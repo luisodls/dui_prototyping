@@ -9,9 +9,9 @@ serversocket.listen(n_connections) # become a server socket, maximum 15 connecti
 buf = ""
 for i in xrange(n_connections):
     connection, address = serversocket.accept()
-    buf = connection.recv(64)
+    buf = connection.recv(640)
     if len(buf) > 0:
-        print "buf =", buf
+        print "...>>> buf =", buf
         if( buf == "stop" ):
             break
 
