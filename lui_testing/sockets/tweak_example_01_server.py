@@ -13,6 +13,7 @@ for i in xrange(n_connections):
     if len(buf) > 0:
         print "...>>> buf =", buf
         if( buf == "stop" ):
+            print "Stoping"
             break
 
     else:
