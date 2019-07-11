@@ -13,6 +13,9 @@ class SolarSystem:
         document.getElementById ('reset_but').innerHTML = "reset ..."
         self.reset_num()
         self.update_count()
+
+        # test here the time thing
+
         document.getElementById ('reset_but').innerHTML = "done ..."
 
     def reset_num(self):
