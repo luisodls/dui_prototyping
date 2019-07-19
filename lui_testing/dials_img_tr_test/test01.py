@@ -47,7 +47,6 @@ np_alg = algr.as_numpy_array()
 
 print np_alg
 
-
 from matplotlib import pyplot as plt
 plt.imshow( np_alg , interpolation = "nearest" )
 plt.show()
