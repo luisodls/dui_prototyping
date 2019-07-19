@@ -4,6 +4,9 @@ from dxtbx.model.experiment_list import ExperimentListFactory
 
 import pickle
 
+# remember to run DUI and generate the needed file in dui_files
+# do import and then do mask tool
+
 n_json_file_path = "/tmp/dui_run/dui_files/2_datablock.json"
 datablocks = DataBlockFactory.from_json_file(n_json_file_path)
 # TODO check length of datablock for safety
@@ -26,9 +29,6 @@ mask_tup_obj = pickle.load(pick_file)
 pick_file.close()
 
 mask_flex = mask_tup_obj[0]
-mask_np_arr = mask_flex.as_numpy_array()
-np_mask = mask_np_arr
-
 
 ##############################################################################
 
