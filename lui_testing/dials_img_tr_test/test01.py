@@ -32,18 +32,6 @@ np_mask = mask_np_arr
 
 ##############################################################################
 
-'''
-algorithm = DispersionThresholdStrategy(
-    kernel_size=params.spotfinder.threshold.dispersion.kernel_size,
-    gain=params.spotfinder.threshold.dispersion.gain,
-    mask=params.spotfinder.lookup.mask,
-    n_sigma_b=params.spotfinder.threshold.dispersion.sigma_background,
-    n_sigma_s=params.spotfinder.threshold.dispersion.sigma_strong,
-    min_count=params.spotfinder.threshold.dispersion.min_local,
-    global_threshold=params.spotfinder.threshold.dispersion.global_threshold,
-)
-'''
-
 algorithm = DispersionThresholdStrategy(
         kernel_size = (3, 3),
         gain = 1,
@@ -53,6 +41,14 @@ algorithm = DispersionThresholdStrategy(
         global_threshold = 0
 )
 
-print algorithm(img_arr, mask_flex)
+algr = algorithm(img_arr, mask_flex)
 
+np_alg = algr.as_numpy_array()
+
+print np_alg
+
+
+from matplotlib import pyplot as plt
+plt.imshow( np_alg , interpolation = "nearest" )
+plt.show()
 
