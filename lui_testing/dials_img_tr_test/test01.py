@@ -30,8 +30,9 @@ mask_np_arr = mask_flex.as_numpy_array()
 np_mask = mask_np_arr
 
 
+##############################################################################
 
-tmp_off = '''
+'''
 algorithm = DispersionThresholdStrategy(
     kernel_size=params.spotfinder.threshold.dispersion.kernel_size,
     gain=params.spotfinder.threshold.dispersion.gain,
@@ -41,6 +42,10 @@ algorithm = DispersionThresholdStrategy(
     min_count=params.spotfinder.threshold.dispersion.min_local,
     global_threshold=params.spotfinder.threshold.dispersion.global_threshold,
 )
-
-print algorithm(image, mask)
 '''
+
+algorithm = DispersionThresholdStrategy()
+
+print algorithm(img_arr, mask_flex)
+
+
