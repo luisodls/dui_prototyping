@@ -1,6 +1,15 @@
-
 from dials.algorithms.spot_finding.threshold import DispersionThresholdStrategy
+from dxtbx.datablock import DataBlockFactory
 
+
+
+n_json_file_path = "/tmp/dui_run/dui_files/1_datablock.json"
+datablocks = DataBlockFactory.from_json_file(n_json_file_path)
+# TODO check length of datablock for safety
+datablock = datablocks[0]
+my_sweep = datablock.extract_sweeps()[0]
+
+tmp_off = '''
 algorithm = DispersionThresholdStrategy(
     kernel_size=params.spotfinder.threshold.dispersion.kernel_size,
     gain=params.spotfinder.threshold.dispersion.gain,
@@ -12,3 +21,4 @@ algorithm = DispersionThresholdStrategy(
 )
 
 print algorithm(image, mask)
+'''
