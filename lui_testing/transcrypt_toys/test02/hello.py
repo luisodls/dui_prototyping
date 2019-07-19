@@ -1,5 +1,5 @@
 from itertools import chain
-
+import time
 class SolarSystem:
 
     def __init__ (self):
@@ -10,13 +10,11 @@ class SolarSystem:
         self.update_count()
 
     def reset_but (self):
-        document.getElementById ('reset_but').innerHTML = "reset ..."
+        #document.getElementById ('reset_but').innerHTML = "reset ..."
         self.reset_num()
         self.update_count()
 
-        # test here the time thing
-
-        document.getElementById ('reset_but').innerHTML = "done ..."
+        document.getElementById ('reset_but').innerHTML = "done in "
 
     def reset_num(self):
         self.counting = 0
