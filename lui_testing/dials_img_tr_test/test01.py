@@ -44,7 +44,14 @@ algorithm = DispersionThresholdStrategy(
 )
 '''
 
-algorithm = DispersionThresholdStrategy()
+algorithm = DispersionThresholdStrategy(
+        kernel_size = (3, 3),
+        gain = 1,
+        n_sigma_b = 6,
+        n_sigma_s = 3,
+        min_count = 2,
+        global_threshold = 0
+)
 
 print algorithm(img_arr, mask_flex)
 
