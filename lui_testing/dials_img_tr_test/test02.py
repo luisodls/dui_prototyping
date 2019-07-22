@@ -60,6 +60,11 @@ gain_value = 1
 gain_map = [
     flex.double(img_raw.accessor(), gain_value)
 ]
+
+
+
+
+
 test_algo = DispersionThresholdDebug(
                         img_arr,
                         mask_flex,
