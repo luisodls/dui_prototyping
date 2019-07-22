@@ -13,7 +13,8 @@ class Test:
         self.image.reshape(flex.grid(2527, 2463))
         self.mask = flex.random_bool(2527 * 2463, 0.99)
         self.mask.reshape(flex.grid(2527, 2463))
-        self.gain = flex.random_double(2527 * 2463) + 0.5
+        #self.gain = flex.double(2527 * 2463) + 0.5
+        self.gain = flex.double(2527 * 2463) + 5.5
         self.gain.reshape(flex.grid(2527, 2463))
         self.size = (3, 3)
         self.min_count = 2
