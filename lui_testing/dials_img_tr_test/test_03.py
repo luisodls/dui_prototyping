@@ -32,8 +32,8 @@ class Test:
             0,
             self.min_count,
         )
-        print("done")
-
+        result = debug.final_mask()
+        return result
 
 
 if __name__ == "__main__":
@@ -41,3 +41,9 @@ if __name__ == "__main__":
 
     test1 = Test()
     a = test1.test_dispersion_debug()
+
+    np_alg = a.as_numpy_array()
+
+    from matplotlib import pyplot as plt
+    plt.imshow( np_alg , interpolation = "nearest" )
+    plt.show()
