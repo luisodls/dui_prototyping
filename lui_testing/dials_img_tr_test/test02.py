@@ -30,17 +30,8 @@ mask_tup_obj = pickle.load(pick_file)
 pick_file.close()
 
 mask_flex = mask_tup_obj[0]
+print "type(mask_flex) =", type(mask_flex)
 
-##############################################################################
-
-algorithm = DispersionThresholdStrategy(
-        kernel_size = (3, 3),
-        gain = 1,
-        n_sigma_b = 6,
-        n_sigma_s = 3,
-        min_count = 2,
-        global_threshold = 0
-)
 
 ##############################################################################
 copy_pasted = '''
@@ -57,34 +48,35 @@ DispersionThresholdDebug(
 '''
 
 gain_value = 1
-gain_map = [
-    flex.double(img_raw.accessor(), gain_value)
-]
+gain_map = flex.double(img_raw.accessor(), gain_value)
 
 
+print "type(img_arr  )", type(img_arr  )
+print "type(mask_flex)", type(mask_flex)
+print "type(gain_map )", type(gain_map )
 
+print "img_arr.all()  ", img_arr.all()
+print "mask_flex.all()", mask_flex.all()
+print "gain_map.all() ", gain_map.all()
+
+
+#db_gain = flex.double(flex.grid(img_arr.all()))
+#db_gain = gain_map
 
 
 test_algo = DispersionThresholdDebug(
                         img_arr,
                         mask_flex,
-                        gain_map,
+                        gain_value,
                         (3, 3),
-                        6,
-                        3,
-                        0,
-                        2,
-                    )
+                        6,3,0,2)
 
 ###############################################################################
-algr = algorithm(img_arr, mask_flex)
-
-np_alg = algr.as_numpy_array()
-
-print np_alg
 
 
+'''
 from matplotlib import pyplot as plt
 plt.imshow( np_alg , interpolation = "nearest" )
 plt.show()
 
+'''
