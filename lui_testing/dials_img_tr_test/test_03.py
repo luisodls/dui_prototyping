@@ -58,8 +58,9 @@ class Test:
             0,
             self.min_count,
         )
-        result = debug.final_mask()
-        return result
+
+
+        return debug
 
 
 if __name__ == "__main__":
@@ -71,8 +72,15 @@ if __name__ == "__main__":
 
     a = test1.test_dispersion_debug()
 
-    np_alg = a.as_numpy_array()
+    #print("dir(debug)", dir(debug))
 
+    '''
+    'cv_mask', 'final_mask', 'global_mask',
+    'index_of_dispersion', 'mean',
+    'value_mask', 'variance'
+    '''
+
+    np_alg = a.final_mask().as_numpy_array()
     from matplotlib import pyplot as plt
     plt.imshow( np_alg , interpolation = "nearest" )
     plt.show()
