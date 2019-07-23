@@ -2,11 +2,13 @@ from __future__ import absolute_import, division, print_function
 
 from dxtbx.datablock import DataBlockFactory
 from dxtbx.model.experiment_list import ExperimentListFactory
+from scitbx.array_family import flex
+
 import pickle
 
 class Test:
     def __init__(self):
-        from scitbx.array_family import flex
+
 
         # Create an image
         self.image = flex.random_double(2527 * 2463, 10)
@@ -33,14 +35,15 @@ class Test:
                         self.n_json_file_path, check_format=False
                     )
 
-        imageset_tmp = experiments.imagesets()[0]
-        mask_file = imageset_tmp.external_lookup.mask.filename
+        self.imageset = experiments.imagesets()[0]
+        mask_file = self.imageset.external_lookup.mask.filename
 
         pick_file = open(mask_file, "rb")
         mask_tup_obj = pickle.load(pick_file)
         pick_file.close()
 
         self.mask = mask_tup_obj[0]
+
 
     def test_dispersion_debug(self):
         from dials.algorithms.image.threshold import DispersionThresholdDebug
@@ -80,7 +83,33 @@ if __name__ == "__main__":
     'value_mask', 'variance'
     '''
 
-    np_alg = a.final_mask().as_numpy_array()
     from matplotlib import pyplot as plt
-    plt.imshow( np_alg , interpolation = "nearest" )
+
+    np_final_mask = a.final_mask().as_numpy_array()
+    plt.imshow( np_final_mask , interpolation = "nearest" )
     plt.show()
+
+    np_global_mask = a.global_mask().as_numpy_array()
+    plt.imshow( np_global_mask , interpolation = "nearest" )
+    plt.show()
+
+    np_cv_mask = a.cv_mask().as_numpy_array()
+    plt.imshow( np_cv_mask , interpolation = "nearest" )
+    plt.show()
+
+    np_value_mask = a.value_mask().as_numpy_array()
+    plt.imshow( np_value_mask , interpolation = "nearest" )
+    plt.show()
+
+    np_index_of_dispersion = a.index_of_dispersion().as_numpy_array()
+    plt.imshow( np_index_of_dispersion , interpolation = "nearest" )
+    plt.show()
+
+    np_mean = a.mean().as_numpy_array()
+    plt.imshow( np_mean , interpolation = "nearest" )
+    plt.show()
+
+    np_variance = a.variance().as_numpy_array()
+    plt.imshow( np_variance , interpolation = "nearest" )
+    plt.show()
+
