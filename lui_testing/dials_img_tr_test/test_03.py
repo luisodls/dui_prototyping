@@ -8,20 +8,6 @@ import pickle
 
 class Test:
     def __init__(self):
-
-
-        # Create an image
-        self.image = flex.random_double(2527 * 2463, 10)
-        self.image.reshape(flex.grid(2527, 2463))
-
-        # TODO put me in the right place
-        self.gain = flex.double(flex.grid(2527, 2463), 1.5)
-
-        self.size = (3, 3)
-        self.min_count = 2
-
-
-    def set_img(self):
         self.n_json_file_path = "/tmp/dui_run/dui_files/2_datablock.json"
         datablocks = DataBlockFactory.from_json_file(self.n_json_file_path)
         # TODO check length of datablock for safety
@@ -43,6 +29,10 @@ class Test:
 
         self.mask = mask_tup_obj[0]
 
+    def set_pars(self):
+        self.gain = flex.double(flex.grid(2527, 2463), 1.5)
+        self.size = (3, 3)
+        self.min_count = 2
 
     def test_dispersion_debug(self):
         from dials.algorithms.image.threshold import DispersionThresholdDebug
@@ -69,15 +59,14 @@ if __name__ == "__main__":
     print("Hi")
 
     test1 = Test()
-    test1.set_img()
     test1.set_mask()
+    test1.set_pars()
 
     a = test1.test_dispersion_debug()
 
     #print("dir(debug)", dir(debug))
 
     '''
-
     gain
     kernel size
 
@@ -86,12 +75,6 @@ if __name__ == "__main__":
 
     glob threshold
     min local_finished
-
-
-
-    'cv_mask', 'final_mask', 'global_mask',
-    'index_of_dispersion', 'mean',
-    'value_mask', 'variance'
     '''
 
     from matplotlib import pyplot as plt
@@ -104,6 +87,7 @@ if __name__ == "__main__":
     plt.imshow( np_global_mask , interpolation = "nearest" )
     plt.show()
 
+    tmp_off = '''
     np_cv_mask = a.cv_mask().as_numpy_array()
     plt.imshow( np_cv_mask , interpolation = "nearest" )
     plt.show()
@@ -123,4 +107,5 @@ if __name__ == "__main__":
     np_variance = a.variance().as_numpy_array()
     plt.imshow( np_variance , interpolation = "nearest" )
     plt.show()
+    '''
 
