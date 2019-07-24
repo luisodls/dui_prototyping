@@ -30,27 +30,28 @@ class Test:
         self.mask = mask_tup_obj[0]
 
     def set_pars(self):
-        self.gain = flex.double(flex.grid(2527, 2463), 1.5)
+        self.gain = 0.5
         self.size = (3, 3)
+        self.nsig_b = 3
+        self.nsig_s = 3
+        self.global_threshold = 0
         self.min_count = 2
 
     def test_dispersion_debug(self):
         from dials.algorithms.image.threshold import DispersionThresholdDebug
 
-        nsig_b = 3
-        nsig_s = 3
+        self.gain_map = flex.double(flex.grid(2527, 2463), self.gain)
 
         debug = DispersionThresholdDebug(
             self.image,
             self.mask,
-            self.gain,
+            self.gain_map,
             self.size,
-            nsig_b,
-            nsig_s,
-            0,
+            self.nsig_b,
+            self.nsig_s,
+            self.global_threshold,
             self.min_count,
         )
-
 
         return debug
 
@@ -87,7 +88,7 @@ if __name__ == "__main__":
     plt.imshow( np_global_mask , interpolation = "nearest" )
     plt.show()
 
-    tmp_off = '''
+
     np_cv_mask = a.cv_mask().as_numpy_array()
     plt.imshow( np_cv_mask , interpolation = "nearest" )
     plt.show()
@@ -103,7 +104,7 @@ if __name__ == "__main__":
     np_mean = a.mean().as_numpy_array()
     plt.imshow( np_mean , interpolation = "nearest" )
     plt.show()
-
+    tmp_off = '''
     np_variance = a.variance().as_numpy_array()
     plt.imshow( np_variance , interpolation = "nearest" )
     plt.show()
