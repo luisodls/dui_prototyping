@@ -13,11 +13,10 @@ class Test:
         # Create an image
         self.image = flex.random_double(2527 * 2463, 10)
         self.image.reshape(flex.grid(2527, 2463))
-        self.mask = flex.random_bool(2527 * 2463, 0.99)
-        self.mask.reshape(flex.grid(2527, 2463))
-        #self.gain = flex.double(2527 * 2463) + 0.5
-        self.gain = flex.double(2527 * 2463) + 5.5
-        self.gain.reshape(flex.grid(2527, 2463))
+
+        # TODO put me in the right place
+        self.gain = flex.double(flex.grid(2527, 2463), 1.5)
+
         self.size = (3, 3)
         self.min_count = 2
 
@@ -78,6 +77,18 @@ if __name__ == "__main__":
     #print("dir(debug)", dir(debug))
 
     '''
+
+    gain
+    kernel size
+
+    sig b
+    sig s
+
+    glob threshold
+    min local_finished
+
+
+
     'cv_mask', 'final_mask', 'global_mask',
     'index_of_dispersion', 'mean',
     'value_mask', 'variance'
