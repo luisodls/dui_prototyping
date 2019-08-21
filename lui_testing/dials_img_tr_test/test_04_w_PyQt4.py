@@ -6,6 +6,9 @@ from dxtbx.model.experiment_list import ExperimentListFactory
 from scitbx.array_family import flex
 import pickle
 
+import numpy as np
+
+
 class Test:
     def __init__(self):
         self.n_json_file_path = "/tmp/dui_run/dui_files/2_datablock.json"
@@ -56,6 +59,53 @@ class Test:
         return debug
 
 
+from dials_viewer_ext import rgb_img
+from dials.array_family import flex
+
+def img_arr_n_cpp(flex_data_in):
+
+    wx_bmp_arr = rgb_img()
+    flex_mask_in = flex.double(
+            flex.grid(flex_data_in.all()[0], flex_data_in.all()[1]), 0
+        )
+
+    err_code = wx_bmp_arr.set_min_max(0.0, 28.0)
+
+    palette = "hot ascend"
+
+    if palette == "black2white":
+        palette_num = 1
+    elif palette == "white2black":
+        palette_num = 2
+    elif palette == "hot ascend":
+        palette_num = 3
+    else: # assuming "hot descend"
+        palette_num = 4
+
+    show_nums = False
+
+    print "before c++"
+    img_array_tmp = wx_bmp_arr.gen_bmp(flex_data_in, flex_mask_in, show_nums, palette_num)
+    print "after c++"
+    np_img_array = img_array_tmp.as_numpy_array()
+
+    height = np.size(np_img_array[:, 0:1, 0:1])
+    width = np.size( np_img_array[0:1, :, 0:1])
+
+    img_array = np.zeros([height, width, 4], dtype=np.uint8)
+
+    #for some strange reason PyQt4 needs to use RGB as BGR
+    img_array[:,:,0:1] = np_img_array[:,:,2:3]
+    img_array[:,:,1:2] = np_img_array[:,:,1:2]
+    img_array[:,:,2:3] = np_img_array[:,:,0:1]
+
+
+
+    print "end of np generator"
+
+    return img_array
+
+
 
 
 
@@ -76,12 +126,23 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         a = test1.test_dispersion_debug()
 
-        np_final_mask = a.final_mask().as_numpy_array()
+        flex_final_mask = a.final_mask()
+
         np_global_mask = a.global_mask().as_numpy_array()
         np_cv_mask = a.cv_mask().as_numpy_array()
         np_value_mask = a.value_mask().as_numpy_array()
-        np_index_of_dispersion = a.index_of_dispersion().as_numpy_array()
         np_mean = a.mean().as_numpy_array()
+
+        flex_index_of_dispersion = a.index_of_dispersion()
+        #building array
+        arr_i = img_arr_n_cpp(flex_index_of_dispersion)
+
+        #converting to QImage
+        print "before QImage generator"
+        q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
+                       np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
+
+
 
         tmp_off = '''
         np_variance = a.variance().as_numpy_array()
