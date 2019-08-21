@@ -142,6 +142,21 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
                        np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
+        print "after QImage generator"
+
+        #####################################################################
+        print "building QImage in graphicsView_1 ... start"
+        my_scene = QtGui.QGraphicsScene()
+        self.graphicsView_1.setScene(my_scene)
+        self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+
+        image = q_img
+        self.l_pixmap = QtGui.QPixmap.fromImage(image)
+        my_scene.addPixmap(self.l_pixmap)
+        print "building QImage in graphicsView_1 ... end"
+
+        ####################################################################
+
 
 
         tmp_off = '''
