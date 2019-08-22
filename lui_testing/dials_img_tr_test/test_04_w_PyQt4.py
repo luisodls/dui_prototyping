@@ -3,11 +3,13 @@ from PyQt4 import QtCore, QtGui, uic
 
 from dxtbx.datablock import DataBlockFactory
 from dxtbx.model.experiment_list import ExperimentListFactory
-from scitbx.array_family import flex
+#from scitbx.array_family import flex
 import pickle
 
-import numpy as np
+from dials_viewer_ext import rgb_img
+from dials.array_family import flex
 
+import numpy as np
 
 class Test:
     def __init__(self):
@@ -59,9 +61,6 @@ class Test:
         return debug
 
 
-from dials_viewer_ext import rgb_img
-from dials.array_family import flex
-
 def img_arr_n_cpp(flex_data_in):
 
     wx_bmp_arr = rgb_img()
@@ -99,15 +98,9 @@ def img_arr_n_cpp(flex_data_in):
     img_array[:,:,1:2] = np_img_array[:,:,1:2]
     img_array[:,:,2:3] = np_img_array[:,:,0:1]
 
-
-
     print "end of np generator"
 
     return img_array
-
-
-
-
 
 
 qtCreatorFile = "test.ui" # Enter file here.
@@ -145,15 +138,22 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         print "after QImage generator"
 
         #####################################################################
+        '''
         print "building QImage in graphicsView_1 ... start"
         my_scene = QtGui.QGraphicsScene()
         self.graphicsView_1.setScene(my_scene)
         self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
-        image = q_img
-        self.l_pixmap = QtGui.QPixmap.fromImage(image)
+        self.l_pixmap = QtGui.QPixmap.fromImage(q_img)
         my_scene.addPixmap(self.l_pixmap)
         print "building QImage in graphicsView_1 ... end"
+        '''
+        my_scene = QtGui.QGraphicsScene()
+        self.graphicsView_1.setScene(my_scene)
+        fileName = "../../../anaelu_git/forthon_01/miscellaneous/lena.jpeg"
+        image = QtGui.QImage(fileName)
+        self.l_pixmap = QtGui.QPixmap.fromImage(image)
+        my_scene.addPixmap(self.l_pixmap)
 
         ####################################################################
 
@@ -164,12 +164,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         plt.imshow( np_variance , interpolation = "nearest" )
         plt.show()
         '''
+        self.show()
 
 
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window = MyApp()
-    window.show()
     sys.exit(app.exec_())
 
