@@ -112,7 +112,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
 
-        ######################################################################################
+
 
         #print "dir(self.graphicsView_1)", dir(self.graphicsView_1)
 
@@ -123,11 +123,12 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.debug_data = test1.test_dispersion_debug()
 
         flex_final_mask = self.debug_data.final_mask()
+        ######################################################################################
+        flex_global_mask = self.debug_data.global_mask()
+        flex_cv_mask = self.debug_data.cv_mask()
+        flex_value_mask = self.debug_data.value_mask()
 
-        np_global_mask = self.debug_data.global_mask().as_numpy_array()
-        np_cv_mask = self.debug_data.cv_mask().as_numpy_array()
-        np_value_mask = self.debug_data.value_mask().as_numpy_array()
-        np_mean = self.debug_data.mean().as_numpy_array()
+        #np_mean = self.debug_data.mean().as_numpy_array()
 
         ######################################################################################
         self.my_scene_1 = QtGui.QGraphicsScene()
@@ -155,10 +156,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         arr_i = img_arr_n_cpp(flex_index_of_dispersion)
 
         #converting to QImage
-        self.q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
+        q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
                        np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
-        tmp_pixmap = QtGui.QPixmap.fromImage(self.q_img)
+        tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
         self.my_scene_1.addPixmap(tmp_pixmap)
 
         print "... Bye"
@@ -166,10 +167,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def set_img_2(self):
         print "Hi ..."
+        np_mean = self.debug_data.global_mask().as_numpy_array()
 
-        fileName = "/home/ufn91840/M_Pics/kona_honzo.png"
-        image = QtGui.QImage(fileName)
-        tmp_pixmap = QtGui.QPixmap.fromImage(image)
+        q_img = QtGui.QImage(np.transpose(np_mean),
+                             np.size(np_mean[0:1, :]),
+                             np.size(np_mean[:, 0:1]),
+                             QtGui.QImage.Format_Mono)
+
+        tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
+
+
         self.my_scene_2.addPixmap(tmp_pixmap)
 
         print "... Bye"
