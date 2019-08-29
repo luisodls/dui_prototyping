@@ -103,13 +103,16 @@ def img_arr_n_cpp(flex_data_in):
     return img_array
 
 
-qtCreatorFile = "test.ui" # Enter file here.
+
+qtCreatorFile = "test02.ui" # Enter file here.
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
+
+        ######################################################################################
 
         #print "dir(self.graphicsView_1)", dir(self.graphicsView_1)
 
@@ -132,44 +135,65 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         #converting to QImage
         print "before QImage generator"
-        q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
+        self.q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
                        np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
         print "after QImage generator"
 
         #####################################################################
-        '''
-        print "building QImage in graphicsView_1 ... start"
-        my_scene = QtGui.QGraphicsScene()
-        self.graphicsView_1.setScene(my_scene)
-        self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
-        self.l_pixmap = QtGui.QPixmap.fromImage(q_img)
-        my_scene.addPixmap(self.l_pixmap)
-        print "building QImage in graphicsView_1 ... end"
-        '''
-        my_scene = QtGui.QGraphicsScene()
-        self.graphicsView_1.setScene(my_scene)
-        fileName = "../../../anaelu_git/forthon_01/miscellaneous/lena.jpeg"
-        image = QtGui.QImage(fileName)
-        self.l_pixmap = QtGui.QPixmap.fromImage(image)
-        my_scene.addPixmap(self.l_pixmap)
+        ######################################################################################
+        self.my_scene_1 = QtGui.QGraphicsScene()
+        self.graphicsView_1.setScene(self.my_scene_1)
 
-        ####################################################################
+        self.my_scene_2 = QtGui.QGraphicsScene()
+        self.graphicsView_2.setScene(self.my_scene_2)
 
+        self.my_scene_3 = QtGui.QGraphicsScene()
+        self.graphicsView_3.setScene(self.my_scene_3)
 
+        self.pushButton_1.clicked.connect(self.set_img_1)
+        self.pushButton_2.clicked.connect(self.set_img_2)
+        self.pushButton_3.clicked.connect(self.set_img_3)
 
-        tmp_off = '''
-        np_variance = a.variance().as_numpy_array()
-        plt.imshow( np_variance , interpolation = "nearest" )
-        plt.show()
-        '''
+        self.setLayout(self.gridLayout)
+        self.setWindowTitle('Testing')
         self.show()
 
+    def set_img_1(self):
+        print "Hi ..."
+
+        tmp_pixmap = QtGui.QPixmap.fromImage(self.q_img)
+        self.my_scene_1.addPixmap(tmp_pixmap)
+
+        print "... Bye"
+
+
+    def set_img_2(self):
+        print "Hi ..."
+
+        fileName = "/home/ufn91840/M_Pics/kona_honzo.png"
+        image = QtGui.QImage(fileName)
+        tmp_pixmap = QtGui.QPixmap.fromImage(image)
+        self.my_scene_2.addPixmap(tmp_pixmap)
+
+        print "... Bye"
+
+
+    def set_img_3(self):
+        print "Hi ..."
+
+        fileName = "/home/ufn91840/M_Pics/chihuahua.png"
+        image = QtGui.QImage(fileName)
+        tmp_pixmap = QtGui.QPixmap.fromImage(image)
+        self.my_scene_3.addPixmap(tmp_pixmap)
+
+        print "... Bye"
 
 
 if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
     window = MyApp()
     sys.exit(app.exec_())
+
 
