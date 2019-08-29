@@ -120,27 +120,14 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         test1.set_mask()
         test1.set_pars()
 
-        a = test1.test_dispersion_debug()
+        self.debug_data = test1.test_dispersion_debug()
 
-        flex_final_mask = a.final_mask()
+        flex_final_mask = self.debug_data.final_mask()
 
-        np_global_mask = a.global_mask().as_numpy_array()
-        np_cv_mask = a.cv_mask().as_numpy_array()
-        np_value_mask = a.value_mask().as_numpy_array()
-        np_mean = a.mean().as_numpy_array()
-
-        flex_index_of_dispersion = a.index_of_dispersion()
-        #building array
-        arr_i = img_arr_n_cpp(flex_index_of_dispersion)
-
-        #converting to QImage
-        print "before QImage generator"
-        self.q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
-                       np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
-
-        print "after QImage generator"
-
-        #####################################################################
+        np_global_mask = self.debug_data.global_mask().as_numpy_array()
+        np_cv_mask = self.debug_data.cv_mask().as_numpy_array()
+        np_value_mask = self.debug_data.value_mask().as_numpy_array()
+        np_mean = self.debug_data.mean().as_numpy_array()
 
         ######################################################################################
         self.my_scene_1 = QtGui.QGraphicsScene()
@@ -162,6 +149,14 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def set_img_1(self):
         print "Hi ..."
+
+        flex_index_of_dispersion = self.debug_data.index_of_dispersion()
+        #building array
+        arr_i = img_arr_n_cpp(flex_index_of_dispersion)
+
+        #converting to QImage
+        self.q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
+                       np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
         tmp_pixmap = QtGui.QPixmap.fromImage(self.q_img)
         self.my_scene_1.addPixmap(tmp_pixmap)
