@@ -102,6 +102,14 @@ def img_arr_n_cpp(flex_data_in):
 
     return img_array
 
+def get_pixmap_mono(flex_img_in):
+    np_img = flex_img_in.as_numpy_array()
+    q_img = QtGui.QImage(np.transpose(np_img),
+                         np.size(np_img[0:1, :]),
+                         np.size(np_img[:, 0:1]),
+                         QtGui.QImage.Format_Mono)
+
+    return QtGui.QPixmap.fromImage(q_img)
 
 
 qtCreatorFile = "test02.ui" # Enter file here.
@@ -133,18 +141,21 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         ######################################################################################
         self.my_scene_1 = QtGui.QGraphicsScene()
         self.graphicsView_1.setScene(self.my_scene_1)
+        self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+
 
         self.my_scene_2 = QtGui.QGraphicsScene()
         self.graphicsView_2.setScene(self.my_scene_2)
+        self.graphicsView_2.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
         self.my_scene_3 = QtGui.QGraphicsScene()
         self.graphicsView_3.setScene(self.my_scene_3)
+        self.graphicsView_3.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
         self.pushButton_1.clicked.connect(self.set_img_1)
         self.pushButton_2.clicked.connect(self.set_img_2)
         self.pushButton_3.clicked.connect(self.set_img_3)
 
-        self.setLayout(self.gridLayout)
         self.setWindowTitle('Testing')
         self.show()
 
@@ -167,15 +178,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def set_img_2(self):
         print "Hi ..."
-        np_mean = self.debug_data.global_mask().as_numpy_array()
+        flex_mean = self.debug_data.global_mask()
 
-        q_img = QtGui.QImage(np.transpose(np_mean),
-                             np.size(np_mean[0:1, :]),
-                             np.size(np_mean[:, 0:1]),
-                             QtGui.QImage.Format_Mono)
-
-        tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
-
+        tmp_pixmap = get_pixmap_mono(flex_mean)
 
         self.my_scene_2.addPixmap(tmp_pixmap)
 
