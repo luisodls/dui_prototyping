@@ -120,20 +120,6 @@ class Scene01(QtGui.QGraphicsScene):
         super(Scene01, self).__init__()
         print("TsT")
 
-        '''
-    def changed(self, region):
-        print("changed")
-
-    def sceneRectChanged(self, rect):
-        print("sceneRectChanged")
-
-    def selectionChanged(self):
-        print("selectionChanged")
-        '''
-
-
-    def contextMenuEvent(self, event):
-        print("contextMenuEvent(event)")
 
     def dragLeaveEvent(self, event):
         print("dragLeaveEvent(event)")
@@ -152,15 +138,6 @@ class Scene01(QtGui.QGraphicsScene):
 
     def focusOutEvent(self, event):
         print("focusOutEvent(event)")
-
-    def helpEvent(self, event):
-        print("helpEvent(event)")
-
-    def inputMethodEvent(self, event):
-        print("inputMethodEvent(event)")
-
-    def inputMethodQuery(self, query):
-        print("inputMethodQuery(query)")
 
     def keyPressEvent(self, event):
         print("keyPressEvent(event)")
