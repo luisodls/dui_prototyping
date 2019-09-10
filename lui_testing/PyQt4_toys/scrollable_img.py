@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from PySide.QtGui import *
-from PySide.QtCore import *
+#from PySide.QtGui import *
+#from PySide.QtCore import *
+
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
 
 class Example(QWidget):
 

@@ -143,6 +143,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.graphicsView_1.setScene(self.my_scene_1)
         self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
+        print("dir(self.my_scene_1)", dir(self.my_scene_1))
+
 
         self.my_scene_2 = QtGui.QGraphicsScene()
         self.graphicsView_2.setScene(self.my_scene_2)
@@ -161,17 +163,20 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def set_img_1(self):
         print "Hi ..."
-
         flex_index_of_dispersion = self.debug_data.index_of_dispersion()
         #building array
         arr_i = img_arr_n_cpp(flex_index_of_dispersion)
-
         #converting to QImage
         q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
                        np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
         tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
-        self.my_scene_1.addPixmap(tmp_pixmap)
+        try:
+            self.my_scene_1.clear()
+            self.my_scene_1.addPixmap(tmp_pixmap)
+
+        except:
+            print "failed to refresh"
 
         print "... Bye"
 
@@ -179,22 +184,22 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def set_img_2(self):
         print "Hi ..."
         flex_mean = self.debug_data.global_mask()
+        new_pixmap = get_pixmap_mono(flex_mean)
+        try:
+            self.my_scene_2.clear()
+            self.my_scene_2.addPixmap(new_pixmap)
 
-        tmp_pixmap = get_pixmap_mono(flex_mean)
-
-        self.my_scene_2.addPixmap(tmp_pixmap)
+        except:
+            print "failed to refresh"
 
         print "... Bye"
 
-
     def set_img_3(self):
         print "Hi ..."
-
         fileName = "/home/ufn91840/M_Pics/chihuahua.png"
         image = QtGui.QImage(fileName)
         tmp_pixmap = QtGui.QPixmap.fromImage(image)
         self.my_scene_3.addPixmap(tmp_pixmap)
-
         print "... Bye"
 
 
