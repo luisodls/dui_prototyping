@@ -114,6 +114,75 @@ def get_pixmap_mono(flex_img_in):
 
 qtCreatorFile = "test02.ui" # Enter file here.
 Ui_MainWindow, QtBaseClass = uic.loadUiType(qtCreatorFile)
+
+class Scene01(QtGui.QGraphicsScene):
+    def __init__(self, parent):
+        super(Scene01, self).__init__()
+        print("TsT")
+
+        '''
+    def changed(self, region):
+        print("changed")
+
+    def sceneRectChanged(self, rect):
+        print("sceneRectChanged")
+
+    def selectionChanged(self):
+        print("selectionChanged")
+        '''
+
+
+    def contextMenuEvent(self, event):
+        print("contextMenuEvent(event)")
+
+    def dragLeaveEvent(self, event):
+        print("dragLeaveEvent(event)")
+
+    def dragEnterEvent(self, event):
+        print("dragEnterEvent(event)")
+
+    def dragMoveEvent(self, event):
+        print("dragMoveEvent(event)")
+
+    def dropEvent(self, event):
+        print("dropEvent(event)")
+
+    def focusInEvent(self, event):
+        print("focusInEvent(event)")
+
+    def focusOutEvent(self, event):
+        print("focusOutEvent(event)")
+
+    def helpEvent(self, event):
+        print("helpEvent(event)")
+
+    def inputMethodEvent(self, event):
+        print("inputMethodEvent(event)")
+
+    def inputMethodQuery(self, query):
+        print("inputMethodQuery(query)")
+
+    def keyPressEvent(self, event):
+        print("keyPressEvent(event)")
+
+    def keyReleaseEvent(self, event):
+        print("keyReleaseEvent(event)")
+
+    def mouseDoubleClickEvent(self, event):
+        print("mouseDoubleClickEvent(event)")
+
+    def mouseMoveEvent(self, event):
+        print("mouseMoveEvent(event)")
+
+    def mousePressEvent(self, event):
+        print("mousePressEvent(event)")
+
+    def mouseReleaseEvent(self, event):
+        print("mouseReleaseEvent(event)")
+
+    def wheelEvent(self, event):
+        print("wheelEvent(event)")
+
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
@@ -139,12 +208,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #np_mean = self.debug_data.mean().as_numpy_array()
 
         ######################################################################################
-        self.my_scene_1 = QtGui.QGraphicsScene()
+        self.my_scene_1 = Scene01(self)
         self.graphicsView_1.setScene(self.my_scene_1)
         self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
-        print("dir(self.my_scene_1)", dir(self.my_scene_1))
+        print("\n dir(self.my_scene_1)", dir(self.my_scene_1), "\n")
 
+        print("\n dir(self.graphicsView_1)", dir(self.graphicsView_1), "\n")
 
         self.my_scene_2 = QtGui.QGraphicsScene()
         self.graphicsView_2.setScene(self.my_scene_2)
@@ -158,8 +228,10 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.set_img_2)
         self.pushButton_3.clicked.connect(self.set_img_3)
 
+
         self.setWindowTitle('Testing')
         self.show()
+
 
     def set_img_1(self):
         print "Hi ..."
