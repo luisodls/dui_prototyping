@@ -160,13 +160,12 @@ class Scene01(QtGui.QGraphicsScene):
     def wheelEvent(self, event):
         print("wheelEvent(event)")
 
+
 class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self):
         QtGui.QMainWindow.__init__(self)
         Ui_MainWindow.__init__(self)
         self.setupUi(self)
-
-
 
         #print "dir(self.graphicsView_1)", dir(self.graphicsView_1)
 
@@ -181,9 +180,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         flex_global_mask = self.debug_data.global_mask()
         flex_cv_mask = self.debug_data.cv_mask()
         flex_value_mask = self.debug_data.value_mask()
-
         #np_mean = self.debug_data.mean().as_numpy_array()
-
         ######################################################################################
         self.my_scene_1 = Scene01(self)
         self.graphicsView_1.setScene(self.my_scene_1)
@@ -205,10 +202,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.set_img_2)
         self.pushButton_3.clicked.connect(self.set_img_3)
 
-
         self.setWindowTitle('Testing')
         self.show()
-
 
     def set_img_1(self):
         print "Hi ..."
@@ -228,7 +223,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             print "failed to refresh"
 
         print "... Bye"
-
 
     def set_img_2(self):
         print "Hi ..."
