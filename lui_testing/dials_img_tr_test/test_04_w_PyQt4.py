@@ -183,12 +183,13 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         #np_mean = self.debug_data.mean().as_numpy_array()
         ######################################################################################
         self.my_scene_1 = Scene01(self)
+        #self.graphicsView_1.setMouseTracking(True)
+
         self.graphicsView_1.setScene(self.my_scene_1)
         self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
-        print("\n dir(self.my_scene_1)", dir(self.my_scene_1), "\n")
-
-        print("\n dir(self.graphicsView_1)", dir(self.graphicsView_1), "\n")
+        #print "\n dir(self.my_scene_1)", dir(self.my_scene_1), "\n"
+        #print "\n dir(self.graphicsView_1)", dir(self.graphicsView_1), "\n"
 
         self.my_scene_2 = QtGui.QGraphicsScene()
         self.graphicsView_2.setScene(self.my_scene_2)
