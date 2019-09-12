@@ -110,7 +110,7 @@ def get_pixmap_mono(flex_img_in):
                          np.size(np_img[:, 0:1]),
                          QtGui.QImage.Format_Mono)
     '''
-    print dir(flex_img_in)
+    #print dir(flex_img_in)
 
     np_img = flex_img_in.as_numpy_array()
     print "\n copy slise ... start"
@@ -210,6 +210,18 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.graphicsView_3.setScene(self.my_scene_3)
         self.graphicsView_3.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
 
+        self.my_scene_4 = QtGui.QGraphicsScene()
+        self.graphicsView_4.setScene(self.my_scene_4)
+        self.graphicsView_4.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+
+        self.my_scene_5 = QtGui.QGraphicsScene()
+        self.graphicsView_5.setScene(self.my_scene_5)
+        self.graphicsView_5.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+
+        self.my_scene_6 = QtGui.QGraphicsScene()
+        self.graphicsView_6.setScene(self.my_scene_6)
+        self.graphicsView_6.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
+
         self.pushButton_1.clicked.connect(self.set_img_1)
         self.pushButton_2.clicked.connect(self.set_img_2)
         self.pushButton_3.clicked.connect(self.set_img_3)
@@ -221,18 +233,16 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.show()
 
     def set_img_1(self):
-        print "Hi ..."
+        print "set_img_1"
         flex_index_of_dispersion = self.debug_data.index_of_dispersion()
-        #building array
-        arr_i = img_arr_n_cpp(flex_index_of_dispersion)
-        #converting to QImage
-        q_img = QtGui.QImage(arr_i.data, np.size(arr_i[0:1, :, 0:1]),
-                       np.size(arr_i[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
+        arr_i_1 = img_arr_n_cpp(flex_index_of_dispersion)
+        q_img_1 = QtGui.QImage(arr_i_1.data, np.size(arr_i_1[0:1, :, 0:1]),
+                       np.size(arr_i_1[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
 
-        tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
+        pixmap_1 = QtGui.QPixmap.fromImage(q_img_1)
         try:
             self.my_scene_1.clear()
-            self.my_scene_1.addPixmap(tmp_pixmap)
+            self.my_scene_1.addPixmap(pixmap_1)
 
         except:
             print "failed to refresh"
@@ -240,110 +250,75 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         print "... Bye"
 
     def set_img_2(self):
-        print "Hi ..."
+        print "set_img_2"
         flex_global_mask = self.debug_data.global_mask()
-        new_pixmap = get_pixmap_mono(flex_global_mask)
+        pixmap_2 = get_pixmap_mono(flex_global_mask)
         try:
             self.my_scene_2.clear()
-            self.my_scene_2.addPixmap(new_pixmap)
+            self.my_scene_2.addPixmap(pixmap_2)
 
         except:
             print "failed to refresh"
 
         print "... Bye"
 
-        ###########################################################################
     def set_img_3(self):
         print "set_img_3"
-        ######################################################################################
         flex_mean = self.debug_data.mean()
-        print "type(flex_mean)", type(flex_mean)
-        ######################################################################################
-        '''
-        print "Hi ..."
-        flex_mean = self.debug_data.global_mask()
-        new_pixmap = get_pixmap_mono(flex_mean)
+        arr_i_3 = img_arr_n_cpp(flex_mean)
+        q_img_3 = QtGui.QImage(arr_i_3.data, np.size(arr_i_3[0:1, :, 0:1]),
+                       np.size(arr_i_3[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
+
+        pixmap_3 = QtGui.QPixmap.fromImage(q_img_3)
         try:
-            self.my_scene_2.clear()
-            self.my_scene_2.addPixmap(new_pixmap)
+            self.my_scene_3.clear()
+            self.my_scene_3.addPixmap(pixmap_3)
 
         except:
             print "failed to refresh"
 
         print "... Bye"
-        '''
 
     def set_img_4(self):
         print "set_img_4"
-        ######################################################################################
         flex_value_mask = self.debug_data.value_mask()
-        print "type(flex_value_mask)", type(flex_value_mask)
-        ######################################################################################
-        '''
         print "Hi ..."
-        flex_mean = self.debug_data.global_mask()
-        new_pixmap = get_pixmap_mono(flex_mean)
+        pixmap_4 = get_pixmap_mono(flex_value_mask)
         try:
-            self.my_scene_2.clear()
-            self.my_scene_2.addPixmap(new_pixmap)
+            self.my_scene_4.clear()
+            self.my_scene_4.addPixmap(pixmap_4)
 
         except:
             print "failed to refresh"
 
         print "... Bye"
-        '''
 
     def set_img_5(self):
         print "set_img_5"
-        ######################################################################################
         flex_cv_mask = self.debug_data.cv_mask()
-        print "type(flex_cv_mask)", type(flex_cv_mask)
-        ######################################################################################
-        '''
-        print "Hi ..."
-        flex_mean = self.debug_data.global_mask()
-        new_pixmap = get_pixmap_mono(flex_mean)
+        pixmap_5 = get_pixmap_mono(flex_cv_mask)
         try:
-            self.my_scene_2.clear()
-            self.my_scene_2.addPixmap(new_pixmap)
+            self.my_scene_5.clear()
+            self.my_scene_5.addPixmap(pixmap_5)
 
         except:
             print "failed to refresh"
 
         print "... Bye"
-        '''
 
     def set_img_6(self):
         print "set_img_6"
         ######################################################################################
         flex_final_mask = self.debug_data.final_mask()
-        print "type(flex_final_mask)", type(flex_final_mask)
-        ######################################################################################
-        '''
-        print "Hi ..."
-        flex_mean = self.debug_data.global_mask()
-        new_pixmap = get_pixmap_mono(flex_mean)
+        pixmap_6 = get_pixmap_mono(flex_final_mask)
         try:
-            self.my_scene_2.clear()
-            self.my_scene_2.addPixmap(new_pixmap)
+            self.my_scene_6.clear()
+            self.my_scene_6.addPixmap(pixmap_6)
 
         except:
             print "failed to refresh"
 
         print "... Bye"
-        '''
-
-
-
-        old_one = '''
-    def set_img_3(self):
-        print "Hi ..."
-        fileName = "/home/ufn91840/M_Pics/chihuahua.png"
-        image = QtGui.QImage(fileName)
-        tmp_pixmap = QtGui.QPixmap.fromImage(image)
-        self.my_scene_3.addPixmap(tmp_pixmap)
-        print "... Bye"
-        '''
 
 
 if __name__ == "__main__":
