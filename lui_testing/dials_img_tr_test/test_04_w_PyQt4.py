@@ -103,13 +103,31 @@ def img_arr_n_cpp(flex_data_in):
     return img_array
 
 def get_pixmap_mono(flex_img_in):
+    old_way = '''
     np_img = flex_img_in.as_numpy_array()
     q_img = QtGui.QImage(np.transpose(np_img),
                          np.size(np_img[0:1, :]),
                          np.size(np_img[:, 0:1]),
                          QtGui.QImage.Format_Mono)
+    '''
+    print dir(flex_img_in)
 
-    return QtGui.QPixmap.fromImage(q_img)
+    np_img = flex_img_in.as_numpy_array()
+    print "\n copy slise ... start"
+    print "\n np.size(np_img) =", np.size(np_img)
+    img_np = np.zeros([2527, 2463], dtype=np.double)
+    img_np[:,:] = np_img[:,:]
+    double_img = flex.double(img_np)
+    print "\n copy slise ... end \n"
+
+    arr_img = img_arr_n_cpp(double_img)
+    q_img = QtGui.QImage(arr_img.data, np.size(arr_img[0:1, :, 0:1]),
+                   np.size(arr_img[:, 0:1, 0:1]), QtGui.QImage.Format_RGB32)
+
+    tmp_pixmap = QtGui.QPixmap.fromImage(q_img)
+
+    #return QtGui.QPixmap.fromImage(q_img)
+    return tmp_pixmap
 
 
 qtCreatorFile = "test02.ui" # Enter file here.
