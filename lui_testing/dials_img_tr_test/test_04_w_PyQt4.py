@@ -70,7 +70,7 @@ def img_arr_n_cpp(flex_data_in):
 
     err_code = wx_bmp_arr.set_min_max(0.0, 28.0)
 
-    palette = "hot ascend"
+    palette = "white2black"
 
     if palette == "black2white":
         palette_num = 1
@@ -193,13 +193,6 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
         self.debug_data = test1.test_dispersion_debug()
 
-        flex_final_mask = self.debug_data.final_mask()
-        ######################################################################################
-        flex_global_mask = self.debug_data.global_mask()
-        flex_cv_mask = self.debug_data.cv_mask()
-        flex_value_mask = self.debug_data.value_mask()
-        #np_mean = self.debug_data.mean().as_numpy_array()
-        ######################################################################################
         self.my_scene_1 = Scene01(self)
         #self.graphicsView_1.setMouseTracking(True)
 
@@ -221,6 +214,9 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.pushButton_2.clicked.connect(self.set_img_2)
         self.pushButton_3.clicked.connect(self.set_img_3)
 
+        self.pushButton_4.clicked.connect(self.set_img_4)
+        self.pushButton_5.clicked.connect(self.set_img_5)
+        self.pushButton_6.clicked.connect(self.set_img_6)
         self.setWindowTitle('Testing')
         self.show()
 
@@ -245,6 +241,26 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
 
     def set_img_2(self):
         print "Hi ..."
+        flex_global_mask = self.debug_data.global_mask()
+        new_pixmap = get_pixmap_mono(flex_global_mask)
+        try:
+            self.my_scene_2.clear()
+            self.my_scene_2.addPixmap(new_pixmap)
+
+        except:
+            print "failed to refresh"
+
+        print "... Bye"
+
+        ###########################################################################
+    def set_img_3(self):
+        print "set_img_3"
+        ######################################################################################
+        flex_mean = self.debug_data.mean()
+        print "type(flex_mean)", type(flex_mean)
+        ######################################################################################
+        '''
+        print "Hi ..."
         flex_mean = self.debug_data.global_mask()
         new_pixmap = get_pixmap_mono(flex_mean)
         try:
@@ -255,7 +271,71 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
             print "failed to refresh"
 
         print "... Bye"
+        '''
 
+    def set_img_4(self):
+        print "set_img_4"
+        ######################################################################################
+        flex_value_mask = self.debug_data.value_mask()
+        print "type(flex_value_mask)", type(flex_value_mask)
+        ######################################################################################
+        '''
+        print "Hi ..."
+        flex_mean = self.debug_data.global_mask()
+        new_pixmap = get_pixmap_mono(flex_mean)
+        try:
+            self.my_scene_2.clear()
+            self.my_scene_2.addPixmap(new_pixmap)
+
+        except:
+            print "failed to refresh"
+
+        print "... Bye"
+        '''
+
+    def set_img_5(self):
+        print "set_img_5"
+        ######################################################################################
+        flex_cv_mask = self.debug_data.cv_mask()
+        print "type(flex_cv_mask)", type(flex_cv_mask)
+        ######################################################################################
+        '''
+        print "Hi ..."
+        flex_mean = self.debug_data.global_mask()
+        new_pixmap = get_pixmap_mono(flex_mean)
+        try:
+            self.my_scene_2.clear()
+            self.my_scene_2.addPixmap(new_pixmap)
+
+        except:
+            print "failed to refresh"
+
+        print "... Bye"
+        '''
+
+    def set_img_6(self):
+        print "set_img_6"
+        ######################################################################################
+        flex_final_mask = self.debug_data.final_mask()
+        print "type(flex_final_mask)", type(flex_final_mask)
+        ######################################################################################
+        '''
+        print "Hi ..."
+        flex_mean = self.debug_data.global_mask()
+        new_pixmap = get_pixmap_mono(flex_mean)
+        try:
+            self.my_scene_2.clear()
+            self.my_scene_2.addPixmap(new_pixmap)
+
+        except:
+            print "failed to refresh"
+
+        print "... Bye"
+        '''
+
+
+
+        old_one = '''
     def set_img_3(self):
         print "Hi ..."
         fileName = "/home/ufn91840/M_Pics/chihuahua.png"
@@ -263,6 +343,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         tmp_pixmap = QtGui.QPixmap.fromImage(image)
         self.my_scene_3.addPixmap(tmp_pixmap)
         print "... Bye"
+        '''
 
 
 if __name__ == "__main__":
