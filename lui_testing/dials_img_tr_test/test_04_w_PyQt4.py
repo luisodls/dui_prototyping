@@ -194,13 +194,8 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         self.debug_data = test1.test_dispersion_debug()
 
         self.my_scene_1 = Scene01(self)
-        #self.graphicsView_1.setMouseTracking(True)
-
         self.graphicsView_1.setScene(self.my_scene_1)
         self.graphicsView_1.setDragMode(QtGui.QGraphicsView.ScrollHandDrag)
-
-        #print "\n dir(self.my_scene_1)", dir(self.my_scene_1), "\n"
-        #print "\n dir(self.graphicsView_1)", dir(self.graphicsView_1), "\n"
 
         self.my_scene_2 = QtGui.QGraphicsScene()
         self.graphicsView_2.setScene(self.my_scene_2)
@@ -282,7 +277,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def set_img_4(self):
         print "set_img_4"
         flex_value_mask = self.debug_data.value_mask()
-        print "Hi ..."
+        print "type(flex_value_mask)", type(flex_value_mask)
         pixmap_4 = get_pixmap_mono(flex_value_mask)
         try:
             self.my_scene_4.clear()
@@ -296,6 +291,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
     def set_img_5(self):
         print "set_img_5"
         flex_cv_mask = self.debug_data.cv_mask()
+        print "type(flex_cv_mask)", type(flex_cv_mask)
         pixmap_5 = get_pixmap_mono(flex_cv_mask)
         try:
             self.my_scene_5.clear()
@@ -310,6 +306,7 @@ class MyApp(QtGui.QMainWindow, Ui_MainWindow):
         print "set_img_6"
         ######################################################################################
         flex_final_mask = self.debug_data.final_mask()
+        print "type(flex_final_mask)", type(flex_final_mask)
         pixmap_6 = get_pixmap_mono(flex_final_mask)
         try:
             self.my_scene_6.clear()
