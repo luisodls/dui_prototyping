@@ -1,10 +1,23 @@
+'''
 import PyQt5
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtWebKitWidgets import QWebView , QWebPage
 from PyQt5.QtWebKit import QWebSettings
 from PyQt5.QtNetwork import *
+'''
 
+import PySide2
+from PySide2.QtCore import QUrl
+from PySide2.QtWidgets import QApplication, QWidget
+from PySide2.QtWebKitWidgets import QWebView , QWebPage
+from PySide2.QtWebKit import QWebSettings
+from PySide2.QtNetwork import *
+'''
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+from PySide2.QtWebKit import *
+'''
 
 import sys
 from optparse import OptionParser
