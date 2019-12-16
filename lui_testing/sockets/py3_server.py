@@ -9,7 +9,7 @@ serversocket.listen(n_connections) # become a server socket, maximum 15 connecti
 buf = ""
 for i in range(n_connections):
     connection, address = serversocket.accept()
-    buf = str(connection.recv(640))
+    buf = connection.recv(640).decode('utf8')
     if len(buf) > 0:
         print("...>>> buf =", buf)
         if( buf == "stop" ):
