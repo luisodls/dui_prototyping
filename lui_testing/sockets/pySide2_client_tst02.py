@@ -45,10 +45,22 @@ class Example(QWidget):
         clientsocket.close()
         '''
 
+        data = QByteArray()
+        data.append(shell_str.encode())
+
+        '''
+        url = "https://httpbin.org/post"
+        req = QtNetwork.QNetworkRequest(QtCore.QUrl(url))
+        req.setHeader(QtNetwork.QNetworkRequest.ContentTypeHeader,
+            "application/x-www-form-urlencoded")
+        '''
+
+        self.manager.post(QNetworkRequest(QUrl("localhost:8089")), data)
+
         #self.manager.get(QNetworkRequest(QUrl("localhost:8089")))
         #self.manager.post(QNetworkRequest(QUrl("localhost:8089")), shell_str.encode())
 
-        self.manager.put(QNetworkRequest(QUrl("localhost:8089")), shell_str.encode())
+        #self.manager.put(QNetworkRequest(QUrl("localhost:8089")), shell_str.encode())
 
     def readReady(self):
         print(Example.readReady)
