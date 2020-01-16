@@ -86,6 +86,7 @@ class Example(QWidget):
 
         print("str:" + str(bytes_string) + ">>")
 
+
 if __name__ == '__main__':
     app =  QApplication(sys.argv)
     ex = Example()
