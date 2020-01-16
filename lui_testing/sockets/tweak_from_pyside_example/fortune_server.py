@@ -60,7 +60,6 @@ class Server(QtWidgets.QDialog):
 
         try:
             # Python v3.
-            #fortune = bytes(fortune, encoding='ascii')
             fortune = str(fortune, encoding='ascii')
 
         except:
