@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-"""PySide port of the network/fortuneserver example from Qt v4.x"""
-
 import random
 
 from PySide2 import QtCore, QtWidgets, QtNetwork

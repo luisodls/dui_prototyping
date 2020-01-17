@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 
-"""PySide port of the network/fortuneclient example from Qt v4.x"""
-
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 
 
@@ -13,40 +11,25 @@ class Client(QtWidgets.QDialog):
         self.currentFortune = ''
 
         hostLabel = QtWidgets.QLabel("&Server name:")
-        portLabel = QtWidgets.QLabel("S&erver port:")
-
         self.hostLineEdit = QtWidgets.QLineEdit('Localhost')
-        #self.portLineEdit.setValidator(QtGui.QIntValidator(1, 65535, self))
-
         hostLabel.setBuddy(self.hostLineEdit)
 
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
                 "the Fortune Server example as well.")
 
         self.getFortuneButton = QtWidgets.QPushButton("Get Fortune")
-        self.getFortuneButton.setDefault(True)
-        self.getFortuneButton.setEnabled(True)
-
-        quitButton = QtWidgets.QPushButton("Quit")
-
-        buttonBox = QtWidgets.QDialogButtonBox()
-        buttonBox.addButton(self.getFortuneButton,
-                QtWidgets.QDialogButtonBox.ActionRole)
-        buttonBox.addButton(quitButton, QtWidgets.QDialogButtonBox.RejectRole)
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
 
         self.getFortuneButton.clicked.connect(self.requestNewFortune)
-        quitButton.clicked.connect(self.close)
         self.tcpSocket.readyRead.connect(self.readFortune)
         self.tcpSocket.error.connect(self.displayError)
 
         mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(hostLabel, 0, 0)
         mainLayout.addWidget(self.hostLineEdit, 0, 1)
-        mainLayout.addWidget(portLabel, 1, 0)
         mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
-        mainLayout.addWidget(buttonBox, 3, 0, 1, 2)
+        mainLayout.addWidget(self.getFortuneButton, 3, 0, 1, 2)
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Fortune Client")
