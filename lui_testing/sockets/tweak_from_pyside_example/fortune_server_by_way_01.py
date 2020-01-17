@@ -10,7 +10,7 @@ class Server(QtWidgets.QDialog):
 
         self.tcpServer = QtNetwork.QTcpServer(self)
         if not self.tcpServer.listen(address =QtNetwork.QHostAddress.Any, port = 12354):
-            QtWidgets.QMessageBox.critical(self, "Fortune Server",
+            QtWidgets.QMessageBox.critical(self, "Counter Server",
                     "Unable to start the server: %s." % self.tcpServer.errorString())
             self.close()
             return
@@ -18,15 +18,15 @@ class Server(QtWidgets.QDialog):
         print("self.tcpServer.serverAddress()", self.tcpServer.serverAddress())
 
         statusLabel.setText("The server is running on port %d.\nRun the "
-                "Fortune Client example now." % self.tcpServer.serverPort())
+                "Counter Client example now." % self.tcpServer.serverPort())
 
-        self.counting = 1
+        self.counting = 0
 
         self.tcpServer.newConnection.connect(self.sendCounting)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
         self.setLayout(mainLayout)
-        self.setWindowTitle("Fortune Server")
+        self.setWindowTitle("Counter Server")
 
     def sendCounting(self):
         print("sendCounting")
