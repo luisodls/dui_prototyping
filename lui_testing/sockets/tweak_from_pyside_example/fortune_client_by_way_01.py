@@ -7,7 +7,6 @@ class Client(QtWidgets.QDialog):
         super(Client, self).__init__(parent)
 
         self.blockSize = 0
-        self.currentFortune = ''
 
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
@@ -48,21 +47,16 @@ class Client(QtWidgets.QDialog):
         if self.tcpSocket.bytesAvailable() < self.blockSize:
             return
 
-        nextFortune = instr.readString()
+        nxt_count = instr.readString()
 
         try:
             # Python v3.
-            nextFortune = str(nextFortune, encoding='ascii')
+            nxt_count = str(nxt_count, encoding='ascii')
         except TypeError:
             # Python v2.
             pass
 
-        if nextFortune == self.currentFortune:
-            QtCore.QTimer.singleShot(0, self.requestNewConnection)
-            return
-
-        self.currentFortune = nextFortune
-        self.statusLabel.setText(self.currentFortune)
+        self.statusLabel.setText(nxt_count)
 
     def displayError(self, socketError):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
