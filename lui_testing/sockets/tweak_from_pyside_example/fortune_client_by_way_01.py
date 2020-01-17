@@ -54,7 +54,7 @@ class Client(QtWidgets.QDialog):
     def requestNewFortune(self):
         self.blockSize = 0
         self.tcpSocket.abort()
-        self.tcpSocket.connectToHost("Localhost", 12354)
+        self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354)
 
     def readFortune(self):
         instr = QtCore.QDataStream(self.tcpSocket)

@@ -16,14 +16,14 @@ class Server(QtWidgets.QDialog):
         quitButton = QtWidgets.QPushButton("Quit")
         quitButton.setAutoDefault(False)
 
-        my_addr = QtNetwork.QHostAddress()
-        my_addr.setAddress("Localhost")
         self.tcpServer = QtNetwork.QTcpServer(self)
-        if not self.tcpServer.listen(address = my_addr, port = 12354):
+        if not self.tcpServer.listen(address =QtNetwork.QHostAddress.Any, port = 12354):
             QtWidgets.QMessageBox.critical(self, "Fortune Server",
                     "Unable to start the server: %s." % self.tcpServer.errorString())
             self.close()
             return
+
+        print("self.tcpServer.serverAddress()", self.tcpServer.serverAddress())
 
         statusLabel.setText("The server is running on port %d.\nRun the "
                 "Fortune Client example now." % self.tcpServer.serverPort())
