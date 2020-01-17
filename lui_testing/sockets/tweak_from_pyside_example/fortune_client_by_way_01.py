@@ -9,9 +9,7 @@ class Client(QtWidgets.QDialog):
         self.blockSize = 0
         self.currentFortune = ''
 
-        DataInLabel = QtWidgets.QLabel("Type here")
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
-
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
                 "the Server example as well.")
 
@@ -19,12 +17,12 @@ class Client(QtWidgets.QDialog):
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
 
-        self.Talk2serverButton.clicked.connect(self.requestNewFortune)
-        self.tcpSocket.readyRead.connect(self.readFortune)
+        self.Talk2serverButton.clicked.connect(self.requestNewConnection)
+        self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
 
         mainLayout = QtWidgets.QGridLayout()
-        mainLayout.addWidget(DataInLabel, 0, 0)
+        mainLayout.addWidget(QtWidgets.QLabel("Type here"), 0, 0)
         mainLayout.addWidget(self.dataLineEdit, 0, 1)
         mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
         mainLayout.addWidget(self.Talk2serverButton, 3, 0, 1, 2)
@@ -32,12 +30,12 @@ class Client(QtWidgets.QDialog):
 
         self.setWindowTitle("Fortune Client")
 
-    def requestNewFortune(self):
+    def requestNewConnection(self):
         self.blockSize = 0
         self.tcpSocket.abort()
         self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354)
 
-    def readFortune(self):
+    def readFromServer(self):
         instr = QtCore.QDataStream(self.tcpSocket)
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
 
@@ -60,7 +58,7 @@ class Client(QtWidgets.QDialog):
             pass
 
         if nextFortune == self.currentFortune:
-            QtCore.QTimer.singleShot(0, self.requestNewFortune)
+            QtCore.QTimer.singleShot(0, self.requestNewConnection)
             return
 
         self.currentFortune = nextFortune
