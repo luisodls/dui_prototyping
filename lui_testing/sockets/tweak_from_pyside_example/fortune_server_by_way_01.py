@@ -22,22 +22,22 @@ class Server(QtWidgets.QDialog):
 
         self.counting = 1
 
-        self.tcpServer.newConnection.connect(self.sendFortune)
+        self.tcpServer.newConnection.connect(self.sendCounting)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
         self.setLayout(mainLayout)
         self.setWindowTitle("Fortune Server")
 
-    def sendFortune(self):
-        print("sendFortune")
+    def sendCounting(self):
+        print("sendCounting")
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.WriteOnly)
         out.setVersion(QtCore.QDataStream.Qt_4_0)
         out.writeUInt16(0)
         self.counting += 1
-        fortune = str(self.counting)
+        counter_str = str(self.counting)
 
-        out.writeString(fortune)
+        out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
