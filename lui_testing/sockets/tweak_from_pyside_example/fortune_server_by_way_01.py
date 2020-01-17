@@ -35,17 +35,9 @@ class Server(QtWidgets.QDialog):
                 "You cannot kill time without injuring eternity.",
                 "Computers are not intelligent. They only think they are.")
 
-        quitButton.clicked.connect(self.close)
         self.tcpServer.newConnection.connect(self.sendFortune)
-
-        buttonLayout = QtWidgets.QHBoxLayout()
-        buttonLayout.addStretch(1)
-        buttonLayout.addWidget(quitButton)
-        buttonLayout.addStretch(1)
-
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
-        mainLayout.addLayout(buttonLayout)
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Fortune Server")
