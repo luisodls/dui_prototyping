@@ -37,14 +37,6 @@ class Server(QtWidgets.QDialog):
         self.counting += 1
         fortune = str(self.counting)
 
-        try:
-            # Python v3.
-            fortune = str(fortune, encoding='ascii')
-
-        except:
-            # Python v2.
-            pass
-
         out.writeString(fortune)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
