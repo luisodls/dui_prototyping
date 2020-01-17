@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 import random
-
 from PySide2 import QtCore, QtWidgets, QtNetwork
-#from PySide2 import QtCore, QtWidgets, QtNetwork
-
 
 class Server(QtWidgets.QDialog):
     def __init__(self, parent=None):

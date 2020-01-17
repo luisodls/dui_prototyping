@@ -2,7 +2,6 @@
 
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 
-
 class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
@@ -10,9 +9,8 @@ class Client(QtWidgets.QDialog):
         self.blockSize = 0
         self.currentFortune = ''
 
-        hostLabel = QtWidgets.QLabel("&Server name:")
-        self.hostLineEdit = QtWidgets.QLineEdit('Localhost')
-        hostLabel.setBuddy(self.hostLineEdit)
+        DataInLabel = QtWidgets.QLabel("Type here")
+        self.dataLineEdit = QtWidgets.QLineEdit('test text')
 
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
                 "the Fortune Server example as well.")
@@ -26,8 +24,8 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.error.connect(self.displayError)
 
         mainLayout = QtWidgets.QGridLayout()
-        mainLayout.addWidget(hostLabel, 0, 0)
-        mainLayout.addWidget(self.hostLineEdit, 0, 1)
+        mainLayout.addWidget(DataInLabel, 0, 0)
+        mainLayout.addWidget(self.dataLineEdit, 0, 1)
         mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
         mainLayout.addWidget(self.getFortuneButton, 3, 0, 1, 2)
         self.setLayout(mainLayout)
