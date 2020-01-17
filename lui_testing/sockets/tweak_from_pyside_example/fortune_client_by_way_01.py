@@ -13,13 +13,13 @@ class Client(QtWidgets.QDialog):
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
 
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
-                "the Fortune Server example as well.")
+                "the Server example as well.")
 
-        self.getFortuneButton = QtWidgets.QPushButton("Get Fortune")
+        self.Talk2serverButton = QtWidgets.QPushButton("send to server")
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
 
-        self.getFortuneButton.clicked.connect(self.requestNewFortune)
+        self.Talk2serverButton.clicked.connect(self.requestNewFortune)
         self.tcpSocket.readyRead.connect(self.readFortune)
         self.tcpSocket.error.connect(self.displayError)
 
@@ -27,7 +27,7 @@ class Client(QtWidgets.QDialog):
         mainLayout.addWidget(DataInLabel, 0, 0)
         mainLayout.addWidget(self.dataLineEdit, 0, 1)
         mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
-        mainLayout.addWidget(self.getFortuneButton, 3, 0, 1, 2)
+        mainLayout.addWidget(self.Talk2serverButton, 3, 0, 1, 2)
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Fortune Client")
@@ -70,16 +70,16 @@ class Client(QtWidgets.QDialog):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
             pass
         elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
-            QtWidgets.QMessageBox.information(self, "Fortune Client",
+            QtWidgets.QMessageBox.information(self, " Client",
                     "The host was not found. Please check the host name and "
                     "port settings.")
         elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
-            QtWidgets.QMessageBox.information(self, "Fortune Client",
-                    "The connection was refused by the peer. Make sure the "
-                    "fortune server is running, and check that the host name "
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The connection was refused by the peer. Make sure "
+                    "the server is running, and check that the host name "
                     "and port settings are correct.")
         else:
-            QtWidgets.QMessageBox.information(self, "Fortune Client",
+            QtWidgets.QMessageBox.information(self, " Client",
                     "The following error occurred: %s." % self.tcpSocket.errorString())
 
 
