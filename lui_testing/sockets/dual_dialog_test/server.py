@@ -7,13 +7,32 @@ https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-message
 
 import sys
 from PySide2.QtCore import QByteArray, QDataStream, QIODevice
-from PySide2.QtWidgets import QApplication, QDialog
 from PySide2.QtNetwork import QHostAddress, QTcpServer
+from PySide2.QtWidgets import (
+    QApplication,
+    QDialog,
+    QVBoxLayout,
+    QPushButton,
+    QLineEdit
+    )
 
 class Server(QDialog):
     def __init__(self):
         super().__init__()
         self.tcpServer = None
+
+        mainbox = QVBoxLayout()
+
+        self.txt_in = QLineEdit('test text')
+        mainbox.addWidget(self.txt_in)
+
+        send_but = QPushButton("send MSG")
+        #send_but.clicked.connect(self.build_request)
+        mainbox.addWidget(send_but)
+
+        self.setLayout(mainbox)
+
+
 
     def sessionOpened(self):
         self.tcpServer = QTcpServer(self)
@@ -39,6 +58,7 @@ class Server(QDialog):
         out.writeString(message)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
+
         clientConnection.waitForReadyRead()
         instr = clientConnection.readAll()
 
