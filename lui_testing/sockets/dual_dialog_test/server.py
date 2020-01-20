@@ -27,11 +27,10 @@ class Server(QDialog):
         mainbox.addWidget(self.txt_in)
 
         send_but = QPushButton("send MSG")
-        #send_but.clicked.connect(self.build_request)
+        send_but.clicked.connect(self.build_msg_back)
         mainbox.addWidget(send_but)
 
         self.setLayout(mainbox)
-
 
 
     def sessionOpened(self):
@@ -46,29 +45,31 @@ class Server(QDialog):
         self.tcpServer.newConnection.connect(self.dealCommunication)
 
     def dealCommunication(self):
-        clientConnection = self.tcpServer.nextPendingConnection()
-        block = QByteArray()
-        out = QDataStream(block, QIODevice.ReadWrite)
-        out.setVersion(QDataStream.Qt_5_0)
-        out.writeUInt16(0)
-
-        message = "Goodbye!"
-        message = str(message)
-
-        out.writeString(message)
-        out.device().seek(0)
-        out.writeUInt16(block.size() - 2)
-
-        clientConnection.waitForReadyRead()
-        instr = clientConnection.readAll()
+        self.clientConnection = self.tcpServer.nextPendingConnection()
+        self.clientConnection.waitForReadyRead()
+        instr = self.clientConnection.readAll()
 
         print("Printing from server")
         print(str(instr, encoding='ascii'))
         print("done ... Server")
 
-        clientConnection.disconnected.connect(clientConnection.deleteLater)
-        clientConnection.write(block)
-        clientConnection.disconnectFromHost()
+    def build_msg_back(self):
+
+        block = QByteArray()
+        out = QDataStream(block, QIODevice.ReadWrite)
+        out.setVersion(QDataStream.Qt_5_0)
+        out.writeUInt16(0)
+
+        message = str(self.txt_in.text())
+
+        out.writeString(message)
+        out.device().seek(0)
+        out.writeUInt16(block.size() - 2)
+
+
+        self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
+        self.clientConnection.write(block)
+        self.clientConnection.disconnectFromHost()
 
 
 if __name__ == '__main__':
