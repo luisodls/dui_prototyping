@@ -1,3 +1,10 @@
+
+'''
+tweaked version of code copied from:
+
+https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-messages-between-client-and-server
+'''
+
 import sys
 from PySide2.QtCore import QByteArray, QDataStream, QIODevice
 from PySide2.QtWidgets import QApplication, QDialog
