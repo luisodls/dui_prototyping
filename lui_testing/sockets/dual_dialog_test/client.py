@@ -13,7 +13,8 @@ from PySide2.QtWidgets import (
     QApplication,
     QDialog,
     QVBoxLayout,
-    QPushButton
+    QPushButton,
+    QLineEdit
     )
 
 class Client(QDialog):
@@ -23,15 +24,24 @@ class Client(QDialog):
         self.blockSize = 0
 
         mainbox = QVBoxLayout()
+
+        self.txt_in = QLineEdit('test text')
+        mainbox.addWidget(self.txt_in)
+
         send_but = QPushButton("send MSG")
-        send_but.clicked.connect(self.make_request)
+        send_but.clicked.connect(self.build_request)
         mainbox.addWidget(send_but)
+
         self.setLayout(mainbox)
 
-    def make_request(self):
+    def build_request(self):
+
+        txt2send = str.encode(self.txt_in.text())
+
+
         self.makeRequest()
         self.tcpSocket.waitForConnected(1000)
-        self.tcpSocket.write(b'hello')
+        self.tcpSocket.write(txt2send)
         self.tcpSocket.readyRead.connect(self.dealCommunication)
         self.tcpSocket.error.connect(self.displayError)
 
