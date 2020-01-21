@@ -8,12 +8,16 @@ https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-message
 import sys
 from PySide2.QtCore import QByteArray, QDataStream, QIODevice
 from PySide2.QtNetwork import QHostAddress, QTcpServer
+
+from PySide2.QtGui import QTextCursor
+
 from PySide2.QtWidgets import (
     QApplication,
     QDialog,
     QVBoxLayout,
     QPushButton,
-    QLineEdit
+    QLineEdit,
+    QTextEdit
     )
 
 class Server(QDialog):
@@ -21,16 +25,23 @@ class Server(QDialog):
         super().__init__()
         self.tcpServer = None
 
-        mainbox = QVBoxLayout()
+        main_box = QVBoxLayout()
+
+        self.incoming_text = QTextEdit()
+        main_box.addWidget(self.incoming_text)
+
+        low_hbox = QVBoxLayout()
 
         self.txt_in = QLineEdit('test text')
-        mainbox.addWidget(self.txt_in)
+        low_hbox.addWidget(self.txt_in)
 
         send_but = QPushButton("send MSG")
         send_but.clicked.connect(self.build_msg_back)
-        mainbox.addWidget(send_but)
+        low_hbox.addWidget(send_but)
 
-        self.setLayout(mainbox)
+        main_box.addLayout(low_hbox)
+
+        self.setLayout(main_box)
 
 
     def sessionOpened(self):
@@ -49,8 +60,12 @@ class Server(QDialog):
         self.clientConnection.waitForReadyRead()
         instr = self.clientConnection.readAll()
 
+        self.incoming_text.moveCursor(QTextCursor.End)
+        str_instr = str(instr, 'utf-8')
+        self.incoming_text.insertPlainText( str_instr + "\n" )
+
         print("Printing from server")
-        print(str(instr, encoding='ascii'))
+        print(str(str_instr))
         print("done ... Server")
 
     def build_msg_back(self):

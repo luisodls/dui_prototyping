@@ -6,15 +6,21 @@ https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-message
 '''
 
 import sys
-from PySide2.QtCore import QDataStream, QIODevice
 from PySide2.QtNetwork import QTcpSocket, QAbstractSocket
+from PySide2.QtGui import QTextCursor
+
+from PySide2.QtCore import (
+    QDataStream,
+    QIODevice
+    )
 
 from PySide2.QtWidgets import (
     QApplication,
     QDialog,
     QVBoxLayout,
     QPushButton,
-    QLineEdit
+    QLineEdit,
+    QTextEdit
     )
 
 class Client(QDialog):
@@ -23,16 +29,24 @@ class Client(QDialog):
         self.tcpSocket = QTcpSocket(self)
         self.blockSize = 0
 
-        mainbox = QVBoxLayout()
+        main_box = QVBoxLayout()
+
+        self.incoming_text = QTextEdit()
+        main_box.addWidget(self.incoming_text)
+
+        low_hbox = QVBoxLayout()
 
         self.txt_in = QLineEdit('test text')
-        mainbox.addWidget(self.txt_in)
+        low_hbox.addWidget(self.txt_in)
 
         send_but = QPushButton("send MSG")
         send_but.clicked.connect(self.build_request)
-        mainbox.addWidget(send_but)
+        low_hbox.addWidget(send_but)
 
-        self.setLayout(mainbox)
+        main_box.addLayout(low_hbox)
+
+        self.setLayout(main_box)
+
 
     def build_request(self):
         txt2send = str.encode(self.txt_in.text())
@@ -59,8 +73,12 @@ class Client(QDialog):
         if self.tcpSocket.bytesAvailable() < self.blockSize:
             return
 
+        self.incoming_text.moveCursor(QTextCursor.End)
+        str_instr = str(instr.readString())
+        self.incoming_text.insertPlainText(str_instr + "\n")
+
         print("Printing from client")
-        print(str(instr.readString()))
+        print(str_instr)
         print("done ... Client")
 
     def displayError(self, socketError):
