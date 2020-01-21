@@ -35,12 +35,8 @@ class Client(QDialog):
         self.setLayout(mainbox)
 
     def build_request(self):
-
         txt2send = str.encode(self.txt_in.text())
-
-
         self.makeRequest()
-        self.tcpSocket.waitForConnected(1000)
         self.tcpSocket.write(txt2send)
         self.tcpSocket.readyRead.connect(self.dealCommunication)
         self.tcpSocket.error.connect(self.displayError)
@@ -49,6 +45,7 @@ class Client(QDialog):
         HOST = '127.0.0.1'
         PORT = 8000
         self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
+        self.tcpSocket.waitForConnected(1000)
 
     def dealCommunication(self):
         instr = QDataStream(self.tcpSocket)

@@ -66,7 +66,6 @@ class Server(QDialog):
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
-
         self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
         self.clientConnection.write(block)
         self.clientConnection.disconnectFromHost()
