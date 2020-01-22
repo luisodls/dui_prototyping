@@ -73,28 +73,13 @@ class Client(QDialog):
 
         self.blockSize = instr.readUInt16()
 
-        '''
-        if self.blockSize == 0:
-
-            if self.tcpSocket.bytesAvailable() < 2:
-                print("self.tcpSocket.bytesAvailable() < 2")
-                return
-
-            self.blockSize = instr.readUInt16()
-        '''
-
         if self.tcpSocket.bytesAvailable() < self.blockSize:
             print("self.tcpSocket.bytesAvailable() < self.blockSize")
             return
 
-        print("instr", instr)
-
         self.incoming_text.moveCursor(QTextCursor.End)
         read_str = instr.readString()
-        print("read_str =", read_str)
         str_instr = str(read_str)
-        print("str_instr =", str_instr)
-
         self.incoming_text.insertPlainText(str_instr + "\n")
 
         print("Printing from client")
