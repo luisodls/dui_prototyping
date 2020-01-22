@@ -27,6 +27,11 @@ class Client(QDialog):
     def __init__(self):
         super().__init__()
         self.tcpSocket = QTcpSocket(self)
+        self.tcpSocket.readyRead.connect(self.dealCommunication)
+        self.tcpSocket.error.connect(self.displayError)
+
+
+
         self.blockSize = 0
 
         main_box = QVBoxLayout()
@@ -52,8 +57,6 @@ class Client(QDialog):
         txt2send = str.encode(self.txt_in.text())
         self.makeRequest()
         self.tcpSocket.write(txt2send)
-        self.tcpSocket.readyRead.connect(self.dealCommunication)
-        self.tcpSocket.error.connect(self.displayError)
 
     def makeRequest(self):
         HOST = '127.0.0.1'
@@ -62,19 +65,36 @@ class Client(QDialog):
         self.tcpSocket.waitForConnected(1000)
 
     def dealCommunication(self):
+
+        self.tcpSocket.waitForConnected(1000) ###
+
         instr = QDataStream(self.tcpSocket)
         instr.setVersion(QDataStream.Qt_5_0)
+
+        self.blockSize = instr.readUInt16()
+
+        '''
         if self.blockSize == 0:
+
             if self.tcpSocket.bytesAvailable() < 2:
+                print("self.tcpSocket.bytesAvailable() < 2")
                 return
 
             self.blockSize = instr.readUInt16()
+        '''
 
         if self.tcpSocket.bytesAvailable() < self.blockSize:
+            print("self.tcpSocket.bytesAvailable() < self.blockSize")
             return
 
+        print("instr", instr)
+
         self.incoming_text.moveCursor(QTextCursor.End)
-        str_instr = str(instr.readString())
+        read_str = instr.readString()
+        print("read_str =", read_str)
+        str_instr = str(read_str)
+        print("str_instr =", str_instr)
+
         self.incoming_text.insertPlainText(str_instr + "\n")
 
         print("Printing from client")

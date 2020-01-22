@@ -46,9 +46,9 @@ class Server(QDialog):
 
     def sessionOpened(self):
         self.tcpServer = QTcpServer(self)
-        PORT = 8000
-        address = QHostAddress('127.0.0.1')
-        if not self.tcpServer.listen(address, PORT):
+        self.MyPort = 8000
+        self.MyAddress = QHostAddress('127.0.0.1')
+        if not self.tcpServer.listen(self.MyAddress, self.MyPort):
             print("cant listen!")
             self.close()
             return
@@ -68,6 +68,7 @@ class Server(QDialog):
         print(str(str_instr))
         print("done ... Server")
 
+
     def build_msg_back(self):
 
         block = QByteArray()
@@ -76,15 +77,17 @@ class Server(QDialog):
         out.writeUInt16(0)
 
         message = str(self.txt_in.text())
-
+        print("message(server) = ", message)
         out.writeString(message)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
-
+        print("(server) out.status()", out.status())
         self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
         self.clientConnection.write(block)
         self.clientConnection.disconnectFromHost()
 
+        #test
+        #self.tcpServer.listen(self.MyAddress, self.MyPort)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
