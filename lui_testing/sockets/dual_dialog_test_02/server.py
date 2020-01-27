@@ -52,6 +52,7 @@ class Server(QDialog):
 
     def dealCommunication(self):
         self.clientConnection = self.tcpServer.nextPendingConnection()
+        #self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
         self.clientConnection.waitForReadyRead()
         instr = self.clientConnection.readAll()
 
@@ -73,7 +74,6 @@ class Server(QDialog):
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
         print("(server) out.status()", out.status())
-        self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
         self.clientConnection.write(block)
         self.clientConnection.disconnectFromHost()
 

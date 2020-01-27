@@ -41,6 +41,7 @@ class Client(QDialog):
         send_but = QPushButton("send MSG")
 
         send_but.clicked.connect(self.build_request)
+        #self.makeRequest()  #
 
         low_hbox.addWidget(send_but)
         main_box.addLayout(low_hbox)
