@@ -28,8 +28,9 @@ class Client(QDialog):
         super().__init__()
         self.tcpSocket = QTcpSocket(self)
         self.tcpSocket.readyRead.connect(self.dealCommunication)
+        self.tcpSocket.stateChanged.connect(self.state_changed)
         self.tcpSocket.error.connect(self.displayError)
-
+        #self.tcpSocket.disconnected.connect(self.makeRequest)
         self.blockSize = 0
 
         main_box = QVBoxLayout()
@@ -47,6 +48,26 @@ class Client(QDialog):
         main_box.addLayout(low_hbox)
         self.setLayout(main_box)
 
+    def state_changed(self, state):
+        print("client(state_changed)")
+        print("type(state): ", type(state))
+        '''
+        print("dir(state)", dir(state))
+        print("state.BoundState       ", state.BoundState       )
+        print("state.ClosingState     ", state.ClosingState     )
+        print("state.ConnectedState   ", state.ConnectedState   )
+        print("state.ConnectingState  ", state.ConnectingState  )
+        print("state.HostLookupState  ", state.HostLookupState  )
+        print("state.ListeningState   ", state.ListeningState   )
+        print("state.UnconnectedState ", state.UnconnectedState )
+        print("state.values", state.values)
+
+        '''
+
+        print("state.name", state.name)
+
+        #print("\n self.tcpSocket.state(): ", self.tcpSocket.state())
+
     def build_request(self):
         txt2send = str.encode(self.txt_in.text())
         self.makeRequest()
@@ -55,8 +76,13 @@ class Client(QDialog):
     def makeRequest(self):
         HOST = '127.0.0.1'
         PORT = 8000
-        self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
-        self.tcpSocket.waitForConnected(1000)
+        try:
+            self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
+            self.tcpSocket.waitForConnected(1000)
+
+        except:
+            print("failed attempt to connect from client")
+
 
     def dealCommunication(self):
 
@@ -77,6 +103,8 @@ class Client(QDialog):
         self.incoming_text.insertPlainText(str_instr + "\n")
 
         print("from client: ", str_instr, "<<")
+
+        self.makeRequest()
 
     def displayError(self, socketError):
         if socketError == QAbstractSocket.RemoteHostClosedError:
