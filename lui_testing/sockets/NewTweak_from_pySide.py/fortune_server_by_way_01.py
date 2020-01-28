@@ -41,12 +41,22 @@ class Server(QtWidgets.QDialog):
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
+        '''
         clientConnection = self.tcpServer.nextPendingConnection()
         clientConnection.disconnected.connect(clientConnection.deleteLater)
 
         clientConnection.write(block)
         clientConnection.disconnectFromHost()
+        '''
 
+        self.clientConnection = self.tcpServer.nextPendingConnection()
+        self.clientConnection.waitForReadyRead()
+        instr = self.clientConnection.readAll()
+
+        str_instr = str(instr, 'utf-8')
+        print("Printing from server")
+        print(str(str_instr))
+        print("done ... Server")
 
 if __name__ == '__main__':
 
