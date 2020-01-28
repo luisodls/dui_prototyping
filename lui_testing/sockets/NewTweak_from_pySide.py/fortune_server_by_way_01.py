@@ -22,14 +22,25 @@ class Server(QtWidgets.QDialog):
 
         self.counting = 0
 
-        self.tcpServer.newConnection.connect(self.sendCounting)
+        self.tcpServer.newConnection.connect(self.print_msg)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
         self.setLayout(mainLayout)
         self.setWindowTitle("Counter Server")
 
+    def print_msg(self):
+        self.clientConnection = self.tcpServer.nextPendingConnection()
+        self.clientConnection.waitForReadyRead()
+        instr = self.clientConnection.readAll()
+
+        str_instr = str(instr, 'utf-8')
+        print("Printing from server")
+        print(str(str_instr), "...")
+        print("done ... Server")
+
     def sendCounting(self):
-        print("sendCounting")
+        to_do = '''
+        print("print_msg")
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         out.setVersion(QtCore.QDataStream.Qt_4_0)
@@ -40,23 +51,12 @@ class Server(QtWidgets.QDialog):
         out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
-
-        '''
         clientConnection = self.tcpServer.nextPendingConnection()
         clientConnection.disconnected.connect(clientConnection.deleteLater)
 
         clientConnection.write(block)
         clientConnection.disconnectFromHost()
         '''
-
-        self.clientConnection = self.tcpServer.nextPendingConnection()
-        self.clientConnection.waitForReadyRead()
-        instr = self.clientConnection.readAll()
-
-        str_instr = str(instr, 'utf-8')
-        print("Printing from server")
-        print(str(str_instr))
-        print("done ... Server")
 
 if __name__ == '__main__':
 
