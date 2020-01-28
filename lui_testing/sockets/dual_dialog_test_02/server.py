@@ -49,7 +49,7 @@ class Server(QDialog):
             return
 
         self.tcpServer.newConnection.connect(self.dealCommunication)
-
+        self.tcpServer.acceptError.connect(self.displayError)
     def dealCommunication(self):
         self.clientConnection = self.tcpServer.nextPendingConnection()
         #self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
@@ -77,6 +77,8 @@ class Server(QDialog):
         self.clientConnection.write(block)
         self.clientConnection.disconnectFromHost()
 
+    def displayError(self, serverError):
+        print(self, "(server Error): \n %s." % self.tcpServer.errorString())
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

@@ -52,17 +52,16 @@ class Client(QDialog):
 
         self.setLayout(main_box)
 
-
-    def build_request(self):
-        txt2send = str.encode(self.txt_in.text())
-        self.makeRequest()
-        self.tcpSocket.write(txt2send)
-
     def makeRequest(self):
         HOST = '127.0.0.1'
         PORT = 8000
         self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
         self.tcpSocket.waitForConnected(1000)
+
+    def build_request(self):
+        txt2send = str.encode(self.txt_in.text())
+        self.makeRequest()
+        self.tcpSocket.write(txt2send)
 
     def dealCommunication(self):
 
@@ -87,11 +86,16 @@ class Client(QDialog):
         print("done ... Client")
 
     def displayError(self, socketError):
+
+        print(self, "The following error occurred: %s." % self.tcpSocket.errorString())
+
+        '''
         if socketError == QAbstractSocket.RemoteHostClosedError:
             pass
 
         else:
             print(self, "The following error occurred: %s." % self.tcpSocket.errorString())
+        '''
 
 
 if __name__ == '__main__':
