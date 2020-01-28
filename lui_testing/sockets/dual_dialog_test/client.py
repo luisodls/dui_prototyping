@@ -30,17 +30,12 @@ class Client(QDialog):
         self.tcpSocket.readyRead.connect(self.dealCommunication)
         self.tcpSocket.error.connect(self.displayError)
 
-
-
         self.blockSize = 0
 
         main_box = QVBoxLayout()
-
         self.incoming_text = QTextEdit()
         main_box.addWidget(self.incoming_text)
-
         low_hbox = QVBoxLayout()
-
         self.txt_in = QLineEdit('test text')
         low_hbox.addWidget(self.txt_in)
 

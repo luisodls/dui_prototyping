@@ -34,6 +34,12 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.abort()
         self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
 
+        if self.tcpSocket.waitForConnected(1000):
+            print("Connected!")
+
+        txt2send = str.encode(self.dataLineEdit.text())
+        self.tcpSocket.write(txt2send)
+
     def readFromServer(self):
         instr = QtCore.QDataStream(self.tcpSocket)
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
