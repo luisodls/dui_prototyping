@@ -41,6 +41,7 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.write(txt2send)
 
     def readFromServer(self):
+        print("client.readFromServer")
         instr = QtCore.QDataStream(self.tcpSocket)
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
 
@@ -54,13 +55,6 @@ class Client(QtWidgets.QDialog):
             return
 
         nxt_count = instr.readString()
-
-        try:
-            # Python v3.
-            nxt_count = str(nxt_count, encoding='ascii')
-        except TypeError:
-            # Python v2.
-            pass
 
         self.statusLabel.setText(nxt_count)
 
