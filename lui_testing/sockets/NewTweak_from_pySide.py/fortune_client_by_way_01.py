@@ -47,15 +47,16 @@ class Client(QtWidgets.QDialog):
 
         if self.blockSize == 0:
             if self.tcpSocket.bytesAvailable() < 2:
+                print("tcpSocket.bytesAvailable() < 2 (client)")
                 return
 
             self.blockSize = instr.readUInt16()
 
         if self.tcpSocket.bytesAvailable() < self.blockSize:
+            print("tcpSocket.bytesAvailable() < self.blockSize")
             return
 
         nxt_count = instr.readString()
-
         self.statusLabel.setText(nxt_count)
 
     def displayError(self, socketError):
