@@ -47,10 +47,7 @@ class Client(QtWidgets.QDialog):
 
     def readFromServer(self):
         print("client.readFromServer")
-
-        #print("dir(self.tcpSocket)", dir(self.tcpSocket))
         instr = QtCore.QDataStream(self.tcpSocket)
-        #instr.resetStatus()
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
         print("self.blockSize =", self.blockSize)
 
@@ -68,8 +65,6 @@ class Client(QtWidgets.QDialog):
         nxt_count = instr.readString()
         print("nxt_count(client) =", nxt_count)
         self.statusLabel.setText(nxt_count)
-        #print("dir(instr)", dir(instr))
-        #self.tcpSocket.write(str.encode("<>"))
         self.blockSize = 0
 
     def displayError(self, socketError):

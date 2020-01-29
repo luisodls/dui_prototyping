@@ -58,9 +58,6 @@ class Server(QtWidgets.QDialog):
 
         self.new_client_socket.write(block)
 
-        #self.new_client_socket.disconnected.connect(clientConnection.deleteLater)
-        #self.new_client_socket.disconnectFromHost()
-
 
 if __name__ == '__main__':
 
