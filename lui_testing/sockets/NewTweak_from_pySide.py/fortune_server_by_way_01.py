@@ -52,7 +52,6 @@ class Server(QtWidgets.QDialog):
         out.writeUInt16(0)
         self.counting += 1
         counter_str = str(self.counting)
-
         out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
@@ -61,6 +60,7 @@ class Server(QtWidgets.QDialog):
 
         #self.new_client_socket.disconnected.connect(clientConnection.deleteLater)
         #self.new_client_socket.disconnectFromHost()
+
 
 if __name__ == '__main__':
 

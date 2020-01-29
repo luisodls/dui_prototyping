@@ -52,6 +52,7 @@ class Client(QtWidgets.QDialog):
         instr = QtCore.QDataStream(self.tcpSocket)
         #instr.resetStatus()
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
+        print("self.blockSize =", self.blockSize)
 
         if self.blockSize == 0:
             if self.tcpSocket.bytesAvailable() < 2:
@@ -68,7 +69,8 @@ class Client(QtWidgets.QDialog):
         print("nxt_count(client) =", nxt_count)
         self.statusLabel.setText(nxt_count)
         #print("dir(instr)", dir(instr))
-        self.tcpSocket.write(str.encode("<>"))
+        #self.tcpSocket.write(str.encode("<>"))
+        self.blockSize = 0
 
     def displayError(self, socketError):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
