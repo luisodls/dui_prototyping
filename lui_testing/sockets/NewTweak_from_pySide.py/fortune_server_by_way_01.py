@@ -25,6 +25,10 @@ class Server(QtWidgets.QDialog):
         self.tcpServer.newConnection.connect(self.print_msg)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
+
+        send_count_butt = QtWidgets.QPushButton("send counting")
+        mainLayout.addWidget(send_count_butt)
+
         self.setLayout(mainLayout)
         self.setWindowTitle("Counter Server")
 
@@ -39,7 +43,7 @@ class Server(QtWidgets.QDialog):
         print("done ... Server")
 
     def sendCounting(self):
-        to_do = '''
+
         print("print_msg")
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
@@ -56,7 +60,6 @@ class Server(QtWidgets.QDialog):
 
         clientConnection.write(block)
         clientConnection.disconnectFromHost()
-        '''
 
 if __name__ == '__main__':
 
