@@ -19,6 +19,7 @@ class Client(QtWidgets.QDialog):
         self.Talk2serverButton.clicked.connect(self.requestNewConnection)
         self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
+        self.tcpSocket.stateChanged.connect(self.tell_State)
 
         mainLayout = QtWidgets.QGridLayout()
         mainLayout.addWidget(QtWidgets.QLabel("Type here"), 0, 0)
@@ -28,6 +29,10 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Fortune Client")
+
+    def tell_State(self):
+        print("self.tcpSocket.state()", self.tcpSocket.state())
+        print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
 
     def requestNewConnection(self):
         self.blockSize = 0
@@ -42,7 +47,10 @@ class Client(QtWidgets.QDialog):
 
     def readFromServer(self):
         print("client.readFromServer")
+
+        #print("dir(self.tcpSocket)", dir(self.tcpSocket))
         instr = QtCore.QDataStream(self.tcpSocket)
+        #instr.resetStatus()
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
 
         if self.blockSize == 0:
@@ -57,7 +65,10 @@ class Client(QtWidgets.QDialog):
             return
 
         nxt_count = instr.readString()
+        print("nxt_count(client) =", nxt_count)
         self.statusLabel.setText(nxt_count)
+        #print("dir(instr)", dir(instr))
+        self.tcpSocket.write(str.encode("<>"))
 
     def displayError(self, socketError):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
