@@ -27,6 +27,7 @@ class Server(QtWidgets.QDialog):
         mainLayout.addWidget(statusLabel)
 
         send_count_butt = QtWidgets.QPushButton("send counting")
+        send_count_butt.clicked.connect(self.sendCounting)
         mainLayout.addWidget(send_count_butt)
 
         self.setLayout(mainLayout)
@@ -55,11 +56,11 @@ class Server(QtWidgets.QDialog):
         out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
-        clientConnection = self.tcpServer.nextPendingConnection()
-        clientConnection.disconnected.connect(clientConnection.deleteLater)
 
-        clientConnection.write(block)
-        clientConnection.disconnectFromHost()
+        self.clientConnection.write(block)
+
+        #self.clientConnection.disconnected.connect(clientConnection.deleteLater)
+        #self.clientConnection.disconnectFromHost()
 
 if __name__ == '__main__':
 
