@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
+
+class Client(QtWidgets.QDialog):
+    def __init__(self, parent=None):
+        super(Client, self).__init__(parent)
+
+        self.incoming_text = QtWidgets.QTextEdit()
+        self.dataLineEdit = QtWidgets.QLineEdit('test text')
+        send2serverButton = QtWidgets.QPushButton("send to server")
+
+        self.tcpSocket = QtNetwork.QTcpSocket(self)
+
+        send2serverButton.clicked.connect(self.requestNewConnection)
+        self.tcpSocket.readyRead.connect(self.readFromServer)
+        self.tcpSocket.error.connect(self.displayError)
+        self.tcpSocket.stateChanged.connect(self.tell_State)
+
+        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout.addWidget(self.incoming_text)
+        mainLayout.addWidget(QtWidgets.QLabel(" \n Type here"))
+        mainLayout.addWidget(self.dataLineEdit)
+        mainLayout.addWidget(send2serverButton)
+        self.setLayout(mainLayout)
+        self.setWindowTitle("DUI2 App")
+
+    def tell_State(self):
+        print("self.tcpSocket.state()", self.tcpSocket.state())
+        print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
+
+    def requestNewConnection(self):
+        self.tcpSocket.abort()
+        self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
+        if self.tcpSocket.waitForConnected(1000):
+            print("Connected!")
+
+        else:
+            print("Failed to connect")
+
+        txt2send = str.encode(self.dataLineEdit.text())
+        self.tcpSocket.write(txt2send)
+
+    def readFromServer(self):
+        print("client.readFromServer")
+        InStr = QtCore.QDataStream(self.tcpSocket)
+        InStr.setVersion(QtCore.QDataStream.Qt_5_0)
+
+        blockSize = InStr.readUInt16()
+
+        if self.tcpSocket.bytesAvailable() < blockSize:
+            print("tcpSocket.bytesAvailable() < blockSize")
+            return
+
+        nxt_str = InStr.readString()
+        print("nxt_str(client) =", nxt_str)
+        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
+        self.incoming_text.insertPlainText(nxt_str + "\n")
+
+    def displayError(self, socketError):
+        if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
+            pass
+        elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
+            QtWidgets.QMessageBox.information(self, "DUI2 Client",
+                    "The host was not found. Please check the host name and "
+                    "port settings.")
+        elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The connection was refused by the peer. Make sure "
+                    "the server is running, and check that the host name "
+                    "and port settings are correct.")
+        else:
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The following error occurred: %s." % self.tcpSocket.errorString())
+
+
+if __name__ == '__main__':
+
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
+    client = Client()
+    client.show()
+    sys.exit(client.exec_())
