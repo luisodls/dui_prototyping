@@ -22,7 +22,7 @@ class Server(QtWidgets.QDialog):
 
         self.counting = 0
 
-        self.tcpServer.newConnection.connect(self.print_msg)
+        self.tcpServer.newConnection.connect(self.reseived_str)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
 
@@ -33,10 +33,10 @@ class Server(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Counter Server")
 
-    def print_msg(self):
-        self.new_client_socket = self.tcpServer.nextPendingConnection()
-        self.new_client_socket.waitForReadyRead()
-        instr = self.new_client_socket.readAll()
+    def reseived_str(self):
+        self.new_socket = self.tcpServer.nextPendingConnection()
+        self.new_socket.waitForReadyRead()
+        instr = self.new_socket.readAll()
 
         str_instr = str(instr, 'utf-8')
         print("Printing from server")
@@ -44,8 +44,6 @@ class Server(QtWidgets.QDialog):
         print("done ... Server")
 
     def sendCounting(self):
-
-        print("print_msg")
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         out.setVersion(QtCore.QDataStream.Qt_5_0)
@@ -56,7 +54,7 @@ class Server(QtWidgets.QDialog):
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
-        self.new_client_socket.write(block)
+        self.new_socket.write(block)
 
 
 if __name__ == '__main__':
