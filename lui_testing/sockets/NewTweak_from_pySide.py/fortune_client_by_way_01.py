@@ -6,7 +6,7 @@ class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
 
-        self.blockSize = 0
+        #self.blockSize = 0
 
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
         self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
@@ -35,7 +35,7 @@ class Client(QtWidgets.QDialog):
         print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
 
     def requestNewConnection(self):
-        self.blockSize = 0
+        #self.blockSize = 0
         self.tcpSocket.abort()
         self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
 
@@ -49,14 +49,16 @@ class Client(QtWidgets.QDialog):
         print("client.readFromServer")
         instr = QtCore.QDataStream(self.tcpSocket)
         instr.setVersion(QtCore.QDataStream.Qt_4_0)
-        print("self.blockSize =", self.blockSize)
+        #print("self.blockSize =", self.blockSize)
 
+        '''
         if self.blockSize == 0:
             if self.tcpSocket.bytesAvailable() < 2:
                 print("tcpSocket.bytesAvailable() < 2 (client)")
                 return
+        '''
 
-            self.blockSize = instr.readUInt16()
+        self.blockSize = instr.readUInt16()
 
         if self.tcpSocket.bytesAvailable() < self.blockSize:
             print("tcpSocket.bytesAvailable() < self.blockSize")
@@ -65,7 +67,7 @@ class Client(QtWidgets.QDialog):
         nxt_count = instr.readString()
         print("nxt_count(client) =", nxt_count)
         self.statusLabel.setText(nxt_count)
-        self.blockSize = 0
+        #self.blockSize = 0
 
     def displayError(self, socketError):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
