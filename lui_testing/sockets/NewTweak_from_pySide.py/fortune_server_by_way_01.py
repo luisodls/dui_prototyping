@@ -48,7 +48,7 @@ class Server(QtWidgets.QDialog):
         print("print_msg")
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
-        out.setVersion(QtCore.QDataStream.Qt_4_0)
+        out.setVersion(QtCore.QDataStream.Qt_5_0)
         out.writeUInt16(0)
         self.counting += 1
         counter_str = str(self.counting)

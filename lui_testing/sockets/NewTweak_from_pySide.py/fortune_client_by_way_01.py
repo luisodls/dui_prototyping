@@ -45,7 +45,7 @@ class Client(QtWidgets.QDialog):
     def readFromServer(self):
         print("client.readFromServer")
         instr = QtCore.QDataStream(self.tcpSocket)
-        instr.setVersion(QtCore.QDataStream.Qt_4_0)
+        instr.setVersion(QtCore.QDataStream.Qt_5_0)
 
         self.blockSize = instr.readUInt16()
 
