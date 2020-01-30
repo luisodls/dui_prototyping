@@ -7,9 +7,7 @@ class Client(QtWidgets.QDialog):
         super(Client, self).__init__(parent)
 
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
-        self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
-                "the Server example as well.")
-
+        self.incoming_text = QtWidgets.QTextEdit()
         self.Talk2serverButton = QtWidgets.QPushButton("send to server")
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
@@ -19,11 +17,11 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.error.connect(self.displayError)
         self.tcpSocket.stateChanged.connect(self.tell_State)
 
-        mainLayout = QtWidgets.QGridLayout()
-        mainLayout.addWidget(QtWidgets.QLabel("Type here"), 0, 0)
-        mainLayout.addWidget(self.dataLineEdit, 0, 1)
-        mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
-        mainLayout.addWidget(self.Talk2serverButton, 3, 0, 1, 2)
+        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout.addWidget(self.incoming_text)
+        mainLayout.addWidget(QtWidgets.QLabel("Type here"))
+        mainLayout.addWidget(self.dataLineEdit)
+        mainLayout.addWidget(self.Talk2serverButton)
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Fortune Client")
@@ -55,7 +53,8 @@ class Client(QtWidgets.QDialog):
 
         nxt_count = instr.readString()
         print("nxt_count(client) =", nxt_count)
-        self.statusLabel.setText(nxt_count)
+        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
+        self.incoming_text.insertPlainText(nxt_count + "\n")
 
     def displayError(self, socketError):
         if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
