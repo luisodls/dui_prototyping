@@ -1,87 +1,68 @@
+#!/usr/bin/env python
 
-'''
-tweaked version of code copied from:
+from PySide2 import QtCore, QtWidgets, QtNetwork
 
-https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-messages-between-client-and-server
-'''
+class Server(QtWidgets.QDialog):
+    def __init__(self, parent=None):
+        super(Server, self).__init__(parent)
 
-import sys
-from PySide2.QtCore import QByteArray, QDataStream, QIODevice
-from PySide2.QtNetwork import QHostAddress, QTcpServer
+        statusLabel = QtWidgets.QLabel()
 
-from PySide2.QtGui import QTextCursor
-
-from PySide2.QtWidgets import (
-    QApplication,
-    QDialog,
-    QVBoxLayout,
-    QPushButton,
-    QLineEdit,
-    QTextEdit
-    )
-
-class Server(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.tcpServer = None
-
-        main_box = QVBoxLayout()
-        self.incoming_text = QTextEdit()
-        main_box.addWidget(self.incoming_text)
-        low_hbox = QVBoxLayout()
-        self.txt_in = QLineEdit('test text')
-        low_hbox.addWidget(self.txt_in)
-
-        send_but = QPushButton("send MSG")
-        send_but.clicked.connect(self.build_msg_back)
-        low_hbox.addWidget(send_but)
-
-        main_box.addLayout(low_hbox)
-        self.setLayout(main_box)
-
-    def sessionOpened(self):
-        self.tcpServer = QTcpServer(self)
-        self.MyPort = 8000
-        self.MyAddress = QHostAddress('127.0.0.1')
-        if not self.tcpServer.listen(self.MyAddress, self.MyPort):
-            print("cant listen!")
+        self.tcpServer = QtNetwork.QTcpServer(self)
+        if not self.tcpServer.listen(address =QtNetwork.QHostAddress.Any, port = 12354):
+            QtWidgets.QMessageBox.critical(self, "Counter Server",
+                    "Unable to start the server: %s." % self.tcpServer.errorString())
             self.close()
             return
 
-        self.tcpServer.newConnection.connect(self.dealCommunication)
-        self.tcpServer.acceptError.connect(self.displayError)
-    def dealCommunication(self):
-        self.clientConnection = self.tcpServer.nextPendingConnection()
-        #self.clientConnection.disconnected.connect(self.clientConnection.deleteLater)
-        self.clientConnection.waitForReadyRead()
-        instr = self.clientConnection.readAll()
+        print("self.tcpServer.serverAddress()", self.tcpServer.serverAddress())
 
-        self.incoming_text.moveCursor(QTextCursor.End)
+        statusLabel.setText("The server is running on port %d.\nRun the "
+                "Counter Client example now." % self.tcpServer.serverPort())
+
+        self.counting = 0
+
+        self.tcpServer.newConnection.connect(self.print_msg)
+        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout.addWidget(statusLabel)
+
+        send_count_butt = QtWidgets.QPushButton("send counting")
+        send_count_butt.clicked.connect(self.sendCounting)
+        mainLayout.addWidget(send_count_butt)
+
+        self.setLayout(mainLayout)
+        self.setWindowTitle("Counter Server")
+
+    def print_msg(self):
+        self.new_client_socket = self.tcpServer.nextPendingConnection()
+        self.new_client_socket.waitForReadyRead()
+        instr = self.new_client_socket.readAll()
+
         str_instr = str(instr, 'utf-8')
-        self.incoming_text.insertPlainText( str_instr + "\n" )
-        print("from server: ", str(str_instr), "<<")
+        print("Printing from server")
+        print("<<", str(str_instr), ">>")
+        print("done ... Server")
 
-    def build_msg_back(self):
+    def sendCounting(self):
 
-        block = QByteArray()
-        out = QDataStream(block, QIODevice.ReadWrite)
-        out.setVersion(QDataStream.Qt_5_0)
+        print("print_msg")
+        block = QtCore.QByteArray()
+        out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
+        out.setVersion(QtCore.QDataStream.Qt_5_0)
         out.writeUInt16(0)
-
-        message = str(self.txt_in.text())
-        print("message(server) = ", message)
-        out.writeString(message)
+        self.counting += 1
+        counter_str = "number of clicks =" + str(self.counting) + " so far"
+        out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
-        print("(server) out.status()", out.status())
-        self.clientConnection.write(block)
-        self.clientConnection.disconnectFromHost()
 
-    def displayError(self, serverError):
-        print(self, "(server Error): \n %s." % self.tcpServer.errorString())
+        self.new_client_socket.write(block)
+
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
     server = Server()
-    server.sessionOpened()
     sys.exit(server.exec_())

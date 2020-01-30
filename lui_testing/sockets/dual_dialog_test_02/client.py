@@ -1,103 +1,84 @@
+#!/usr/bin/env python
 
-'''
-tweaked version of code copied from:
+from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 
-https://stackoverflow.com/questions/41167409/pyqt5-sending-and-receiving-messages-between-client-and-server
-'''
+class Client(QtWidgets.QDialog):
+    def __init__(self, parent=None):
+        super(Client, self).__init__(parent)
 
-import sys
-from PySide2.QtNetwork import QTcpSocket, QAbstractSocket
-from PySide2.QtGui import QTextCursor
+        self.dataLineEdit = QtWidgets.QLineEdit('test text')
+        self.statusLabel = QtWidgets.QLabel("This examples requires that you run "
+                "the Server example as well.")
 
-from PySide2.QtCore import (
-    QDataStream,
-    QIODevice
-    )
+        self.Talk2serverButton = QtWidgets.QPushButton("send to server")
 
-from PySide2.QtWidgets import (
-    QApplication,
-    QDialog,
-    QVBoxLayout,
-    QPushButton,
-    QLineEdit,
-    QTextEdit
-    )
+        self.tcpSocket = QtNetwork.QTcpSocket(self)
 
-class Client(QDialog):
-    def __init__(self):
-        super().__init__()
-        self.tcpSocket = QTcpSocket(self)
-        self.tcpSocket.readyRead.connect(self.dealCommunication)
-        self.tcpSocket.stateChanged.connect(self.state_changed)
+        self.Talk2serverButton.clicked.connect(self.requestNewConnection)
+        self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
-        self.tcpSocket.disconnected.connect(self.makeRequest)
-        self.blockSize = 0
+        self.tcpSocket.stateChanged.connect(self.tell_State)
 
-        main_box = QVBoxLayout()
-        self.incoming_text = QTextEdit()
-        main_box.addWidget(self.incoming_text)
-        low_hbox = QVBoxLayout()
-        self.txt_in = QLineEdit('test text')
-        low_hbox.addWidget(self.txt_in)
-        send_but = QPushButton("send MSG")
+        mainLayout = QtWidgets.QGridLayout()
+        mainLayout.addWidget(QtWidgets.QLabel("Type here"), 0, 0)
+        mainLayout.addWidget(self.dataLineEdit, 0, 1)
+        mainLayout.addWidget(self.statusLabel, 2, 0, 1, 2)
+        mainLayout.addWidget(self.Talk2serverButton, 3, 0, 1, 2)
+        self.setLayout(mainLayout)
 
-        send_but.clicked.connect(self.build_request)
+        self.setWindowTitle("Fortune Client")
 
-        low_hbox.addWidget(send_but)
-        main_box.addLayout(low_hbox)
-        self.setLayout(main_box)
+    def tell_State(self):
+        print("self.tcpSocket.state()", self.tcpSocket.state())
+        print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
 
-    def state_changed(self, state):
-        print("client(state_changed)")
-        print("type(state): ", type(state))
-        print("state.name", state.name)
+    def requestNewConnection(self):
+        self.tcpSocket.abort()
+        self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
 
-        #print("\n self.tcpSocket.state(): ", self.tcpSocket.state())
+        if self.tcpSocket.waitForConnected(1000):
+            print("Connected!")
 
-    def build_request(self):
-        txt2send = str.encode(self.txt_in.text())
-        self.makeRequest()
+        txt2send = str.encode(self.dataLineEdit.text())
         self.tcpSocket.write(txt2send)
 
-    def makeRequest(self):
-        HOST = '127.0.0.1'
-        PORT = 8000
-        try:
-            print("makeRequest --- ini")
-            self.tcpSocket.connectToHost(HOST, PORT, QIODevice.ReadWrite)
-            print("makeRequest --- mid")
-            self.tcpSocket.waitForConnected(1000)
-            print("makeRequest --- end")
-
-        except:
-            print("failed attempt to connect from client")
-
-
-    def dealCommunication(self):
-
-        self.tcpSocket.waitForConnected(1000) ###
-
-        instr = QDataStream(self.tcpSocket)
-        instr.setVersion(QDataStream.Qt_5_0)
+    def readFromServer(self):
+        print("client.readFromServer")
+        instr = QtCore.QDataStream(self.tcpSocket)
+        instr.setVersion(QtCore.QDataStream.Qt_5_0)
 
         self.blockSize = instr.readUInt16()
 
         if self.tcpSocket.bytesAvailable() < self.blockSize:
-            print("self.tcpSocket.bytesAvailable() < self.blockSize")
+            print("tcpSocket.bytesAvailable() < self.blockSize")
             return
 
-        self.incoming_text.moveCursor(QTextCursor.End)
-        read_str = instr.readString()
-        str_instr = str(read_str)
-        self.incoming_text.insertPlainText(str_instr + "\n")
-
-        print("from client: ", str_instr, "<<")
+        nxt_count = instr.readString()
+        print("nxt_count(client) =", nxt_count)
+        self.statusLabel.setText(nxt_count)
 
     def displayError(self, socketError):
-        print(self, "(client Error): \n %s." % self.tcpSocket.errorString())
+        if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
+            pass
+        elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The host was not found. Please check the host name and "
+                    "port settings.")
+        elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The connection was refused by the peer. Make sure "
+                    "the server is running, and check that the host name "
+                    "and port settings are correct.")
+        else:
+            QtWidgets.QMessageBox.information(self, " Client",
+                    "The following error occurred: %s." % self.tcpSocket.errorString())
 
 
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
+
+    import sys
+
+    app = QtWidgets.QApplication(sys.argv)
     client = Client()
+    client.show()
     sys.exit(client.exec_())
