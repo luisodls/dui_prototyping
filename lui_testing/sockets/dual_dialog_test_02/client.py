@@ -15,7 +15,6 @@ class Client(QtWidgets.QDialog):
         send2serverButton.clicked.connect(self.requestNewConnection)
         self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
-        #self.tcpSocket.stateChanged.connect(self.tell_State)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
@@ -24,6 +23,8 @@ class Client(QtWidgets.QDialog):
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
         self.setWindowTitle("Fortune Client")
+
+        self.tcpSocket.stateChanged.connect(self.tell_State)
 
     def tell_State(self):
         print("self.tcpSocket.state()", self.tcpSocket.state())
