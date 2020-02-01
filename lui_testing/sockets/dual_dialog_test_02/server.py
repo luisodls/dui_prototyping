@@ -22,28 +22,28 @@ class Server(QtWidgets.QDialog):
 
         self.counting = 0
 
-        self.tcpServer.newConnection.connect(self.reseived_str)
+        self.tcpServer.newConnection.connect(self.new_connection)
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(statusLabel)
 
         send_count_butt = QtWidgets.QPushButton("send counting")
-        send_count_butt.clicked.connect(self.sendCounting)
+        send_count_butt.clicked.connect(self.send_counting)
         mainLayout.addWidget(send_count_butt)
 
         self.setLayout(mainLayout)
         self.setWindowTitle("Counter Server")
 
-    def reseived_str(self):
+    def new_connection(self):
         self.new_socket = self.tcpServer.nextPendingConnection()
         self.new_socket.waitForReadyRead()
-        self.print_resived()
+        self.print_resived_str()
         self.new_socket.channelReadyRead.connect(self.channel_ready_read)
 
     def channel_ready_read(self):
         print("channel_ready_read(server)")
-        self.print_resived()
+        self.print_resived_str()
 
-    def print_resived(self):
+    def print_resived_str(self):
         instr = self.new_socket.readAll()
 
         str_instr = str(instr, 'utf-8')
@@ -52,7 +52,7 @@ class Server(QtWidgets.QDialog):
         print("done ... Server")
 
 
-    def sendCounting(self):
+    def send_counting(self):
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         #out.setVersion(QtCore.QDataStream.Qt_5_0)
