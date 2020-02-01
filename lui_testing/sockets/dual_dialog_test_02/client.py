@@ -15,7 +15,7 @@ class Client(QtWidgets.QDialog):
         send2serverButton.clicked.connect(self.requestNewConnection)
         self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
-        self.tcpSocket.stateChanged.connect(self.tell_State)
+        #self.tcpSocket.stateChanged.connect(self.tell_State)
 
         mainLayout = QtWidgets.QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
@@ -30,8 +30,10 @@ class Client(QtWidgets.QDialog):
         print("self.tcpSocket.isValid()", self.tcpSocket.isValid())
 
     def requestNewConnection(self):
-        self.tcpSocket.abort()
-        self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
+        if not self.tcpSocket.isValid():
+            self.tcpSocket.abort()
+            self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
+
         if self.tcpSocket.waitForConnected(1000):
             print("Connected!")
 
@@ -44,7 +46,7 @@ class Client(QtWidgets.QDialog):
     def readFromServer(self):
         print("client.readFromServer")
         InStr = QtCore.QDataStream(self.tcpSocket)
-        InStr.setVersion(QtCore.QDataStream.Qt_5_0)
+        #InStr.setVersion(QtCore.QDataStream.Qt_5_0)
 
         blockSize = InStr.readUInt16()
 

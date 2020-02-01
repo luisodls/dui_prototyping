@@ -36,6 +36,14 @@ class Server(QtWidgets.QDialog):
     def reseived_str(self):
         self.new_socket = self.tcpServer.nextPendingConnection()
         self.new_socket.waitForReadyRead()
+        self.print_resived()
+        self.new_socket.channelReadyRead.connect(self.channel_ready_read)
+
+    def channel_ready_read(self):
+        print("channel_ready_read(server)")
+        self.print_resived()
+
+    def print_resived(self):
         instr = self.new_socket.readAll()
 
         str_instr = str(instr, 'utf-8')
@@ -43,10 +51,11 @@ class Server(QtWidgets.QDialog):
         print("<<", str(str_instr), ">>")
         print("done ... Server")
 
+
     def sendCounting(self):
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
-        out.setVersion(QtCore.QDataStream.Qt_5_0)
+        #out.setVersion(QtCore.QDataStream.Qt_5_0)
         out.writeUInt16(0)
         self.counting += 1
         counter_str = "number of clicks =" + str(self.counting) + " so far"
