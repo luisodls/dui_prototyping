@@ -61,7 +61,7 @@ class Client( QDialog):
 
         nxt_str = InStr.readString()
         print("nxt_str(client) =", nxt_str)
-        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
+        self.incoming_text.moveCursor(QTextCursor.End)
         self.incoming_text.insertPlainText(nxt_str + "\n")
 
     def displayError(self, socketError):
