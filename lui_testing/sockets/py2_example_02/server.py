@@ -40,7 +40,8 @@ class Server( QDialog):
         self.new_socket = self.tcpServer.nextPendingConnection()
         self.new_socket.waitForReadyRead()
         self.print_resived_str()
-        self.new_socket.channelReadyRead.connect(self.channel_ready_read)
+        #self.new_socket.channelReadyRead.connect(self.channel_ready_read)
+        self.new_socket.readyRead.connect(self.channel_ready_read)
 
     def channel_ready_read(self):
         print("channel_ready_read(server)")
