@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 
-from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
+from __future__ import division, print_function
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from PyQt4.QtNetwork import *
 
-class Client(QtWidgets.QDialog):
+class Client( QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
 
-        self.incoming_text = QtWidgets.QTextEdit()
-        self.dataLineEdit = QtWidgets.QLineEdit('test text')
-        send2serverButton = QtWidgets.QPushButton("send to server")
+        self.incoming_text =  QTextEdit()
+        self.dataLineEdit =  QLineEdit('test text')
+        send2serverButton =  QPushButton("send to server")
 
-        self.tcpSocket = QtNetwork.QTcpSocket(self)
+        self.tcpSocket =  QTcpSocket(self)
 
         send2serverButton.clicked.connect(self.requestNewConnection)
         self.tcpSocket.readyRead.connect(self.readFromServer)
         self.tcpSocket.error.connect(self.displayError)
 
-        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout =  QVBoxLayout()
         mainLayout.addWidget(self.incoming_text)
-        mainLayout.addWidget(QtWidgets.QLabel(" \n Type here"))
+        mainLayout.addWidget( QLabel(" \n Type here"))
         mainLayout.addWidget(self.dataLineEdit)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
@@ -33,7 +36,7 @@ class Client(QtWidgets.QDialog):
     def requestNewConnection(self):
         if not self.tcpSocket.isValid():
             self.tcpSocket.abort()
-            self.tcpSocket.connectToHost(QtNetwork.QHostAddress.Any, 12354, QtCore.QIODevice.ReadWrite)
+            self.tcpSocket.connectToHost( QHostAddress.Any, 12354,  QIODevice.ReadWrite)
 
         if self.tcpSocket.waitForConnected(1000):
             print("Connected!")
@@ -41,13 +44,14 @@ class Client(QtWidgets.QDialog):
         else:
             print("Failed to connect")
 
-        txt2send = str.encode(self.dataLineEdit.text())
+        txt2send = str(self.dataLineEdit.text())
+        #txt2send = str.encode(self.dataLineEdit.text())
         self.tcpSocket.write(txt2send)
 
     def readFromServer(self):
         print("client.readFromServer")
-        InStr = QtCore.QDataStream(self.tcpSocket)
-        #InStr.setVersion(QtCore.QDataStream.Qt_5_0)
+        InStr =  QDataStream(self.tcpSocket)
+        #InStr.setVersion( QDataStream.Qt_5_0)
 
         blockSize = InStr.readUInt16()
 
@@ -57,23 +61,23 @@ class Client(QtWidgets.QDialog):
 
         nxt_str = InStr.readString()
         print("nxt_str(client) =", nxt_str)
-        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
+        self.incoming_text.moveCursor(QTextCursor.End)
         self.incoming_text.insertPlainText(nxt_str + "\n")
 
     def displayError(self, socketError):
-        if socketError == QtNetwork.QAbstractSocket.RemoteHostClosedError:
+        if socketError ==  QAbstractSocket.RemoteHostClosedError:
             pass
-        elif socketError == QtNetwork.QAbstractSocket.HostNotFoundError:
-            QtWidgets.QMessageBox.information(self, " Client",
+        elif socketError ==  QAbstractSocket.HostNotFoundError:
+             QMessageBox.information(self, " Client",
                     "The host was not found. Please check the host name and "
                     "port settings.")
-        elif socketError == QtNetwork.QAbstractSocket.ConnectionRefusedError:
-            QtWidgets.QMessageBox.information(self, " Client",
+        elif socketError ==  QAbstractSocket.ConnectionRefusedError:
+             QMessageBox.information(self, " Client",
                     "The connection was refused by the peer. Make sure "
                     "the server is running, and check that the host name "
                     "and port settings are correct.")
         else:
-            QtWidgets.QMessageBox.information(self, " Client",
+             QMessageBox.information(self, " Client",
                     "The following error occurred: %s." % self.tcpSocket.errorString())
 
 
@@ -81,7 +85,7 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
+    app =  QApplication(sys.argv)
     client = Client()
     client.show()
     sys.exit(client.exec_())

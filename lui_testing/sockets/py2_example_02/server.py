@@ -1,16 +1,19 @@
 #!/usr/bin/env python
 
-from PySide2 import QtCore, QtWidgets, QtNetwork
+from __future__ import division, print_function
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
+from PyQt4.QtNetwork import *
 
-class Server(QtWidgets.QDialog):
+class Server( QDialog):
     def __init__(self, parent=None):
         super(Server, self).__init__(parent)
 
-        statusLabel = QtWidgets.QLabel()
+        statusLabel =  QLabel()
 
-        self.tcpServer = QtNetwork.QTcpServer(self)
-        if not self.tcpServer.listen(address =QtNetwork.QHostAddress.Any, port = 12354):
-            QtWidgets.QMessageBox.critical(self, "Counter Server",
+        self.tcpServer =  QTcpServer(self)
+        if not self.tcpServer.listen(address = QHostAddress.Any, port = 12354):
+            QMessageBox.critical(self, "Counter Server",
                     "Unable to start the server: %s." % self.tcpServer.errorString())
             self.close()
             return
@@ -23,10 +26,10 @@ class Server(QtWidgets.QDialog):
         self.counting = 0
 
         self.tcpServer.newConnection.connect(self.new_connection)
-        mainLayout = QtWidgets.QVBoxLayout()
+        mainLayout =  QVBoxLayout()
         mainLayout.addWidget(statusLabel)
 
-        send_count_butt = QtWidgets.QPushButton("send counting")
+        send_count_butt =  QPushButton("send counting")
         send_count_butt.clicked.connect(self.send_counting)
         mainLayout.addWidget(send_count_butt)
 
@@ -37,7 +40,8 @@ class Server(QtWidgets.QDialog):
         self.new_socket = self.tcpServer.nextPendingConnection()
         self.new_socket.waitForReadyRead()
         self.print_resived_str()
-        self.new_socket.channelReadyRead.connect(self.channel_ready_read)
+        #self.new_socket.channelReadyRead.connect(self.channel_ready_read)
+        self.new_socket.readyRead.connect(self.channel_ready_read)
 
     def channel_ready_read(self):
         print("channel_ready_read(server)")
@@ -46,16 +50,16 @@ class Server(QtWidgets.QDialog):
     def print_resived_str(self):
         instr = self.new_socket.readAll()
 
-        str_instr = str(instr, 'utf-8')
+        str_instr = str(instr)
         print("Printing from server")
         print("<<", str(str_instr), ">>")
         print("done ... Server")
 
 
     def send_counting(self):
-        block = QtCore.QByteArray()
-        out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
-        #out.setVersion(QtCore.QDataStream.Qt_5_0)
+        block =  QByteArray()
+        out =  QDataStream(block,  QIODevice.ReadWrite)
+        #out.setVersion( QDataStream.Qt_5_0)
         out.writeUInt16(0)
         self.counting += 1
         counter_str = "number of clicks =" + str(self.counting) + " so far"
@@ -70,6 +74,6 @@ if __name__ == '__main__':
 
     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
+    app =  QApplication(sys.argv)
     server = Server()
     sys.exit(server.exec_())
