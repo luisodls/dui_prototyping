@@ -46,7 +46,9 @@ class Server(QtWidgets.QDialog):
     def print_resived_str(self):
         instr = self.new_socket.readAll()
 
-        str_instr = str(instr, 'utf-8')
+        #str_instr = str(instr, 'utf-8')
+        str_instr = str(instr.data().decode('utf-8'))
+
         print("Printing from server")
         print("<<", str(str_instr), ">>")
         print("done ... Server")
