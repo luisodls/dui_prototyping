@@ -23,34 +23,35 @@ class CommandThread(QtCore.QThread):
 
     def emit_print_signal(self, str_lin):
         print(str_lin, ":<<")
-        #self.str_print_signal.emit(str_lin)
+        self.str_print_signal.emit(str_lin)
 
     def emit_fail_signal(self):
         #self.str_fail_signal.emit()
         print("emit_fail_signal")
 
 
-def run_cmd(cmd2run):
-    cmd_thread = CommandThread()
-    print("\nRunning:", cmd2run, "\n")
+class run_cmd(object):
+    def __init__(self, cmd2run):
+        self.cmd_thread = CommandThread()
+        print("\nRunning:", cmd2run, "\n")
 
-    my_process = subprocess.Popen(
-        cmd2run,
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
-        bufsize=1,
-    )
+        my_process = subprocess.Popen(
+            cmd2run,
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            bufsize=1,
+        )
 
-    for line in iter(my_process.stdout.readline, b""):
-        single_line = line[0 : len(line) - 1]
-        print(">>: ", single_line)
-        cmd_thread.emit_print_signal(str_lin = single_line)
+        for line in iter(my_process.stdout.readline, b""):
+            single_line = line[0 : len(line) - 1]
+            print(">>: ", single_line)
+            self.cmd_thread.emit_print_signal(str_lin = single_line)
 
-    my_process.wait()
-    my_process.stdout.close()
+        my_process.wait()
+        my_process.stdout.close()
 
-    print(cmd2run, "finished")
+        print(cmd2run, "finished")
 
 
 if __name__ == "__main__":
