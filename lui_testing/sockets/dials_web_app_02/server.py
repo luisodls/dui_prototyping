@@ -2,7 +2,7 @@
 
 from PySide2 import QtCore, QtWidgets, QtNetwork
 
-from runner import run_cmd
+from runner import MyThread
 
 class Server(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -54,11 +54,19 @@ class Server(QtWidgets.QDialog):
         print("Printing from server")
         print("<<", str(str_instr), ">>")
         print("done ... Server")
-        new_cmd2run = run_cmd(str_instr)
-        new_cmd2run.cmd_thread.str_print_signal.connect(self.print_from_server)
 
-    def print_from_server(self, str2print):
-        print("print_from_server:", str2print)
+        self.thrd = MyThread()
+
+        self.thrd.finished.connect(self.tell_finished)
+        self.thrd.str_print_signal.connect(self.cli_out)
+        self.thrd.start()
+
+    def tell_finished(self):
+        print("tell_finished")
+
+    def cli_out(self, str_out):
+        print(">>: ", str_out)
+
 
     def send_counting(self):
         block = QtCore.QByteArray()
