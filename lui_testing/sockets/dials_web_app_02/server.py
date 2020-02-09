@@ -65,16 +65,16 @@ class Server(QtWidgets.QDialog):
         print("tell_finished")
 
     def cli_out(self, str_out):
-        print(">>: ", str_out)
+        print(">", str_out, "<")
+        self.send_counting(str_in = str_out)
 
-
-    def send_counting(self):
+    def send_counting(self, str_in = "dummy str"):
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         #out.setVersion(QtCore.QDataStream.Qt_5_0)
         out.writeUInt16(0)
         self.counting += 1
-        counter_str = "number of clicks =" + str(self.counting) + " so far"
+        counter_str = str(self.counting) + ": " + str_in
         out.writeString(counter_str)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
