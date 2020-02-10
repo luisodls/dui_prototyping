@@ -30,9 +30,9 @@ class MyThread (QThread):
 
     def run(self):
         self.cmd_to_run = "dials.import"
-        print("Hi from QThread(run)")
+        print(" Hi from QThread(run) \n")
         run_cli_prss(cmd_to_run = self.cmd_to_run, ref_to_class = self)
-        print("after ...close()")
+        print("\n after ...close()")
 
     def emit_print_signal(self, str_lin):
         self.str_print_signal.emit(str_lin)

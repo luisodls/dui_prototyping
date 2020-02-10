@@ -37,6 +37,7 @@ class MyThread (QtCore.QThread):
         print("after ...close()")
 
     def emit_print_signal(self, str_lin):
+        print("str_lin(runner):", str_lin)
         self.str_print_signal.emit(str_lin)
 
 
