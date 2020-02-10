@@ -47,16 +47,11 @@ class Server(QtWidgets.QDialog):
 
     def print_resived_str(self):
         instr = self.new_socket.readAll()
-
-        #str_instr = str(instr, 'utf-8')
         str_instr = str(instr.data().decode('utf-8'))
-
         print("Printing from server")
         print("<<", str(str_instr), ">>")
-        print("done ... Server")
 
         self.thrd = MyThread()
-
         self.thrd.finished.connect(self.tell_finished)
         self.thrd.str_print_signal.connect(self.cli_out)
         self.thrd.start()
@@ -65,7 +60,6 @@ class Server(QtWidgets.QDialog):
         print("tell_finished")
 
     def cli_out(self, str_out):
-        print(">", str_out, "<")
         self.send_counting(str_in = str_out)
 
     def send_counting(self, str_in = "dummy str"):
@@ -74,13 +68,15 @@ class Server(QtWidgets.QDialog):
         #out.setVersion(QtCore.QDataStream.Qt_5_0)
         out.writeUInt16(0)
         self.counting += 1
-        counter_str = str(self.counting) + ": " + str_in
-        out.writeString(counter_str)
+        str2send = str(self.counting) + ": " + str(str_in)
+        print("from server:", str2send, "<")
+        out.writeString(str2send)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
         self.new_socket.write(block)
-
+        self.new_socket.waitForBytesWritten()
+        self.new_socket.flush()
 
 if __name__ == '__main__':
 

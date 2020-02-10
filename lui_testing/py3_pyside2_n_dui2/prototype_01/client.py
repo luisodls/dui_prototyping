@@ -45,7 +45,6 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.write(txt2send)
 
     def readFromServer(self):
-        print("client.readFromServer")
         InStr = QtCore.QDataStream(self.tcpSocket)
         #InStr.setVersion(QtCore.QDataStream.Qt_5_0)
 
