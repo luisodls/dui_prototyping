@@ -1,11 +1,5 @@
+from PySide2 import QtCore
 import subprocess
-import subprocess
-'''
-from PyQt4.QtGui import *
-from PyQt4.QtCore import *
-from PyQt4.QtWebKit import *
-'''
-from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 
 def run_cli_prss(cmd_to_run = None, ref_to_class = None):
     proc = subprocess.Popen(cmd_to_run,
@@ -19,8 +13,8 @@ def run_cli_prss(cmd_to_run = None, ref_to_class = None):
         line = proc.stdout.readline()[:-1]
         ref_to_class.emit_print_signal(line)
 
-    #proc.wait()
     proc.stdout.close()
+
 
 class MyThread (QtCore.QThread):
 

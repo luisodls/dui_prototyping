@@ -1,10 +1,8 @@
-#!/usr/bin/env python
-
 from PySide2 import QtCore, QtWidgets, QtNetwork
+import time
+import sys
 
 from runner import MyThread
-
-import time
 
 class Server(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -81,10 +79,8 @@ class Server(QtWidgets.QDialog):
         time.sleep(0.05)
         self.new_socket.waitForBytesWritten()
 
+
 if __name__ == '__main__':
-
-    import sys
-
     app = QtWidgets.QApplication(sys.argv)
     server = Server()
     sys.exit(server.exec_())

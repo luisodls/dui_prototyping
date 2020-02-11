@@ -1,6 +1,5 @@
-#!/usr/bin/env python
-
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
+import sys
 
 class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -77,9 +76,6 @@ class Client(QtWidgets.QDialog):
 
 
 if __name__ == '__main__':
-
-    import sys
-
     app = QtWidgets.QApplication(sys.argv)
     client = Client()
     client.show()
