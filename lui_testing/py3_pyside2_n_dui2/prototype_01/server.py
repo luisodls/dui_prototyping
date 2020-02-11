@@ -4,6 +4,8 @@ from PySide2 import QtCore, QtWidgets, QtNetwork
 
 from runner import MyThread
 
+import time
+
 class Server(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Server, self).__init__(parent)
@@ -76,71 +78,26 @@ class Server(QtWidgets.QDialog):
 
 
         self.new_socket.write(block)
+        '''
         for ntimes in range(500):
             print("ntimes:", ntimes)
-            print("self.new_socket.state()", self.new_socket.state())
+
+            #waitForDisconnected
+            print("self.new_socket.isSequential()        ", self.new_socket.isSequential()         )
+            #print("self.new_socket.isSignalConnected()   ", self.new_socket.isSignalConnected()    )
+            print("self.new_socket.isTextModeEnabled()   ", self.new_socket.isTextModeEnabled()    )
+            print("self.new_socket.isTransactionStarted()", self.new_socket.isTransactionStarted() )
+            print("self.new_socket.isValid()             ", self.new_socket.isValid()              )
+            print("self.new_socket.isWritable()          ", self.new_socket.isWritable()           )
+            print("\n\n")
+
+            #print("dir(self.new_socket): ", dir(self.new_socket))
+
             self.new_socket.waitForBytesWritten()
+        '''
 
-        #print("dir(block): ", dir(block))
-        print("type(block.capacity)              ",type(block.capacity)              )
-        print("type(block.cbegin)                ",type(block.cbegin)                )
-        print("type(block.cend)                  ",type(block.cend)                  )
-        print("type(block.chop)                  ",type(block.chop)                  )
-        print("type(block.clear)                 ",type(block.clear)                 )
-        print("type(block.contains)              ",type(block.contains)              )
-        print("type(block.count)                 ",type(block.count)                 )
-        print("type(block.data)                  ",type(block.data)                  )
-        print("type(block.endsWith)              ",type(block.endsWith)              )
-        print("type(block.fill)                  ",type(block.fill)                  )
-        print("type(block.fromBase64)            ",type(block.fromBase64)            )
-        print("type(block.fromHex)               ",type(block.fromHex)               )
-        print("type(block.fromPercentEncoding)   ",type(block.fromPercentEncoding)   )
-        print("type(block.fromRawData)           ",type(block.fromRawData)           )
-        print("type(block.indexOf)               ",type(block.indexOf)               )
-        print("type(block.insert)                ",type(block.insert)                )
-        print("type(block.isEmpty)               ",type(block.isEmpty)               )
-        print("type(block.isNull)                ",type(block.isNull)                )
-        print("type(block.isSharedWith)          ",type(block.isSharedWith)          )
-        print("type(block.lastIndexOf)           ",type(block.lastIndexOf)           )
-        print("type(block.left)                  ",type(block.left)                  )
-        print("type(block.leftJustified)         ",type(block.leftJustified)         )
-        print("type(block.length)                ",type(block.length)                )
-        print("type(block.mid)                   ",type(block.mid)                   )
-        print("type(block.number)                ",type(block.number)                )
-        print("type(block.prepend)               ",type(block.prepend)               )
-        print("type(block.remove)                ",type(block.remove)                )
-        print("type(block.repeated)              ",type(block.repeated)              )
-        print("type(block.replace)               ",type(block.replace)               )
-        print("type(block.reserve)               ",type(block.reserve)               )
-        print("type(block.resize)                ",type(block.resize)                )
-        print("type(block.right)                 ",type(block.right)                 )
-        print("type(block.rightJustified)        ",type(block.rightJustified)        )
-        print("type(block.setNum)                ",type(block.setNum)                )
-        print("type(block.setRawData)            ",type(block.setRawData)            )
-        print("type(block.simplified)            ",type(block.simplified)            )
-        print("type(block.size)                  ",type(block.size)                  )
-        print("type(block.split)                 ",type(block.split)                 )
-        print("type(block.squeeze)               ",type(block.squeeze)               )
-        print("type(block.startsWith)            ",type(block.startsWith)            )
-        print("type(block.swap)                  ",type(block.swap)                  )
-        print("type(block.toBase64)              ",type(block.toBase64)              )
-        print("type(block.toDouble)              ",type(block.toDouble)              )
-        print("type(block.toFloat)               ",type(block.toFloat)               )
-        print("type(block.toHex)                 ",type(block.toHex)                 )
-        print("type(block.toInt)                 ",type(block.toInt)                 )
-        print("type(block.toLong)                ",type(block.toLong)                )
-        print("type(block.toLongLong)            ",type(block.toLongLong)            )
-        print("type(block.toLower)               ",type(block.toLower)               )
-        print("type(block.toPercentEncoding)     ",type(block.toPercentEncoding)     )
-        print("type(block.toShort)               ",type(block.toShort)               )
-        print("type(block.toUInt)                ",type(block.toUInt)                )
-        print("type(block.toULong)               ",type(block.toULong)               )
-        print("type(block.toULongLong)           ",type(block.toULongLong)           )
-        print("type(block.toUShort)              ",type(block.toUShort)              )
-        print("type(block.toUpper)               ",type(block.toUpper)               )
-        print("type(block.trimmed)               ",type(block.trimmed)               )
-        print("type(block.truncate)              ",type(block.truncate)              )
-
+        time.sleep(0.1)
+        self.new_socket.waitForBytesWritten()
 
 if __name__ == '__main__':
 
