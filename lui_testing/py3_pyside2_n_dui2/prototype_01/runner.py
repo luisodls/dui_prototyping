@@ -29,9 +29,11 @@ class MyThread (QtCore.QThread):
     def __init__(self, parent = None):
         super(MyThread, self).__init__()
 
+    def set_cmd(self, cmd_in = None):
+        print("str_instr =", cmd_in)
+        self.cmd_to_run = cmd_in
 
     def run(self):
-        self.cmd_to_run = "dials.import"
         print("Hi from QThread(run)")
         run_cli_prss(cmd_to_run = self.cmd_to_run, ref_to_class = self)
         print("after ...close()")

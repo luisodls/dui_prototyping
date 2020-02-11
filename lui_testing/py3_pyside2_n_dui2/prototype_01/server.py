@@ -50,12 +50,13 @@ class Server(QtWidgets.QDialog):
     def print_resived_str(self):
         instr = self.new_socket.readAll()
         str_instr = str(instr.data().decode('utf-8'))
-        print("Printing from server")
-        print("<<", str(str_instr), ">>")
+        #print("Printing from server")
+        #print("<<", str(str_instr), ">>")
 
         self.thrd = MyThread()
         self.thrd.finished.connect(self.tell_finished)
         self.thrd.str_print_signal.connect(self.cli_out)
+        self.thrd.set_cmd(cmd_in = str_instr)
         self.thrd.start()
 
     def tell_finished(self):
@@ -71,32 +72,13 @@ class Server(QtWidgets.QDialog):
         out.writeUInt16(0)
         self.counting += 1
         str2send = str(self.counting) + ": " + str(str_in)
-        print("from server:", str2send, "<")
+        #print("from server:", str2send, "<")
         out.writeString(str2send)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
 
-
         self.new_socket.write(block)
-        '''
-        for ntimes in range(500):
-            print("ntimes:", ntimes)
-
-            #waitForDisconnected
-            print("self.new_socket.isSequential()        ", self.new_socket.isSequential()         )
-            #print("self.new_socket.isSignalConnected()   ", self.new_socket.isSignalConnected()    )
-            print("self.new_socket.isTextModeEnabled()   ", self.new_socket.isTextModeEnabled()    )
-            print("self.new_socket.isTransactionStarted()", self.new_socket.isTransactionStarted() )
-            print("self.new_socket.isValid()             ", self.new_socket.isValid()              )
-            print("self.new_socket.isWritable()          ", self.new_socket.isWritable()           )
-            print("\n\n")
-
-            #print("dir(self.new_socket): ", dir(self.new_socket))
-
-            self.new_socket.waitForBytesWritten()
-        '''
-
-        time.sleep(0.1)
+        time.sleep(0.05)
         self.new_socket.waitForBytesWritten()
 
 if __name__ == '__main__':
