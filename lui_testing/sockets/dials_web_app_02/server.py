@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from PySide2 import QtCore, QtWidgets, QtNetwork
-
+import time
 from runner import MyThread
 
 class Server(QtWidgets.QDialog):
@@ -80,7 +80,8 @@ class Server(QtWidgets.QDialog):
         out.writeUInt16(block.size() - 2)
 
         self.new_socket.write(block)
-
+        time.sleep(0.05)
+        self.new_socket.waitForBytesWritten()
 
 if __name__ == '__main__':
 
