@@ -12,7 +12,7 @@ class Server(QtWidgets.QDialog):
 
         self.tcpServer = QtNetwork.QTcpServer(self)
         if not self.tcpServer.listen(address =QtNetwork.QHostAddress.Any, port = 12354):
-            QtWidgets.QMessageBox.critical(self, "Counter Server",
+            QtWidgets.QMessageBox.critical(self, "DUI controller Server",
                     "Unable to start the server: %s." % self.tcpServer.errorString())
             self.close()
             return
