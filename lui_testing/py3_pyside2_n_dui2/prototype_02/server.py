@@ -27,13 +27,10 @@ class MyThread (QtCore.QThread):
         line = None
         while proc.poll() is None or line != '':
             line = proc.stdout.readline()[:-1]
-            self.emit_print_signal(line)
+            self.str_print_signal.emit(line)
 
         proc.stdout.close()
         print("after proc.stdout.close() ...")
-
-    def emit_print_signal(self, str_lin):
-        self.str_print_signal.emit(str_lin)
 
 
 class Server(QtWidgets.QDialog):
