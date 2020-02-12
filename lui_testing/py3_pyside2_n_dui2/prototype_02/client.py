@@ -21,7 +21,7 @@ class Client(QtWidgets.QDialog):
         mainLayout.addWidget(self.dataLineEdit)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
-        self.setWindowTitle("Fortune Client")
+        self.setWindowTitle("DUI front end test")
 
         self.tcpSocket.stateChanged.connect(self.tell_State)
 
