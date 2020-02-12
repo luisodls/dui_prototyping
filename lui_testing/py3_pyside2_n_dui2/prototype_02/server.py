@@ -38,18 +38,17 @@ class Server(QtWidgets.QDialog):
     def new_connection(self):
         self.new_socket = self.tcpServer.nextPendingConnection()
         self.new_socket.waitForReadyRead()
-        self.print_resived_str()
+        self.launch_thread()
         self.new_socket.channelReadyRead.connect(self.channel_ready_read)
 
     def channel_ready_read(self):
         print("channel_ready_read(server)")
-        self.print_resived_str()
+        self.launch_thread()
 
-    def print_resived_str(self):
+    def launch_thread(self):
         instr = self.new_socket.readAll()
         str_instr = str(instr.data().decode('utf-8'))
-        #print("Printing from server")
-        #print("<<", str(str_instr), ">>")
+        print("New command: \n <<", str(str_instr), ">>")
 
         self.thrd = MyThread()
         self.thrd.finished.connect(self.tell_finished)
@@ -58,7 +57,7 @@ class Server(QtWidgets.QDialog):
         self.thrd.start()
 
     def tell_finished(self):
-        print("tell_finished")
+        print("... QThread() finished")
 
     def cli_out(self, str_out):
         self.send_counting(str_in = str_out)
