@@ -3,12 +3,12 @@ import time
 import sys
 import subprocess
 
-class MyThread (QtCore.QThread):
+class CommandThread (QtCore.QThread):
 
     str_print_signal = QtCore.Signal(str)
 
     def __init__(self, parent = None):
-        super(MyThread, self).__init__()
+        super(CommandThread, self).__init__()
 
     def set_cmd(self, cmd_in = None):
         self.cmd_to_run = cmd_in
@@ -32,8 +32,43 @@ class MyThread (QtCore.QThread):
         proc.stdout.close()
         print("after proc.stdout.close() ...")
 
-        time.sleep(5.5)
-        print("after time.sleep")
+class connectThread (QtCore.QThread):
+
+    #str_print_signal = QtCore.Signal(str)
+
+    def __init__(self, parent = None):
+        super(connectThread, self).__init__()
+        self.counting = 0
+
+    def set_socket(self, socket_out = None):
+        self.socket = socket_out
+        print("set_socket")
+
+    def add_str(self, new_str):
+        print("new_str>>", new_str)
+
+        #def send_str(self, str_in = "dummy str"):
+        block = QtCore.QByteArray()
+        out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
+        out.setVersion(QtCore.QDataStream.Qt_5_0)
+        out.writeUInt16(0)
+        self.counting += 1
+        str2send = str(self.counting) + ": " + str(new_str)
+        #print("from server:", str2send, "<")
+        out.writeString(str2send)
+        out.device().seek(0)
+        out.writeUInt16(block.size() - 2)
+
+        self.socket.write(block)
+        time.sleep(0.01)
+        self.socket.waitForBytesWritten()
+
+
+
+    def run(self):
+        print("... from QThread(run)")
+
+        print("after proc.stdout.close() ...")
 
 
 class Server(QtWidgets.QDialog):
@@ -61,7 +96,7 @@ class Server(QtWidgets.QDialog):
         mainLayout.addWidget(statusLabel)
 
         send_count_butt = QtWidgets.QPushButton("send counting")
-        send_count_butt.clicked.connect(self.send_counting)
+        #send_count_butt.clicked.connect(self.send_str)
         mainLayout.addWidget(send_count_butt)
 
         self.setLayout(mainLayout)
@@ -82,20 +117,29 @@ class Server(QtWidgets.QDialog):
         str_instr = str(instr.data().decode('utf-8'))
         print("New command: \n <<", str(str_instr), ">>")
 
-        self.thrd = MyThread()
-        self.thrd.finished.connect(self.tell_finished)
-        self.thrd.str_print_signal.connect(self.cli_out)
-        self.thrd.set_cmd(cmd_in = str_instr)
-        self.thrd.start()
+        self.cmd_thrd = CommandThread()
+
+        #self.cmd_thrd.str_print_signal.connect(self.cli_out)
+        self.cmd_thrd.finished.connect(self.tell_finished)
+        self.cmd_thrd.set_cmd(cmd_in = str_instr)
+
+        self.cnnt_thrd = connectThread()
+        #self.cnnt_thrd.finished.connect(self.tell_finished)
+        #self.cnnt_thrd.str_print_signal.connect(self.cli_out)
+        self.cnnt_thrd.set_socket(socket_out = self.new_socket)
+
+        self.cmd_thrd.str_print_signal.connect(self.cnnt_thrd.add_str)
+        self.cmd_thrd.start()
 
     def tell_finished(self):
-        print("... QThread() finished")
+        print("... cmd_thrd() finished")
 
     def cli_out(self, str_out):
         print("cli_out(", str_out, ")")
-        self.send_counting(str_in = str_out)
+        self.send_str(str_in = str_out)
 
-    def send_counting(self, str_in = "dummy str"):
+        to_move = '''
+    def send_str(self, str_in = "dummy str"):
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         out.setVersion(QtCore.QDataStream.Qt_5_0)
@@ -110,6 +154,7 @@ class Server(QtWidgets.QDialog):
         self.new_socket.write(block)
         time.sleep(0.01)
         self.new_socket.waitForBytesWritten()
+        '''
 
 
 if __name__ == '__main__':
