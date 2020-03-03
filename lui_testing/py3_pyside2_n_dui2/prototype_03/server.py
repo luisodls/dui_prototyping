@@ -32,6 +32,9 @@ class MyThread (QtCore.QThread):
         proc.stdout.close()
         print("after proc.stdout.close() ...")
 
+        time.sleep(5.5)
+        print("after time.sleep")
+
 
 class Server(QtWidgets.QDialog):
     def __init__(self, parent=None):
@@ -89,6 +92,7 @@ class Server(QtWidgets.QDialog):
         print("... QThread() finished")
 
     def cli_out(self, str_out):
+        print("cli_out(", str_out, ")")
         self.send_counting(str_in = str_out)
 
     def send_counting(self, str_in = "dummy str"):
@@ -104,7 +108,7 @@ class Server(QtWidgets.QDialog):
         out.writeUInt16(block.size() - 2)
 
         self.new_socket.write(block)
-        time.sleep(0.05)
+        time.sleep(0.01)
         self.new_socket.waitForBytesWritten()
 
 
