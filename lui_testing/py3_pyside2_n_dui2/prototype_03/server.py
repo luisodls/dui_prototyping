@@ -14,7 +14,7 @@ class CommandThread (QtCore.QThread):
         self.cmd_to_run = cmd_in
 
     def run(self):
-        print("... from QThread(run)")
+        print("... from CommandThread(run)")
 
         proc = subprocess.Popen(
             self.cmd_to_run,
@@ -27,20 +27,26 @@ class CommandThread (QtCore.QThread):
         line = None
         while proc.poll() is None or line != '':
             line = proc.stdout.readline()[:-1]
+            print("line>>", line)
             self.str_print_signal.emit(line)
 
         proc.stdout.close()
-        print("after proc.stdout.close() ...")
 
-class connectThread (QtCore.QThread):
+class TransferThread (QtCore.QThread):
     def __init__(self, parent = None):
-        super(connectThread, self).__init__()
+        super(TransferThread, self).__init__()
+        self.str_lst = []
+        self.str_pos = -1
+        print("str_lst", self.str_lst)
 
     def set_socket(self, socket_out = None):
         self.socket = socket_out
         print("set_socket")
 
     def add_str(self, new_str):
+        self.str_lst.append(new_str)
+
+    def transfer_str(self, new_str):
         print("new_str>>", new_str)
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
@@ -56,10 +62,18 @@ class connectThread (QtCore.QThread):
         time.sleep(0.01)
         self.socket.waitForBytesWritten()
 
-    def run(self):
-        print("... from QThread(run)")
+        self.str_pos += 1
 
-        print("after proc.stdout.close() ...")
+    def run(self):
+        self.EOF = False
+        print("... from TransferThread(run)")
+
+        print("self.str_pos", self.str_pos)
+        print("len(self.str_lst)", len(self.str_lst))
+
+        while self.EOF == False:
+            if len(self.str_lst) > self.str_pos:
+                self.transfer_str(self.str_lst[self.str_pos + 1])
 
 
 class Server(QtWidgets.QDialog):
@@ -108,20 +122,26 @@ class Server(QtWidgets.QDialog):
 
         self.cmd_thrd = CommandThread()
 
-        self.cmd_thrd.finished.connect(self.tell_finished)
+        self.cmd_thrd.finished.connect(self.tell_cmd_thrd_finished)
         self.cmd_thrd.set_cmd(cmd_in = str_instr)
 
-        self.cnnt_thrd = connectThread()
-        self.cnnt_thrd.set_socket(socket_out = self.new_socket)
+        self.tranf_thrd = TransferThread()
+        self.tranf_thrd.set_socket(socket_out = self.new_socket)
+        self.tranf_thrd.finished.connect(self.tell_tranf_thrd_finished)
+        self.tranf_thrd.start()
 
-        self.cmd_thrd.str_print_signal.connect(self.cnnt_thrd.add_str)
+        self.cmd_thrd.str_print_signal.connect(self.tranf_thrd.add_str)
         self.cmd_thrd.start()
 
-    def tell_finished(self):
+    def tell_cmd_thrd_finished(self):
         print("... cmd_thrd() finished")
+        self.tranf_thrd.EOF = True
+
+    def tell_tranf_thrd_finished(self):
+        print("... tranf_thrd() finished")
 
     def send_str(self):
-        self.cnnt_thrd.add_str("dummy_str")
+        self.tranf_thrd.add_str("dummy_str")
 
 
 if __name__ == '__main__':
