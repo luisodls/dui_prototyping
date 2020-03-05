@@ -6,7 +6,9 @@ class Client(QtWidgets.QDialog):
         super(Client, self).__init__(parent)
 
         self.incoming_text = QtWidgets.QTextEdit()
+        self.incoming_text.setFont(QtGui.QFont("Monospace"))
         self.dataLineEdit = QtWidgets.QLineEdit('test text')
+        self.dataLineEdit.setFont(QtGui.QFont("Monospace"))
         send2serverButton = QtWidgets.QPushButton("send to server")
 
         self.tcpSocket = QtNetwork.QTcpSocket(self)
@@ -54,10 +56,7 @@ class Client(QtWidgets.QDialog):
             return
 
         nxt_str = InStr.readString()
-        #print("nxt_str(client) =", nxt_str)
-
-        print(nxt_str, "<<")
-
+        #print(nxt_str, "<<")
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(nxt_str + "\n")
 

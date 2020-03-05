@@ -37,7 +37,6 @@ class TransferThread (QtCore.QThread):
         super(TransferThread, self).__init__()
         self.str_lst = []
         self.str_pos = 0
-        print("str_lst", self.str_lst)
 
     def set_socket(self, socket_out = None):
         self.socket = socket_out
@@ -47,7 +46,7 @@ class TransferThread (QtCore.QThread):
         self.str_lst.append(new_str)
 
     def transfer_str(self, new_str):
-        print("new_str>>", new_str)
+        print("str_<<", new_str)
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         out.setVersion(QtCore.QDataStream.Qt_5_0)
@@ -66,19 +65,18 @@ class TransferThread (QtCore.QThread):
         if new_str == "/*EOF*/":
             self.EOF = True
 
-
     def run(self):
         self.EOF = False
         print("... from TransferThread(run)")
-
         print("self.str_pos", self.str_pos)
         print("len(self.str_lst)", len(self.str_lst))
 
         while self.EOF == False:
             time.sleep(0.05)
-
             if len(self.str_lst) > self.str_pos:
                 self.transfer_str(self.str_lst[self.str_pos])
+
+        print("EOF = True")
 
 
 class Server(QtWidgets.QDialog):
