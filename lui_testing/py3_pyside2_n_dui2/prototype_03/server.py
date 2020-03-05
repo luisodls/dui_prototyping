@@ -36,7 +36,7 @@ class TransferThread (QtCore.QThread):
     def __init__(self, parent = None):
         super(TransferThread, self).__init__()
         self.str_lst = []
-        self.str_pos = -1
+        self.str_pos = 0
         print("str_lst", self.str_lst)
 
     def set_socket(self, socket_out = None):
@@ -59,10 +59,13 @@ class TransferThread (QtCore.QThread):
         out.writeUInt16(block.size() - 2)
 
         self.socket.write(block)
-        time.sleep(0.01)
+        time.sleep(0.05)
         self.socket.waitForBytesWritten()
 
         self.str_pos += 1
+        if new_str == "/*EOF*/":
+            self.EOF = True
+
 
     def run(self):
         self.EOF = False
@@ -72,8 +75,10 @@ class TransferThread (QtCore.QThread):
         print("len(self.str_lst)", len(self.str_lst))
 
         while self.EOF == False:
+            time.sleep(0.05)
+
             if len(self.str_lst) > self.str_pos:
-                self.transfer_str(self.str_lst[self.str_pos + 1])
+                self.transfer_str(self.str_lst[self.str_pos])
 
 
 class Server(QtWidgets.QDialog):
@@ -135,8 +140,8 @@ class Server(QtWidgets.QDialog):
 
     def tell_cmd_thrd_finished(self):
         print("... cmd_thrd() finished")
-        self.tranf_thrd.EOF = True
-
+        time.sleep(0.5)
+        self.tranf_thrd.add_str("/*EOF*/")
     def tell_tranf_thrd_finished(self):
         print("... tranf_thrd() finished")
 
