@@ -47,6 +47,7 @@ class TransferThread (QtCore.QThread):
 
     def transfer_str(self, new_str):
         print("str_<<", new_str)
+        '''
         block = QtCore.QByteArray()
         out = QtCore.QDataStream(block, QtCore.QIODevice.ReadWrite)
         out.setVersion(QtCore.QDataStream.Qt_5_0)
@@ -56,14 +57,19 @@ class TransferThread (QtCore.QThread):
         out.writeString(str2send)
         out.device().seek(0)
         out.writeUInt16(block.size() - 2)
-
         self.socket.write(block)
+        '''
+
+        txt2send = str.encode(new_str)
+        self.socket.write(txt2send)
+
         time.sleep(0.05)
         self.socket.waitForBytesWritten()
 
         self.str_pos += 1
         if new_str == "/*EOF*/":
             self.EOF = True
+
 
     def run(self):
         self.EOF = False
@@ -72,7 +78,7 @@ class TransferThread (QtCore.QThread):
         print("len(self.str_lst)", len(self.str_lst))
 
         while self.EOF == False:
-            time.sleep(0.05)
+            time.sleep(0.02)
             if len(self.str_lst) > self.str_pos:
                 self.transfer_str(self.str_lst[self.str_pos])
 

@@ -46,6 +46,11 @@ class Client(QtWidgets.QDialog):
         self.tcpSocket.write(txt2send)
 
     def readFromServer(self):
+
+        instr = self.tcpSocket.readAll()
+        nxt_str = str(instr.data().decode('utf-8'))
+
+        '''
         InStr = QtCore.QDataStream(self.tcpSocket)
         InStr.setVersion(QtCore.QDataStream.Qt_5_0)
 
@@ -54,8 +59,9 @@ class Client(QtWidgets.QDialog):
         if self.tcpSocket.bytesAvailable() < blockSize:
             print("tcpSocket.bytesAvailable() < blockSize")
             return
-
         nxt_str = InStr.readString()
+        '''
+
         #print(nxt_str, "<<")
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(nxt_str + "\n")
