@@ -48,6 +48,7 @@ class Client(QtWidgets.QDialog):
     def readFromServer(self):
         instr = self.tcpSocket.readAll()
         nxt_str = str(instr.data().decode('utf-8'))
+        print(nxt_str, "<<line")
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(nxt_str + "\n")
 
