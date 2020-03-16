@@ -27,7 +27,7 @@ class CommandThread (QtCore.QThread):
         line = None
         while proc.poll() is None or line != '':
             line = proc.stdout.readline()[:-1]
-            #print("line>>", line)
+            print("line>>", line)
             self.str_print_signal.emit(line)
 
         proc.stdout.close()
@@ -46,7 +46,7 @@ class TransferThread (QtCore.QThread):
         self.str_lst.append(new_str)
 
     def transfer_str(self, new_str):
-        print("line>>", new_str)
+        #print("line>>", new_str)
         txt2send = str.encode(new_str)
 
         self.socket.write(txt2send)
