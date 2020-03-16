@@ -50,7 +50,7 @@ class TransferThread (QtCore.QThread):
         txt2send = str.encode(new_str)
 
         self.socket.write(txt2send)
-        time.sleep(0.02)
+        time.sleep(0.01)
         self.socket.waitForBytesWritten()
         time.sleep(0.01)
 
@@ -65,7 +65,7 @@ class TransferThread (QtCore.QThread):
         print("len(self.str_lst)", len(self.str_lst))
 
         while self.EOF == False:
-            time.sleep(0.02)
+            time.sleep(0.01)
             if len(self.str_lst) > self.str_pos:
                 self.transfer_str(self.str_lst[self.str_pos])
 
