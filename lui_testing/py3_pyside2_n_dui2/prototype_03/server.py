@@ -29,6 +29,12 @@ class CommandThread (QtCore.QThread):
             line = proc.stdout.readline()[:-1]
             print("line>>", line)
             self.str_print_signal.emit(line)
+            '''
+            line_err = proc.stderr.readline()[:-1]
+            if line_err != '':
+                print("_err>>", line_err)
+            '''
+
 
         proc.stdout.close()
 
