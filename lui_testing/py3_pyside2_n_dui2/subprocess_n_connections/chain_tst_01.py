@@ -1,5 +1,6 @@
 import subprocess
 import os
+import glob
 
 def run_cmd(cmd_to_run):
     proc = subprocess.Popen(
@@ -38,6 +39,8 @@ if __name__ == "__main__":
     cmd_lst = [
         "dials.index",
         "dials.refine",
+        "dials.integrate",
+        "dials.scale",
         ]
 
     old_dir = "/tmp/dui2run/run_zero"
@@ -47,16 +50,39 @@ if __name__ == "__main__":
         os.mkdir(new_dir)
         os.chdir(new_dir)
 
-        new_cmd = comd + " " + old_dir + "/*.expt " + old_dir + "/*.refl "
+        lst_expt = glob.glob(old_dir + "/*.expt")
+        lst_refl = glob.glob(old_dir + "/*.refl")
+
+        new_cmd = str(comd)
+
+        for expt_2_add in lst_expt:
+            new_cmd += " " + expt_2_add
+
+        for refl_2_add in lst_refl:
+            new_cmd += " " + refl_2_add
 
         print("\n new_cmd ", new_cmd)
 
-        run_cmd(comd)
+        run_cmd(new_cmd)
         old_dir = os.getcwd()
         os.chdir("..")
 
 
     '''
+    >>> import glob
+    >>> glob.glob('./[0-9].*')
+    ['./1.gif', './2.txt']
+    >>> glob.glob('*.gif')
+    ['1.gif', 'card.gif']
+    >>> glob.glob('?.gif')
+    ['1.gif']
+    >>> glob.glob('**/*.txt', recursive=True)
+    ['2.txt', 'sub/3.txt']
+    >>> glob.glob('./**/', recursive=True)
+    ['./', './sub/']
+
+
+
     path = "/tmp/home/monthly/daily/hourly"
     os.mkdir( path, 0755 )
 
@@ -66,9 +92,10 @@ if __name__ == "__main__":
 
     run_cmd("")
 
->>> os.mkdir("x")
->>> os.chdir("x")
->>> os.getcwd()
+
+    >>> os.mkdir("x")
+    >>> os.chdir("x")
+    >>> os.getcwd()
     '''
 
 
