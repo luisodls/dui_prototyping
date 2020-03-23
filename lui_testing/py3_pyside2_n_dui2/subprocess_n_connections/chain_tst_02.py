@@ -4,11 +4,17 @@ import glob
 
 class node(object):
     def __init__(self):
-        self.old_lst_expt = []
-        self.old_lst_refl = []
+        self._lst2run = None
 
     def set_cmd_lst(self, lst_in):
         self._lst2run = lst_in
+
+    def set_imp_fil(self, lst_expt, lst_refl):
+        for expt_2_add in lst_expt:
+            self._lst2run += " " + expt_2_add
+
+        for refl_2_add in lst_refl:
+            self._lst2run += " " + refl_2_add
 
     def run_cmd(self):
         proc = subprocess.Popen(
@@ -22,7 +28,7 @@ class node(object):
         line = None
         while proc.poll() is None or line != '':
             line = proc.stdout.readline()[:-1]
-            print("out_lin>>", line)
+            print("lin out >>", line)
             '''
             line_err = proc.stderr.readline()[:-1]
             if line_err != '':
@@ -59,7 +65,7 @@ if __name__ == "__main__":
     old_lst_refl = []
 
     for num, comd in enumerate(cmd_lst):
-        print("\n num=", num, "comd", comd)
+        print("\n num=", num, "comd", comd, "\n")
         new_dir = "run" + str(num)
         os.mkdir(new_dir)
         os.chdir(new_dir)
@@ -76,18 +82,10 @@ if __name__ == "__main__":
         if len(lst_refl) == 0:
             lst_refl = old_lst_refl
 
-        new_cmd = str(comd)
-
-        for expt_2_add in lst_expt:
-            new_cmd += " " + expt_2_add
-
-        for refl_2_add in lst_refl:
-            new_cmd += " " + refl_2_add
-
-        print("\n new_cmd ", new_cmd)
-
         new_node = node()
-        new_node.set_cmd_lst(new_cmd)
+        new_node.set_cmd_lst(str(comd))
+        new_node.set_imp_fil(lst_expt, lst_refl)
+
         new_node.run_cmd()
 
         #run_cmd(new_cmd)
