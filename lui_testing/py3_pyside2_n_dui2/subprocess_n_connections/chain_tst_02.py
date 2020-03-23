@@ -3,7 +3,15 @@ import os
 import glob
 
 class node(object):
-    def __init__(self):
+    def __init__(self, old_node):
+        self._old_node = old_node
+        try:
+            print("old_node.dir ...")
+
+        except:
+            pass
+
+
         self._lst2run = None
 
     def set_cmd_lst(self, lst_in):
@@ -38,16 +46,10 @@ class node(object):
         proc.stdout.close()
 
 
+
+
 if __name__ == "__main__":
 
-    to_add_later = [
-        "dials.import /tmp/dui2run/imgs/X4_wide_M1S4_2_00*.cbf image_range=1,12",
-        "dials.find_spots  ../tst1/*.expt ../tst1/*.refl spotfinder.threshold.dispersion.gain=1.1",
-
-        "dials.integrate ../tst4/*.expt ../tst4/*.refl integration.mp.nproc=4",
-        "dials.scale ../tst5/*.expt ../tst5/*.refl",
-        "dials.symmetry ../tst6/*.expt ../tst6/*.refl",
-        ]
 
     cmd_lst = [
         "dials.find_spots",
@@ -63,6 +65,9 @@ if __name__ == "__main__":
 
     old_lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
     old_lst_refl = []
+
+    old_node = node(None)
+
 
     for num, comd in enumerate(cmd_lst):
         print("\n num=", num, "comd", comd, "\n")
@@ -82,7 +87,7 @@ if __name__ == "__main__":
         if len(lst_refl) == 0:
             lst_refl = old_lst_refl
 
-        new_node = node()
+        new_node = node(old_node)
         new_node.set_cmd_lst(str(comd))
         new_node.set_imp_fil(lst_expt, lst_refl)
 
@@ -95,6 +100,8 @@ if __name__ == "__main__":
         old_lst_refl = lst_refl
 
         os.chdir("..")
+
+        old_node = new_node
 
 
 
