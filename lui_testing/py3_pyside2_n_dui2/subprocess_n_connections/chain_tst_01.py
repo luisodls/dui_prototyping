@@ -37,13 +37,20 @@ if __name__ == "__main__":
         ]
 
     cmd_lst = [
+        "dials.find_spots",
         "dials.index",
         "dials.refine",
         "dials.integrate",
         "dials.scale",
         ]
 
-    old_dir = "/tmp/dui2run/run_zero"
+    #old_dir = "/tmp/dui2run/tst_chain/run_zero"
+
+    old_dir = "/tmp/dui2run/tst_chain/imp_dir"
+
+    old_lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
+    old_lst_refl = []
+
     for num, comd in enumerate(cmd_lst):
         print("\n num=", num, "comd", comd)
         new_dir = "run" + str(num)
@@ -52,6 +59,15 @@ if __name__ == "__main__":
 
         lst_expt = glob.glob(old_dir + "/*.expt")
         lst_refl = glob.glob(old_dir + "/*.refl")
+
+        print("lst_expt: ", lst_expt)
+        print("lst_refl: ", lst_refl)
+
+        if len(lst_expt) == 0:
+            lst_expt = old_lst_expt
+
+        if len(lst_refl) == 0:
+            lst_refl = old_lst_refl
 
         new_cmd = str(comd)
 
@@ -65,37 +81,10 @@ if __name__ == "__main__":
 
         run_cmd(new_cmd)
         old_dir = os.getcwd()
+        old_lst_expt = lst_expt
+        old_lst_refl = lst_refl
+
         os.chdir("..")
 
-
-    '''
-    >>> import glob
-    >>> glob.glob('./[0-9].*')
-    ['./1.gif', './2.txt']
-    >>> glob.glob('*.gif')
-    ['1.gif', 'card.gif']
-    >>> glob.glob('?.gif')
-    ['1.gif']
-    >>> glob.glob('**/*.txt', recursive=True)
-    ['2.txt', 'sub/3.txt']
-    >>> glob.glob('./**/', recursive=True)
-    ['./', './sub/']
-
-
-
-    path = "/tmp/home/monthly/daily/hourly"
-    os.mkdir( path, 0755 )
-
-    os.chdir(path)
-
-    os.getcwd()
-
-    run_cmd("")
-
-
-    >>> os.mkdir("x")
-    >>> os.chdir("x")
-    >>> os.getcwd()
-    '''
 
 
