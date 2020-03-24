@@ -29,16 +29,6 @@ class node(object):
             print("NOT _run_dir on old_node")
 
 
-    def set_cmd_lst(self, lst_in):
-        self._lst2run = [lst_in[0]]
-        self.set_imp_fil(self._lst_expt, self._lst_refl)
-        try:
-            for par in lst_in[1:]:
-                self._lst2run.append(par)
-
-        except:
-            print("no extra parameters")
-
     def set_base_dir(self, dir_in = None):
             self._base_dir = dir_in
 
@@ -55,6 +45,16 @@ class node(object):
 
         for refl_2_add in lst_refl:
             self._lst2run.append(refl_2_add)
+
+    def set_cmd_lst(self, lst_in):
+        self._lst2run = [lst_in[0]]
+        self.set_imp_fil(self._lst_expt, self._lst_refl)
+        try:
+            for par in lst_in[1:]:
+                self._lst2run.append(par)
+
+        except:
+            print("no extra parameters")
 
     def run_cmd(self):
 
