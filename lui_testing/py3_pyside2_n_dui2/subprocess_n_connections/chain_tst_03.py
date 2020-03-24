@@ -72,11 +72,11 @@ class node(object):
 if __name__ == "__main__":
 
     cmd_lst = [
-        "dials.find_spots",
-        "dials.index",
-        "dials.refine",
-        "dials.integrate",
-        "dials.scale",
+        ["dials.find_spots"],
+        ["dials.index"],
+        ["dials.refine"],
+        ["dials.integrate"],
+        ["dials.scale"],
         ]
 
     old_node = node(None)
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
         new_node = node(old_node)
         new_node.set_run_dir(new_dir)
-        new_node.set_cmd_lst([str(comd)])
+        new_node.set_cmd_lst(comd)
         new_node.run_cmd()
 
         old_node = new_node
