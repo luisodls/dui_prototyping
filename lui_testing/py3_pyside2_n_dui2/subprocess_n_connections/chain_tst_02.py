@@ -3,20 +3,35 @@ import os
 import glob
 
 class node(object):
-    def __init__(self, old_node):
+    def __init__(self, old_node = None):
         self._old_node = old_node
-        try:
-            print("old_node.dir ...")
+        self._lst_expt = []
+        self._lst_refl = []
+        self._lst2run = ""
+        self._run_dir = ""
 
-        except:
-            pass
+        if(old_node != None):
+            #try:
+            print("old_node.dir =", self._old_node._run_dir)
+            self._lst_expt = glob.glob(self._old_node._run_dir + "/*.expt")
+            self._lst_refl = glob.glob(self._old_node._run_dir + "/*.refl")
 
+            if len(self._lst_expt) == 0:
+                self._lst_expt = self._old_node._lst_expt
 
-        self._lst2run = None
-        self._run_dir = None
+            if len(self._lst_refl) == 0:
+                self._lst_refl = self._old_node._lst_refl
+
+            print("self._lst_expt: ", self._lst_expt)
+            print("self._lst_refl: ", self._lst_refl)
+
+            #except:
+            #print("NOT _run_dir on old_node")
+
 
     def set_cmd_lst(self, lst_in):
         self._lst2run = lst_in
+        self.set_imp_fil(self._lst_expt, self._lst_refl)
 
     def set_run_dir(self, dir_in):
         self._run_dir = dir_in
@@ -29,6 +44,10 @@ class node(object):
             self._lst2run += " " + refl_2_add
 
     def run_cmd(self):
+
+        print("self._lst2run:", self._lst2run)
+        print("self._run_dir:", self._run_dir)
+
         proc = subprocess.Popen(
             self._lst2run,
             shell=True,
@@ -63,11 +82,10 @@ if __name__ == "__main__":
 
     old_dir = "/tmp/dui2run/tst_chain/imp_dir"
 
-    old_lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
-    old_lst_refl = []
-
     old_node = node(None)
-
+    old_node.set_run_dir("/tmp/dui2run/tst_chain/imp_dir")
+    old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
+    old_node._lst_refl = []
     base_dir = os.getcwd()
 
     for num, comd in enumerate(cmd_lst):
@@ -76,28 +94,16 @@ if __name__ == "__main__":
         print("new_dir: ", new_dir, "\n")
         os.mkdir(new_dir)
 
-        lst_expt = glob.glob(old_dir + "/*.expt")
-        lst_refl = glob.glob(old_dir + "/*.refl")
-
-        print("lst_expt: ", lst_expt)
-        print("lst_refl: ", lst_refl)
-
-        if len(lst_expt) == 0:
-            lst_expt = old_lst_expt
-
-        if len(lst_refl) == 0:
-            lst_refl = old_lst_refl
 
         new_node = node(old_node)
         new_node.set_cmd_lst(str(comd))
         new_node.set_run_dir(new_dir)
-        new_node.set_imp_fil(lst_expt, lst_refl)
+
+        ##############################################################
 
         new_node.run_cmd()
 
         old_dir = new_dir
-        old_lst_expt = lst_expt
-        old_lst_refl = lst_refl
 
         old_node = new_node
 
