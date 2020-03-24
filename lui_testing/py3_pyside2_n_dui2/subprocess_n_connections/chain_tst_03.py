@@ -29,8 +29,14 @@ class node(object):
 
 
     def set_cmd_lst(self, lst_in):
-        self._lst2run = lst_in
+        self._lst2run = [lst_in[0]]
         self.set_imp_fil(self._lst_expt, self._lst_refl)
+        try:
+            for par in lst_in[1:]:
+                self._lst2run.append(par)
+
+        except:
+            print("no extra parameters")
 
     def set_run_dir(self, dir_in):
         self._run_dir = dir_in
@@ -72,10 +78,10 @@ class node(object):
 if __name__ == "__main__":
 
     cmd_lst = [
-        ["dials.find_spots"],
+        ["dials.find_spots", "nproc=5"],
         ["dials.index"],
         ["dials.refine"],
-        ["dials.integrate"],
+        ["dials.integrate", "nproc=5"],
         ["dials.scale"],
         ]
 
