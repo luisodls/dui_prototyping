@@ -7,7 +7,7 @@ class node(object):
         self._old_node = old_node
         self._lst_expt = []
         self._lst_refl = []
-        self._lst2run = ""
+        self._lst2run = []
         self._run_dir = ""
 
         try:
@@ -37,10 +37,10 @@ class node(object):
 
     def set_imp_fil(self, lst_expt, lst_refl):
         for expt_2_add in lst_expt:
-            self._lst2run += " " + expt_2_add
+            self._lst2run.append(expt_2_add)
 
         for refl_2_add in lst_refl:
-            self._lst2run += " " + refl_2_add
+            self._lst2run.append(refl_2_add)
 
     def run_cmd(self):
 
@@ -49,7 +49,7 @@ class node(object):
 
         proc = subprocess.Popen(
             self._lst2run,
-            shell=True,
+            shell=False,
             cwd=self._run_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -93,7 +93,7 @@ if __name__ == "__main__":
 
         new_node = node(old_node)
         new_node.set_run_dir(new_dir)
-        new_node.set_cmd_lst(str(comd))
+        new_node.set_cmd_lst([str(comd)])
         new_node.run_cmd()
 
         old_node = new_node
