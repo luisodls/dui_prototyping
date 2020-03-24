@@ -13,9 +13,13 @@ class node(object):
 
 
         self._lst2run = None
+        self._run_dir = None
 
     def set_cmd_lst(self, lst_in):
         self._lst2run = lst_in
+
+    def set_run_dir(self, dir_in):
+        self._run_dir = dir_in
 
     def set_imp_fil(self, lst_expt, lst_refl):
         for expt_2_add in lst_expt:
@@ -28,6 +32,7 @@ class node(object):
         proc = subprocess.Popen(
             self._lst2run,
             shell=True,
+            cwd=self._run_dir,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             universal_newlines=True
@@ -46,10 +51,7 @@ class node(object):
         proc.stdout.close()
 
 
-
-
 if __name__ == "__main__":
-
 
     cmd_lst = [
         "dials.find_spots",
@@ -59,8 +61,6 @@ if __name__ == "__main__":
         "dials.scale",
         ]
 
-    #old_dir = "/tmp/dui2run/tst_chain/run_zero"
-
     old_dir = "/tmp/dui2run/tst_chain/imp_dir"
 
     old_lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
@@ -68,12 +68,13 @@ if __name__ == "__main__":
 
     old_node = node(None)
 
+    base_dir = os.getcwd()
 
     for num, comd in enumerate(cmd_lst):
         print("\n num=", num, "comd", comd, "\n")
-        new_dir = "run" + str(num)
+        new_dir = base_dir + "/run" + str(num)
+        print("new_dir: ", new_dir, "\n")
         os.mkdir(new_dir)
-        os.chdir(new_dir)
 
         lst_expt = glob.glob(old_dir + "/*.expt")
         lst_refl = glob.glob(old_dir + "/*.refl")
@@ -89,17 +90,14 @@ if __name__ == "__main__":
 
         new_node = node(old_node)
         new_node.set_cmd_lst(str(comd))
+        new_node.set_run_dir(new_dir)
         new_node.set_imp_fil(lst_expt, lst_refl)
 
         new_node.run_cmd()
 
-        #run_cmd(new_cmd)
-
-        old_dir = os.getcwd()
+        old_dir = new_dir
         old_lst_expt = lst_expt
         old_lst_refl = lst_refl
-
-        os.chdir("..")
 
         old_node = new_node
 
