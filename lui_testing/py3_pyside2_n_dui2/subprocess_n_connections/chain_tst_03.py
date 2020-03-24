@@ -10,8 +10,7 @@ class node(object):
         self._lst2run = ""
         self._run_dir = ""
 
-        if(old_node != None):
-            #try:
+        try:
             print("old_node.dir =", self._old_node._run_dir)
             self._lst_expt = glob.glob(self._old_node._run_dir + "/*.expt")
             self._lst_refl = glob.glob(self._old_node._run_dir + "/*.refl")
@@ -25,8 +24,8 @@ class node(object):
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
 
-            #except:
-            #print("NOT _run_dir on old_node")
+        except:
+            print("NOT _run_dir on old_node")
 
 
     def set_cmd_lst(self, lst_in):
@@ -60,7 +59,7 @@ class node(object):
         line = None
         while proc.poll() is None or line != '':
             line = proc.stdout.readline()[:-1]
-            print("s_Out> ", line)
+            print("Out>> ", line)
             '''
             line_err = proc.stderr.readline()[:-1]
             if line_err != '':
@@ -80,8 +79,6 @@ if __name__ == "__main__":
         "dials.scale",
         ]
 
-    old_dir = "/tmp/dui2run/tst_chain/imp_dir"
-
     old_node = node(None)
     old_node.set_run_dir("/tmp/dui2run/tst_chain/imp_dir")
     old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
@@ -94,16 +91,10 @@ if __name__ == "__main__":
         print("new_dir: ", new_dir, "\n")
         os.mkdir(new_dir)
 
-
         new_node = node(old_node)
-        new_node.set_cmd_lst(str(comd))
         new_node.set_run_dir(new_dir)
-
-        ##############################################################
-
+        new_node.set_cmd_lst(str(comd))
         new_node.run_cmd()
-
-        old_dir = new_dir
 
         old_node = new_node
 
