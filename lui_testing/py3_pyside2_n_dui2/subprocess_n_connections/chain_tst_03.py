@@ -23,6 +23,7 @@ class node(object):
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
+            self.set_base_dir(self._old_node._base_dir)
 
         except:
             print("NOT _run_dir on old_node")
@@ -38,8 +39,15 @@ class node(object):
         except:
             print("no extra parameters")
 
-    def set_run_dir(self, dir_in):
-        self._run_dir = dir_in
+    def set_base_dir(self, dir_in = None):
+            self._base_dir = dir_in
+
+    def set_run_dir(self, num = None):
+        print("\n num=", num, "comd", comd, "\n")
+        self._run_dir = self._base_dir + "/run" + str(num)
+
+        print("new_dir: ", self._run_dir, "\n")
+        os.mkdir(self._run_dir)
 
     def set_imp_fil(self, lst_expt, lst_refl):
         for expt_2_add in lst_expt:
@@ -86,19 +94,15 @@ if __name__ == "__main__":
         ]
 
     old_node = node(None)
-    old_node.set_run_dir("/tmp/dui2run/tst_chain/imp_dir")
+    base_dir = os.getcwd()
+    old_node.set_base_dir(base_dir)
+    old_node._run_dir = "/tmp/dui2run/tst_chain/imp_dir"
     old_node._lst_expt = ["/tmp/dui2run/tst_chain/imp_dir/imported.expt"]
     old_node._lst_refl = []
-    base_dir = os.getcwd()
 
     for num, comd in enumerate(cmd_lst):
-        print("\n num=", num, "comd", comd, "\n")
-        new_dir = base_dir + "/run" + str(num)
-        print("new_dir: ", new_dir, "\n")
-        os.mkdir(new_dir)
-
         new_node = node(old_node)
-        new_node.set_run_dir(new_dir)
+        new_node.set_run_dir(num)
         new_node.set_cmd_lst(comd)
         new_node.run_cmd()
 
