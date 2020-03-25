@@ -14,4 +14,4 @@ dials.import /scratch/dui_tst/X4_wide/X4_wide_M1S4_2_000*.cbf
 cd ..
 
 
-dials.python /scratch/dui_prototyping/lui_testing/py3_pyside2_n_dui2/subprocess_n_connections/chain_tst_02.py
+dials.python /scratch/dui_prototyping/lui_testing/py3_pyside2_n_dui2/subprocess_n_connections/chain_tst_03.py
