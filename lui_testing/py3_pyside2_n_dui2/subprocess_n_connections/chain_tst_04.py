@@ -7,7 +7,7 @@ class node(object):
         self._old_node = old_node
         self._lst_expt = []
         self._lst_refl = []
-        self._lst2run = []
+        self._lst2run = [[]]
         self._run_dir = ""
 
         try:
@@ -40,58 +40,74 @@ class node(object):
         os.mkdir(self._run_dir)
 
     def set_imp_fil(self, lst_expt, lst_refl):
-        for expt_2_add in lst_expt:
-            self._lst2run.append(expt_2_add)
+        for inner_lst in self._lst2run:
+            for expt_2_add in lst_expt:
+                inner_lst.append(expt_2_add)
 
-        for refl_2_add in lst_refl:
-            self._lst2run.append(refl_2_add)
+            for refl_2_add in lst_refl:
+                inner_lst.append(refl_2_add)
 
     def set_cmd_lst(self, lst_in):
-        self._lst2run = [lst_in[0]]
-        self.set_imp_fil(self._lst_expt, self._lst_refl)
-        try:
-            for par in lst_in[1:]:
-                self._lst2run.append(par)
+        self._lst2run = []
+        for inner_lst in lst_in:
+            self._lst2run.append([inner_lst[0]])
 
-        except:
-            print("no extra parameters")
+        self.set_imp_fil(self._lst_expt, self._lst_refl)
+        for inner_lst in self._lst2run:
+            try:
+                for inner_inner_lst in lst_in:
+                    for par in inner_inner_lst[1:]:
+                        inner_lst.append(par)
+
+                print("\n inner_lst:", inner_lst, "\n")
+
+            except:
+                print("no extra parameters")
+
+        print("\n _lst2run:", self._lst2run, "\n")
 
     def run_cmd(self):
 
         print("self._lst2run:", self._lst2run)
         print("self._run_dir:", self._run_dir, "\n")
 
-        proc = subprocess.Popen(
-            self._lst2run,
-            shell=False,
-            cwd=self._run_dir,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
-        )
+        for inner_lst in self._lst2run:
+            proc = subprocess.Popen(
+                inner_lst,
+                shell=False,
+                cwd=self._run_dir,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True
+            )
 
-        line = None
-        while proc.poll() is None or line != '':
-            line = proc.stdout.readline()[:-1]
-            print("Out>> ", line)
-            '''
-            line_err = proc.stderr.readline()[:-1]
-            if line_err != '':
-                print("_err>>", line_err)
-            '''
+            line = None
+            while proc.poll() is None or line != '':
+                line = proc.stdout.readline()[:-1]
+                print("StdOut>> ", line)
+                '''
+                line_err = proc.stderr.readline()[:-1]
+                if line_err != '':
+                    print("_err>>", line_err)
+                '''
 
-        proc.stdout.close()
+            proc.stdout.close()
 
 
 if __name__ == "__main__":
 
+    tst2add = '''
+    dials.generate_mask untrusted.rectangle=0,1421,1258,1312 input.experiments=1_experiments.expt output.mask=tmp_mask.pickle
+    dials.apply_mask input.experiments=1_experiments.expt input.mask=tmp_mask.pickle output.experiments=2_experiments.expt
+    '''
+
     cmd_lst = [
-        ["dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"],
-        ["dials.find_spots", "nproc=5"],
-        ["dials.index"],
-        ["dials.refine"],
-        ["dials.integrate", "nproc=5"],
-        ["dials.scale"],
+        [["dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"]],
+        [["dials.find_spots", "nproc=5"]],
+        [["dials.index"]],
+        [["dials.refine"]],
+        [["dials.integrate", "nproc=3"]],
+        [["dials.scale"]],
         ]
 
     old_node = node(None)
