@@ -11,7 +11,8 @@ class node(object):
         self._run_dir = ""
 
         try:
-            print("\n old_node.dir =", self._old_node._run_dir)
+            self.set_base_dir(self._old_node._base_dir)
+            print("\n old_node._base_dir =", self._old_node._base_dir)
             self._lst_expt = glob.glob(self._old_node._run_dir + "/*.expt")
             self._lst_refl = glob.glob(self._old_node._run_dir + "/*.refl")
 
@@ -23,10 +24,9 @@ class node(object):
 
             print("self._lst_expt: ", self._lst_expt)
             print("self._lst_refl: ", self._lst_refl)
-            self.set_base_dir(self._old_node._base_dir)
 
         except:
-            print("NOT _run_dir on old_node")
+            print("NOT _base_dir on old_node")
 
 
     def set_base_dir(self, dir_in = None):
