@@ -11,7 +11,7 @@ class node(object):
         self._run_dir = ""
 
         try:
-            print("old_node.dir =", self._old_node._run_dir)
+            print("\n old_node.dir =", self._old_node._run_dir)
             self._lst_expt = glob.glob(self._old_node._run_dir + "/*.expt")
             self._lst_refl = glob.glob(self._old_node._run_dir + "/*.refl")
 
@@ -33,7 +33,7 @@ class node(object):
             self._base_dir = dir_in
 
     def set_run_dir(self, num = None):
-        print("\n num=", num, "comd", comd, "\n")
+        print("\nnum=", num, "comd", comd)
         self._run_dir = self._base_dir + "/run" + str(num)
 
         print("new_dir: ", self._run_dir, "\n")
@@ -59,7 +59,7 @@ class node(object):
     def run_cmd(self):
 
         print("self._lst2run:", self._lst2run)
-        print("self._run_dir:", self._run_dir)
+        print("self._run_dir:", self._run_dir, "\n")
 
         proc = subprocess.Popen(
             self._lst2run,
