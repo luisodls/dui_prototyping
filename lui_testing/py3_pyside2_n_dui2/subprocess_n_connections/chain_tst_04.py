@@ -53,14 +53,11 @@ class node(object):
             self._lst2run.append([inner_lst[0]])
 
         self.set_imp_fil(self._lst_expt, self._lst_refl)
-        for inner_lst in self._lst2run:
+
+        for num, inner_lst in enumerate(self._lst2run):
             try:
-                for inner_inner_lst in lst_in:
-                    for par in inner_inner_lst[1:]:
-                        inner_lst.append(par)
-
-                print("\n inner_lst:", inner_lst, "\n")
-
+                for par in lst_in[num][1:]:
+                    inner_lst.append(par)
             except:
                 print("no extra parameters")
 
@@ -68,10 +65,8 @@ class node(object):
 
     def run_cmd(self):
 
-        print("self._lst2run:", self._lst2run)
-        print("self._run_dir:", self._run_dir, "\n")
-
         for inner_lst in self._lst2run:
+            print("\n Running:", inner_lst, "\n")
             proc = subprocess.Popen(
                 inner_lst,
                 shell=False,
@@ -101,12 +96,42 @@ if __name__ == "__main__":
     dials.apply_mask input.experiments=1_experiments.expt input.mask=tmp_mask.pickle output.experiments=2_experiments.expt
     '''
 
+    tst2add = '''
+    dials.generate_mask untrusted.rectangle=0,1421,1258,1312 output.mask=tmp_mask.pickle
+    dials.apply_mask input.mask=tmp_mask.pickle
+    '''
+
     cmd_lst = [
-        [["dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"]],
-        [["dials.find_spots", "nproc=5"]],
+        [
+            [
+                "dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"
+            ]
+        ],
+        [
+            [
+                "dials.generate_mask",
+                "untrusted.rectangle=0,1421,1258,1312",
+                "output.mask=tmp_mask.pickle"
+            ],
+            [
+                "dials.apply_mask",
+                "input.mask=tmp_mask.pickle"
+            ]
+        ],
+        [
+            [
+                "dials.find_spots",
+                "nproc=5"
+            ]
+        ],
         [["dials.index"]],
         [["dials.refine"]],
-        [["dials.integrate", "nproc=3"]],
+        [
+            [
+                "dials.integrate",
+                "nproc=3"
+            ]
+        ],
         [["dials.scale"]],
         ]
 
