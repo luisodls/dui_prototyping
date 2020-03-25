@@ -86,6 +86,7 @@ class node(object):
 if __name__ == "__main__":
 
     cmd_lst = [
+        ["dials.modify_geometry", "geometry.detector.slow_fast_beam_centre=1279,1234"],
         ["dials.find_spots", "nproc=5"],
         ["dials.index"],
         ["dials.refine"],
