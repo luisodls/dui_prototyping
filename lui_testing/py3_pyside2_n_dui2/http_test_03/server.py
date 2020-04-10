@@ -16,15 +16,13 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(bytes('     YEY                        \n', 'utf-8'))
         self.wfile.write(bytes('                                \n', 'utf-8'))
 
-        '''
         print("starting to send numbers ...")
-        for num in range(20):
+        for num in range(5):
             num_str = '<p> ' + str(num) + ' </p>'
             time.sleep(1.5)
             self.wfile.write(bytes(num_str, 'utf-8'))
 
         print("... finished sending numbers")
-        '''
 
 
 if __name__ == "__main__":
