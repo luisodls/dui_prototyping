@@ -4,13 +4,8 @@ import socketserver
 import time
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self):
-        '''
-        self.send_response(200)
-        self.send_header('Content-type', 'application/json')
-        self.end_headers()
-        '''
-
+    def do_GET(self, str_in = None):
+        print("str_in =", str_in)
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
@@ -21,12 +16,15 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(bytes('     YEY                        \n', 'utf-8'))
         self.wfile.write(bytes('                                \n', 'utf-8'))
 
-        for num in range(10):
-            num_str = str(num)
-            print("num_str=", num_str)
-            time.sleep(0.5)
+        '''
+        print("starting to send numbers ...")
+        for num in range(20):
+            num_str = '<p> ' + str(num) + ' </p>'
+            time.sleep(1.5)
             self.wfile.write(bytes(num_str, 'utf-8'))
 
+        print("... finished sending numbers")
+        '''
 
 
 if __name__ == "__main__":
