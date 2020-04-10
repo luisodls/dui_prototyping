@@ -1,6 +1,8 @@
 import http.server
 import socketserver
 
+import time
+
 class ReqHandler(http.server.BaseHTTPRequestHandler):
     def do_GET(self):
         '''
@@ -12,20 +14,19 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        old_stable = '''
-        self.wfile.write(bytes('<html><body><p>', 'utf-8'))
-        self.wfile.write(bytes('Hi from the HTTP Server #3 ', 'utf-8'))
-        self.wfile.write(bytes('</p></body></html>', 'utf-8'))
-        '''
 
-        self.wfile.write(bytes('                                ', 'utf-8'))
-        self.wfile.write(bytes(' *** TEST 03 ***                ', 'utf-8'))
-        self.wfile.write(bytes('                                ', 'utf-8'))
-        self.wfile.write(bytes('     YEY                        ', 'utf-8'))
-        self.wfile.write(bytes('                                ', 'utf-8'))
+        self.wfile.write(bytes('                                \n', 'utf-8'))
+        self.wfile.write(bytes(' *** TEST 03 ***                \n', 'utf-8'))
+        self.wfile.write(bytes('                                \n', 'utf-8'))
+        self.wfile.write(bytes('     YEY                        \n', 'utf-8'))
+        self.wfile.write(bytes('                                \n', 'utf-8'))
 
+        for num in range(10):
+            num_str = str(num)
+            print("num_str=", num_str)
+            time.sleep(0.5)
+            self.wfile.write(bytes(num_str, 'utf-8'))
 
-        print("dir(self)", dir(self))
 
 
 if __name__ == "__main__":
