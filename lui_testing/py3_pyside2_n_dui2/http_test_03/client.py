@@ -1,16 +1,20 @@
-import requests
-old_stable = '''
-r = requests.get('http://localhost:8080/')
-print(r.headers['content-type'])
-print(r.text, "\n")
-print(dir(r))
-'''
 
 import requests
-r = requests.get('http://localhost:8080/', stream=True)
+#r = requests.get('http://localhost:8080/', stream=True)
 
-for line in r.iter_lines():
-    if line:
-        print("tst")
-        decoded_line = line.decode('utf-8')
-        print(str(decoded_line))
+with requests.get('http://localhost:8080/', stream=False) as r:
+    print(r.headers)
+    '''
+    for line in r.iter_lines():
+        if line:
+            print("\\n")
+            print(str(line.decode('utf-8')))
+
+    '''
+    lines = r.iter_content()
+    # Save the first line for later or just skip it
+    first_line = next(lines)
+    print(str(first_line.decode('utf-8')))
+    for line in lines:
+        print(str(line.decode('utf-8')))
+

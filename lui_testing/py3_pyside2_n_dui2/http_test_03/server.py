@@ -18,8 +18,9 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         print("starting to send numbers ...")
         for num in range(5):
-            num_str = '<p> ' + str(num) + ' </p>'
+            num_str = ' num = ' + str(num) + '\n'
             time.sleep(1.5)
+            print("sending <<", num_str, ">> str")
             self.wfile.write(bytes(num_str, 'utf-8'))
 
         print("... finished sending numbers")
