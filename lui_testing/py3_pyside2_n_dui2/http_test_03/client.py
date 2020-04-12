@@ -1,21 +1,18 @@
 
 import requests
-#r = requests.get('http://localhost:8080/', stream=True)
+import time
 
-with requests.get('http://localhost:8080/', stream=False) as r:
-    print(r.headers)
-    '''
-    for line in r.iter_lines():
-        if line:
-            print("\\n")
-            print(str(line.decode('utf-8')))
 
-    '''
+r = requests.get('http://localhost:8080/', stream=True)
 
-    #lines = r.iter_content()
-    lines = r.iter_lines()
-    first_line = next(lines)
-    print(str(first_line.decode('utf-8')))
-    for line in lines:
-        print(str(line.decode('utf-8')))
+line_str = ''
+
+while True:
+    time.sleep(0.01)
+    tmp_dat = r.raw.read(1)
+    single_char = str(tmp_dat.decode('utf-8'))
+    line_str += single_char
+    if single_char == '\n':
+        print('receiving <<', line_str, '>>')
+        line_str = ''
 
