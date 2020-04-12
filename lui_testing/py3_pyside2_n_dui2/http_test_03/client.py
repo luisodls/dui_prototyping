@@ -11,8 +11,9 @@ with requests.get('http://localhost:8080/', stream=False) as r:
             print(str(line.decode('utf-8')))
 
     '''
-    lines = r.iter_content()
-    # Save the first line for later or just skip it
+
+    #lines = r.iter_content()
+    lines = r.iter_lines()
     first_line = next(lines)
     print(str(first_line.decode('utf-8')))
     for line in lines:
