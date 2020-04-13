@@ -1,14 +1,17 @@
 import http.server
 import socketserver
-
+from urllib.parse import urlparse, parse_qs
 import time
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
-    def do_GET(self, str_in = None):
-        print("str_in =", str_in)
+
+    def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
+
+        url_path = self.path
+        print('urlparse(self.path).query', parse_qs(urlparse(url_path).query))
 
         self.wfile.write(bytes('Test #4\n', 'utf-8'))
         self.wfile.write(bytes('1234567890\n', 'utf-8'))
@@ -18,7 +21,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("starting to send numbers ...")
         for num in range(3):
             num_str = ' num = ' + str(num) + '\n'
-            time.sleep(5.5)
+            time.sleep(0.5)
             print("sending <<", num_str, ">> str ")
             self.wfile.write(bytes(num_str, 'utf-8'))
 

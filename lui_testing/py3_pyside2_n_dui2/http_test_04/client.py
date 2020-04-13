@@ -1,13 +1,17 @@
 import requests
-#import time
+import time
 
-r = requests.get('http://localhost:8080/', stream=True)
+command = str(input(">> "))
+print('entered:', command)
+
+
+cmd = {'command': [command]}
+
+r_g = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
 line_str = ''
-
 while True:
-    #time.sleep(0.1)
-    tmp_dat = r.raw.read(1)
+    tmp_dat = r_g.raw.read(1)
     single_char = str(tmp_dat.decode('utf-8'))
     line_str += single_char
     if single_char == '\n':
@@ -19,4 +23,10 @@ while True:
         break
 
     print('#', end = '')
+
+
+
+#r_p = requests.post('http://localhost:8080/', params = cmd)
+#print('before get()')
+#time.sleep(1.5)
 
