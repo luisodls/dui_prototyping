@@ -16,3 +16,6 @@ while True:
         print('receiving <<', line_str, '>>')
         line_str = ''
 
+    elif line_str[-7:] == '/*EOF*/':
+        print('/*EOF*/ received')
+
