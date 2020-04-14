@@ -38,7 +38,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     PORT = 8080
-    with socketserver.TCPServer(("", PORT), ReqHandler) as http_daemon:
+    with socketserver.ThreadingTCPServer(("", PORT), ReqHandler) as http_daemon:
         print("serving at port", PORT)
         try:
             http_daemon.serve_forever()
