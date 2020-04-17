@@ -15,23 +15,26 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         dict_cmd = parse_qs(urlparse(url_path).query)
         cmd_str = dict_cmd['command'][0]
         cmd_lst = cmd_str.split(' ')
+        try:
+            print("\n Running:", cmd_lst, "\n")
+            proc = subprocess.Popen(
+                cmd_lst,
+                shell=False,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                universal_newlines=True
+            )
+            line = None
+            while proc.poll() is None or line != '':
+                line = proc.stdout.readline()
+                #print("StdOut>> ", line)
+                self.wfile.write(bytes(line , 'utf-8'))
 
-        print("\n Running:", cmd_lst, "\n")
-        proc = subprocess.Popen(
-            cmd_lst,
-            shell=False,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
-        )
+            proc.stdout.close()
 
-        line = None
-        while proc.poll() is None or line != '':
-            line = proc.stdout.readline()
-            #print("StdOut>> ", line)
-            self.wfile.write(bytes(line , 'utf-8'))
+        except:
+            print("error running subprocess from server")
 
-        proc.stdout.close()
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
