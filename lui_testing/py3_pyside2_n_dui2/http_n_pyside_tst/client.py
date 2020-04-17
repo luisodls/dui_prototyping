@@ -2,6 +2,35 @@ from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
 import sys, time
 import requests
 
+
+class Run_n_Output(QtCore.QThread):
+    """Tracks the lifetime of a subprocess
+
+    Args:
+        process (subprocess.Popen): The process to track
+    """
+
+    def __init__(self, parent, request):
+        super(Run_n_Output, self).__init__()
+        self.parent = parent
+        self.request = request
+
+    def run(self):
+        line_str = ''
+        while True:
+            tmp_dat = self.request.raw.read(1)
+            single_char = str(tmp_dat.decode('utf-8'))
+            line_str += single_char
+            if single_char == '\n':
+                print(line_str[:-1])
+                self.parent.line_out.emit(line_str)
+                line_str = ''
+
+            elif line_str[-7:] == '/*EOF*/':
+                print('/*EOF*/ received')
+                break
+
+
 class Client(QtWidgets.QDialog):
     line_out = QtCore.Signal(str)
     def __init__(self, parent=None):
@@ -31,25 +60,19 @@ class Client(QtWidgets.QDialog):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
         self.incoming_text.insertPlainText(new_line)
 
+    def run_ended(self):
+        print("run_ended")
+
     def request_launch(self):
 
         cmd_str = str.encode(self.dataLineEdit.text())
         cmd = {'command': [cmd_str]}
-        r_g = requests.get('http://localhost:8080/', stream = True, params = cmd)
+        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
-        line_str = ''
-        while True:
-            tmp_dat = r_g.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
-            line_str += single_char
-            if single_char == '\n':
-                print(line_str[:-1])
-                self.line_out.emit(line_str)
-                line_str = ''
+        self.thrd = Run_n_Output(self, req_get)
+        self.thrd.finished.connect(self.run_ended)
+        self.thrd.start()
 
-            elif line_str[-7:] == '/*EOF*/':
-                print('/*EOF*/ received')
-                break
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)

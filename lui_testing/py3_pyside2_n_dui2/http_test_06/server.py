@@ -4,6 +4,8 @@ from urllib.parse import urlparse, parse_qs
 import time, subprocess
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        print("in_data =", args, kwargs)
 
     def do_GET(self):
         self.send_response(200)

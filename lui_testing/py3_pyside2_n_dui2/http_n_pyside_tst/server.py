@@ -9,7 +9,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        self.wfile.write(bytes('Test #6 ... multitasking \n', 'utf-8'))
+        self.wfile.write(bytes('Test #6.5 ... multitasking & GUI \n', 'utf-8'))
 
         url_path = self.path
         dict_cmd = parse_qs(urlparse(url_path).query)
