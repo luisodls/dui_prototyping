@@ -39,7 +39,9 @@ class Client(QtWidgets.QDialog):
             single_char = str(tmp_dat.decode('utf-8'))
             line_str += single_char
             if single_char == '\n':
-                print('<<', line_str[:-1], '\\n')
+                print(line_str[:-1])
+                self.incoming_text.moveCursor(QtGui.QTextCursor.End)
+                self.incoming_text.insertPlainText(line_str)
                 line_str = ''
 
             elif line_str[-7:] == '/*EOF*/':
