@@ -5,9 +5,8 @@ import requests
 
 class Run_n_Output(QtCore.QThread):
     line_out = QtCore.Signal(str)
-    def __init__(self, parent, request):
+    def __init__(self, request):
         super(Run_n_Output, self).__init__()
-        self.parent = parent
         self.request = request
 
     def run(self):
@@ -46,7 +45,7 @@ class Client(QtWidgets.QDialog):
         mainLayout.addWidget(self.dataLineEdit)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
-        self.setWindowTitle("DUI front end test")
+        self.setWindowTitle("DUI front end test with HTTP")
 
     def add_line(self, new_line):
         self.incoming_text.moveCursor(QtGui.QTextCursor.End)
@@ -61,7 +60,7 @@ class Client(QtWidgets.QDialog):
         cmd = {'command': [cmd_str]}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
-        self.thrd = Run_n_Output(self, req_get)
+        self.thrd = Run_n_Output(req_get)
         self.thrd.line_out.connect(self.add_line)
         self.thrd.finished.connect(self.run_ended)
         self.thrd.start()
