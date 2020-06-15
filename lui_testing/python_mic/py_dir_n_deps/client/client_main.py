@@ -1,2 +1,2 @@
 if __name__ == "__main__":
-    print("Hi from main")
+    print("Hi from main client")
