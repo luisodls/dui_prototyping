@@ -6,12 +6,12 @@ import sys, os
 try:
     from common.dep1 import dep01
 
-except:
-    sys.path.append('/scratch/dui_prototyping/lui_testing/python_mic/py_dir_n_deps/common')
+except ModuleNotFoundError:
+    comm_path = os.path.abspath(__file__)[0:-21] + "common"
+    sys.path.append(comm_path)
     from dep1 import dep01
 
 if __name__ == "__main__":
     print("Hi from main server")
     dep01()
 
-    print(dir(sys))
