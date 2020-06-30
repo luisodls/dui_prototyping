@@ -55,7 +55,7 @@ class tree_2_lineal(object):
 
                 else:
                     param_info["type"] = "number(s)"
-                    param_info["default"] = ""
+                    param_info["default"] = str(single_obj.extract())
 
                 self.lst_obj.append(param_info)
 
