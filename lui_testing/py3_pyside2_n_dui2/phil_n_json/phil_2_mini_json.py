@@ -95,7 +95,16 @@ if __name__ == "__main__":
         par_str = "   " * phl_obj["indent"]
         par_str += phl_obj["name"]
         try:
-            par_str += "    " + str(phl_obj["default"])
+
+            default = phl_obj["default"]
+            if(
+                (phl_obj["type"] == "bool" or phl_obj["type"] == "choice")
+                and default is not None
+            ):
+                par_str += "    " + str(phl_obj["opt_lst"][default])
+
+            else:
+                par_str += "    " + str(phl_obj["default"])
 
         except KeyError:
             pass
