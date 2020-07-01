@@ -5,8 +5,8 @@ from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 class tree_2_lineal(object):
     """
     Recursively navigates the Phil objects in a way that the final
-    self.lst_obj is a lineal list without ramifications, this final list
-    will be used later to generate a dynamic GUI
+    self.lst_obj is a lineal list without ramifications, then another list
+    is created with de info about parameters
     """
     def __init__(self, phl_obj_lst):
         self.lst_obj = []
@@ -18,7 +18,6 @@ class tree_2_lineal(object):
 
     def deep_in_recurs(self, phl_obj_lst):
         for single_obj in phl_obj_lst:
-            print(single_obj.name)
             if single_obj.name == "output":
                 print(" << output >> should be handled by DUI")
 
@@ -89,16 +88,13 @@ class tree_2_lineal(object):
 
 
 if __name__ == "__main__":
-    print("hi")
     lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
     lst_phil_obj = lst_dict()
 
     for data_info in lst_phil_obj:
-        #print(data_info, "\n")
         par_str = "   " * data_info["indent"]
         par_str += data_info["name"]
         try:
-
             default = data_info["default"]
             if(
                 (data_info["type"] == "bool" or data_info["type"] == "choice")
