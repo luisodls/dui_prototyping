@@ -13,11 +13,28 @@ class tree_2_lineal(object):
         self.deep_in_recurs(phl_obj)
 
     def __call__(self):
-        return self.lst_obj
+        self.build_data()
+        return self.lst_dict
 
     def deep_in_recurs(self, phl_obj):
-
         for single_obj in phl_obj:
+            if single_obj.name == "output":
+                print(" << output >> should be handled by DUI")
+
+            elif single_obj.is_definition:
+                self.lst_obj.append(single_obj)
+
+            elif single_obj.is_scope and single_obj.name != "output":
+                self.lst_obj.append(single_obj)
+                self.deep_in_recurs(single_obj.objects)
+
+            else:
+                print("\n", single_obj.name,
+                    "\n WARNING neither definition or scope\n")
+
+    def build_data(self):
+        self.lst_dict = []
+        for single_obj in self.lst_obj:
             if single_obj.is_definition:
                 param_info = {
                     "name"          :str(single_obj.name),
@@ -57,38 +74,23 @@ class tree_2_lineal(object):
                     param_info["type"] = "other(s)"
                     param_info["default"] = str(single_obj.extract())
 
-                self.lst_obj.append(param_info)
-
-
             elif single_obj.is_scope:
-                if single_obj.name != "output":
-                    param_info = {
-                        "name"          :str(single_obj.name),
-                        "full_path"     :str(single_obj.full_path()),
-                        "short_caption" :str(single_obj.short_caption),
-                        "help"          :str(single_obj.help),
-                        "indent"        :int(str(single_obj.full_path()).count(".")),
-                        "type"          :"scope"
-                    }
-                    self.lst_obj.append(param_info)
-                    self.deep_in_recurs(single_obj.objects)
+                param_info = {
+                    "name"          :str(single_obj.name),
+                    "full_path"     :str(single_obj.full_path()),
+                    "short_caption" :str(single_obj.short_caption),
+                    "help"          :str(single_obj.help),
+                    "indent"        :int(str(single_obj.full_path()).count(".")),
+                    "type"          :"scope"
+                }
 
-                else:
-                    print(
-                        'The ', single_obj.name,
-                        ' set of parameters is automatically handled by DUI Cloud',
-                    )
-
-            else:
-                print(
-                    "\n _____________ <<< WARNING neither definition or scope\n"
-                )
+            self.lst_dict.append(param_info)
 
 
 if __name__ == "__main__":
     print("hi")
-    lst_obj = tree_2_lineal(phil_scope_find_spots.objects)
-    lst_phil_obj = lst_obj()
+    lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
+    lst_phil_obj = lst_dict()
 
     for phl_obj in lst_phil_obj:
         #print(phl_obj, "\n")
