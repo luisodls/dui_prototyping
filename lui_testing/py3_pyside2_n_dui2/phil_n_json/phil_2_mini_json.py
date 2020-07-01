@@ -1,12 +1,18 @@
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
+from dials.command_line.index import working_phil as phil_scope_index
+from dials.command_line.refine_bravais_settings import (
+    phil_scope as phil_scope_r_b_settings,
+)
+from dials.command_line.refine import working_phil as phil_scope_refine
+from dials.command_line.integrate import phil_scope as phil_scope_integrate
 
 
 class tree_2_lineal(object):
     """
     Recursively navigates the Phil objects in a way that the final
     self.lst_obj is a lineal list without ramifications, then another list
-    is created with de info about parameters
+    is created with the info about parameters
     """
     def __init__(self, phl_obj_lst):
         self.lst_obj = []
@@ -88,7 +94,12 @@ class tree_2_lineal(object):
 
 
 if __name__ == "__main__":
-    lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
+    #lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
+    #lst_dict = tree_2_lineal(phil_scope_index.objects)
+    #lst_dict = tree_2_lineal(phil_scope_integrate.objects)
+    #lst_dict = tree_2_lineal(phil_scope_r_b_settings.objects)
+    lst_dict = tree_2_lineal(phil_scope_refine.objects)
+
     lst_phil_obj = lst_dict()
 
     for data_info in lst_phil_obj:
@@ -100,10 +111,10 @@ if __name__ == "__main__":
                 (data_info["type"] == "bool" or data_info["type"] == "choice")
                 and default is not None
             ):
-                par_str += "    " + str(data_info["opt_lst"][default])
+                par_str += "  =  " + str(data_info["opt_lst"][default])
 
             else:
-                par_str += "    " + str(data_info["default"])
+                par_str += "  =  " + str(data_info["default"])
 
         except KeyError:
             pass
