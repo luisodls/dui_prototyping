@@ -8,16 +8,17 @@ class tree_2_lineal(object):
     self.lst_obj is a lineal list without ramifications, this final list
     will be used later to generate a dynamic GUI
     """
-    def __init__(self, phl_obj):
+    def __init__(self, phl_obj_lst):
         self.lst_obj = []
-        self.deep_in_recurs(phl_obj)
+        self.deep_in_recurs(phl_obj_lst)
 
     def __call__(self):
         self.build_data()
         return self.lst_dict
 
-    def deep_in_recurs(self, phl_obj):
-        for single_obj in phl_obj:
+    def deep_in_recurs(self, phl_obj_lst):
+        for single_obj in phl_obj_lst:
+            print(single_obj.name)
             if single_obj.name == "output":
                 print(" << output >> should be handled by DUI")
 
@@ -92,21 +93,21 @@ if __name__ == "__main__":
     lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
     lst_phil_obj = lst_dict()
 
-    for phl_obj in lst_phil_obj:
-        #print(phl_obj, "\n")
-        par_str = "   " * phl_obj["indent"]
-        par_str += phl_obj["name"]
+    for data_info in lst_phil_obj:
+        #print(data_info, "\n")
+        par_str = "   " * data_info["indent"]
+        par_str += data_info["name"]
         try:
 
-            default = phl_obj["default"]
+            default = data_info["default"]
             if(
-                (phl_obj["type"] == "bool" or phl_obj["type"] == "choice")
+                (data_info["type"] == "bool" or data_info["type"] == "choice")
                 and default is not None
             ):
-                par_str += "    " + str(phl_obj["opt_lst"][default])
+                par_str += "    " + str(data_info["opt_lst"][default])
 
             else:
-                par_str += "    " + str(phl_obj["default"])
+                par_str += "    " + str(data_info["default"])
 
         except KeyError:
             pass
