@@ -1,3 +1,4 @@
+import json
 import libtbx.phil
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
@@ -120,4 +121,7 @@ if __name__ == "__main__":
             pass
 
         print(par_str)
+
+    json_str = json.dumps(lst_phil_obj) + '\n'
+    print(json_str)
 
