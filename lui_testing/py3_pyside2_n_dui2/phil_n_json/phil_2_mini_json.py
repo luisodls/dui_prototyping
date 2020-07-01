@@ -10,12 +10,12 @@ class tree_2_lineal(object):
     """
     def __init__(self, phl_obj):
         self.lst_obj = []
-        self.deep_in_rec(phl_obj)
+        self.deep_in_recurs(phl_obj)
 
     def __call__(self):
         return self.lst_obj
 
-    def deep_in_rec(self, phl_obj):
+    def deep_in_recurs(self, phl_obj):
 
         for single_obj in phl_obj:
             if single_obj.is_definition:
@@ -54,7 +54,7 @@ class tree_2_lineal(object):
                         param_info["opt_lst"].append(opt)
 
                 else:
-                    param_info["type"] = "number(s)"
+                    param_info["type"] = "other(s)"
                     param_info["default"] = str(single_obj.extract())
 
                 self.lst_obj.append(param_info)
@@ -71,7 +71,7 @@ class tree_2_lineal(object):
                         "type"          :"scope"
                     }
                     self.lst_obj.append(param_info)
-                    self.deep_in_rec(single_obj.objects)
+                    self.deep_in_recurs(single_obj.objects)
 
                 else:
                     print(
