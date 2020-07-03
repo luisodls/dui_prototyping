@@ -16,7 +16,7 @@ from dials.command_line.combine_experiments import (
     phil_scope as phil_scope_combine_params
 )
 
-class tree_2_lineal(object):
+class build_json_data(object):
     """
     Recursively navigates the Phil objects in a way that the final
     self.lst_obj is a lineal list without ramifications, then another list
@@ -25,7 +25,9 @@ class tree_2_lineal(object):
     def __init__(self, phl_obj_lst):
         self.lst_obj = []
         for single_obj in phl_obj_lst:
-            self.lst_obj.append(self.deep_in_recurs(single_obj))
+            nxt = self.deep_in_recurs(single_obj)
+            if nxt is not None:
+                self.lst_obj.append(nxt)
 
     def __call__(self):
         return self.lst_obj
@@ -94,14 +96,44 @@ class tree_2_lineal(object):
                 "\n WARNING neither definition or scope\n")
 
 
+
+class tree_2_lineal(object):
+    """
+    Recursively navigates the Phil objects in a way that the final
+    self.lst_obj is a lineal list without ramifications, then another list
+    is created with the info about parameters
+    """
+    def __init__(self, phl_obj_lst):
+        self.lst_obj = []
+        self.deep_in_recurs(phl_obj_lst)
+
+    def __call__(self):
+        return self.lst_obj
+
+    def deep_in_recurs(self, phl_obj_lst):
+        for single_obj in phl_obj_lst:
+            single_obj["indent"] = int(str(single_obj["full_path"]).count("."))
+            if single_obj["name"] == "output":
+                print(" << output >> should be handled by DUI")
+
+            elif single_obj["type"] == "scope":
+                self.lst_obj.append(single_obj)
+                self.deep_in_recurs(single_obj["child_objects"])
+
+
+            else:
+                self.lst_obj.append(single_obj)
+
+
+
 if __name__ == "__main__":
-    #lst_dict = tree_2_lineal(phil_scope_find_spots.objects)
-    #lst_dict = tree_2_lineal(phil_scope_index.objects)
-    #lst_dict = tree_2_lineal(phil_scope_integrate.objects)
-    lst_dict = tree_2_lineal(phil_scope_r_b_settings.objects)
-    #lst_dict = tree_2_lineal(phil_scope_refine.objects)
-    #lst_dict = tree_2_lineal(phil_scope_scale.objects)
-    #lst_dict = tree_2_lineal(phil_scope_symmetry.objects)
+    #lst_dict = build_json_data(phil_scope_find_spots.objects)
+    lst_dict = build_json_data(phil_scope_index.objects)
+    #lst_dict = build_json_data(phil_scope_integrate.objects)
+    #lst_dict = build_json_data(phil_scope_r_b_settings.objects)
+    #lst_dict = build_json_data(phil_scope_refine.objects)
+    #lst_dict = build_json_data(phil_scope_scale.objects)
+    #lst_dict = build_json_data(phil_scope_symmetry.objects)
 
     lst_phil_obj = lst_dict()
 
@@ -109,8 +141,12 @@ if __name__ == "__main__":
     print(json_str, "\n\n")
     new_lst = json.loads(json_str)
 
-    '''
-    for data_info in new_lst:
+    lin_lst = tree_2_lineal(new_lst)
+    new_lin_lst = lin_lst()
+    print(new_lin_lst)
+
+
+    for data_info in new_lin_lst:
         par_str = "    " * data_info["indent"]
         par_str += data_info["name"]
         try:
@@ -128,5 +164,3 @@ if __name__ == "__main__":
             pass
 
         print(par_str)
-
-    '''
