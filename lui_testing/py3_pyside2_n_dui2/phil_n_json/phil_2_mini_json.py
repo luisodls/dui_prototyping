@@ -1,5 +1,6 @@
 import json
 import libtbx.phil
+
 from dials.command_line.find_spots import phil_scope as phil_scope_find_spots
 from dials.command_line.index import working_phil as phil_scope_index
 from dials.command_line.refine_bravais_settings import (
@@ -8,6 +9,9 @@ from dials.command_line.refine_bravais_settings import (
 from dials.command_line.refine import working_phil as phil_scope_refine
 from dials.command_line.integrate import phil_scope as phil_scope_integrate
 
+from dials.command_line.scale import phil_scope as phil_scope_scale
+from dials.command_line.symmetry import phil_scope as phil_scope_symmetry
+from dials.command_line.combine_experiments import phil_scope as phil_scope_combine_params
 
 class tree_2_lineal(object):
     """
@@ -99,12 +103,14 @@ if __name__ == "__main__":
     #lst_dict = tree_2_lineal(phil_scope_index.objects)
     #lst_dict = tree_2_lineal(phil_scope_integrate.objects)
     #lst_dict = tree_2_lineal(phil_scope_r_b_settings.objects)
-    lst_dict = tree_2_lineal(phil_scope_refine.objects)
+    #lst_dict = tree_2_lineal(phil_scope_refine.objects)
+    #lst_dict = tree_2_lineal(phil_scope_scale.objects)
+    lst_dict = tree_2_lineal(phil_scope_symmetry.objects)
 
     lst_phil_obj = lst_dict()
 
     for data_info in lst_phil_obj:
-        par_str = "   " * data_info["indent"]
+        par_str = "    " * data_info["indent"]
         par_str += data_info["name"]
         try:
             default = data_info["default"]
@@ -123,5 +129,4 @@ if __name__ == "__main__":
         print(par_str)
 
     json_str = json.dumps(lst_phil_obj) + '\n'
-    print(json_str)
 
