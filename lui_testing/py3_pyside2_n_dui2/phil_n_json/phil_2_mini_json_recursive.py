@@ -77,7 +77,7 @@ class build_json_data(object):
             return param_info
 
 
-        elif single_obj.is_scope and single_obj.name != "output":
+        elif single_obj.is_scope:
             param_info = {
                 "name"          :str(single_obj.name),
                 "full_path"     :str(single_obj.full_path()),
@@ -87,13 +87,17 @@ class build_json_data(object):
                 "child_objects" :[]
             }
             for child in single_obj.objects:
-                param_info["child_objects"].append(self.deep_in_recurs(child))
+                nxt = self.deep_in_recurs(child)
+                if nxt is not None:
+                    param_info["child_objects"].append(nxt)
 
             return param_info
 
         else:
             print("\n", single_obj.name,
                 "\n WARNING neither definition or scope\n")
+
+        return None
 
 
 
@@ -127,8 +131,8 @@ class tree_2_lineal(object):
 
 
 if __name__ == "__main__":
-    #lst_dict = build_json_data(phil_scope_find_spots.objects)
-    lst_dict = build_json_data(phil_scope_index.objects)
+    lst_dict = build_json_data(phil_scope_find_spots.objects)
+    #lst_dict = build_json_data(phil_scope_index.objects)
     #lst_dict = build_json_data(phil_scope_integrate.objects)
     #lst_dict = build_json_data(phil_scope_r_b_settings.objects)
     #lst_dict = build_json_data(phil_scope_refine.objects)
@@ -138,12 +142,12 @@ if __name__ == "__main__":
     lst_phil_obj = lst_dict()
 
     json_str = json.dumps(lst_phil_obj, indent = 4)
-    print(json_str, "\n\n")
+    #print(json_str, "\n\n")
     new_lst = json.loads(json_str)
 
     lin_lst = tree_2_lineal(new_lst)
     new_lin_lst = lin_lst()
-    print(new_lin_lst)
+    #print(new_lin_lst)
 
 
     for data_info in new_lin_lst:
