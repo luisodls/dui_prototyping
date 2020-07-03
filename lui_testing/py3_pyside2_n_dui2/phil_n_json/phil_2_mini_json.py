@@ -109,7 +109,12 @@ if __name__ == "__main__":
 
     lst_phil_obj = lst_dict()
 
-    for data_info in lst_phil_obj:
+    json_str = json.dumps(lst_phil_obj, indent = 4)
+    print(json_str, "\n\n")
+
+    new_lst = json.loads(json_str)
+
+    for data_info in new_lst:
         par_str = "    " * data_info["indent"]
         par_str += data_info["name"]
         try:
@@ -128,5 +133,4 @@ if __name__ == "__main__":
 
         print(par_str)
 
-    json_str = json.dumps(lst_phil_obj) + '\n'
 
