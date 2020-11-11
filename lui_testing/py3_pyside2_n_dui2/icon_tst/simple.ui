@@ -28,8 +28,7 @@
     </property>
     <property name="icon">
      <iconset>
-      <normaloff>icon_resources/import.png</normaloff>
-      <normalon>icon_resources/import_grayed.png</normalon>icon_resources/import.png</iconset>
+      <normaloff>icon_resources/import.png</normaloff>icon_resources/import.png</iconset>
     </property>
     <property name="iconSize">
      <size>
