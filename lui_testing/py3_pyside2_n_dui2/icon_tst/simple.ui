@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>705</width>
-    <height>326</height>
+    <height>286</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>90</x>
       <y>70</y>
-      <width>161</width>
-      <height>101</height>
+      <width>211</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">
@@ -41,10 +41,10 @@
    <widget class="QPushButton" name="GrayButton">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>400</x>
       <y>70</y>
-      <width>161</width>
-      <height>101</height>
+      <width>221</width>
+      <height>81</height>
      </rect>
     </property>
     <property name="text">

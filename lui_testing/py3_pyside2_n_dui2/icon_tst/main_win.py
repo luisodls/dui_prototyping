@@ -26,7 +26,6 @@ class MainObject(QObject):
         print("pushButton clicked")
 
 
-
 if __name__ == "__main__":
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
