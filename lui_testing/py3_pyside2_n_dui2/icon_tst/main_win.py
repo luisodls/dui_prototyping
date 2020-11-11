@@ -14,10 +14,13 @@ class MainObject(QObject):
         self.window.setWindowTitle("CCP4 DUI Cloud")
         self.window.GrayButton.clicked.connect(self.gray_but)
         self.window.pushButton.clicked.connect(self.but_clic)
+        self.enable_state = True
         self.window.show()
 
     def gray_but(self):
         print("GrayButton clicked")
+        self.enable_state = not self.enable_state
+        self.window.pushButton.setEnabled(self.enable_state)
 
     def but_clic(self):
         print("pushButton clicked")
