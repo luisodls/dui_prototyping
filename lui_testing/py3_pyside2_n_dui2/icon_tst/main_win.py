@@ -12,8 +12,12 @@ class MainObject(QObject):
         ui_path += os.sep + "simple.ui"
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
+        self.window.GrayButton.clicked.connect(self.gray_but)
         self.window.pushButton.clicked.connect(self.but_clic)
         self.window.show()
+
+    def gray_but(self):
+        print("GrayButton clicked")
 
     def but_clic(self):
         print("pushButton clicked")
