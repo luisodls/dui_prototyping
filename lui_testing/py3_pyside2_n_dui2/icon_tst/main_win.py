@@ -27,6 +27,12 @@ class MainObject(QObject):
 
 
 if __name__ == "__main__":
+
+    script = os.path.realpath(__file__)
+    print("SCript path:", script)
+    print("__file__:", __file__)
+    print("SCript DIR path:", os.path.realpath(__file__)[0:-len(str(__file__))])
+
     QCoreApplication.setAttribute(Qt.AA_ShareOpenGLContexts)
     app = QApplication(sys.argv)
     m_obj = MainObject()
