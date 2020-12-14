@@ -13,18 +13,13 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
 
-        str_lst = [
-            '<html><head><title>Python test server</title>',
-            '    </head>                                  ',
-            '    <body>                                   ',
-            '        <h1> Test # 02 </h1>           ',
-            '        <p>Hi from the HTTP Server #2 </p>   ',
-            '    </body>                                  ',
-            '</html>                                      '
-        ]
+        f = open("index.html", "r")
+        str_lst = f.readlines()
+        f.close()
 
         for lin in str_lst:
             self.wfile.write(bytes(lin, 'utf-8'))
+
 
 
 if __name__ == "__main__":
