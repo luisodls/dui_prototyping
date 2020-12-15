@@ -5,24 +5,19 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
+from PySide2 import QtUiTools
 
-class Example(QWidget):
 
-    def __init__(self):
-        super().__init__()
+class MainObject(QObject):
+    def __init__(self, parent = None):
+        super(MainObject, self).__init__(parent)
 
-        vbox = QVBoxLayout(self)
-
+        self.window = QtUiTools.QUiLoader().load("viewer.ui")
         self.webEngineView = QWebEngineView()
         self.loadPage()
 
-        vbox.addWidget(self.webEngineView)
-
-        self.setLayout(vbox)
-
-        self.setGeometry(300, 300, 350, 250)
-        self.setWindowTitle('QWebEngineView')
-        self.show()
+        self.window.horizontalMainLayout.addWidget(self.webEngineView)
+        self.window.show()
 
     def loadPage(self):
         r_g = requests.get(
@@ -43,13 +38,13 @@ class Example(QWidget):
                 print('/*EOF*/ received')
                 break
 
-            print("html:", full_file)
-            print("type(full_file):", type(full_file))
-            self.webEngineView.setHtml(full_file)
+        print("html:", full_file)
+        print("type(full_file):", type(full_file))
+        self.webEngineView.setHtml(full_file)
 
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    ex = Example()
+    ex = MainObject()
     sys.exit(app.exec_())
 
