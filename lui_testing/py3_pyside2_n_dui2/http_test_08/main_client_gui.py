@@ -21,7 +21,7 @@ class MainObject(QObject):
 
     def loadPage(self):
         r_g = requests.get(
-            'http://localhost:8080/', stream = True, params = "a"
+            'http://localhost:8182/', stream = True, params = "a"
         )
 
         full_file = ''
