@@ -27,8 +27,8 @@ class MainObject(QObject):
         full_file = ''
         line_str = ''
         while True:
-            tmp_dat = r_g.raw.read(1)
-            single_char = str(tmp_dat.decode('utf-8'))
+            tmp_dat = r_g.raw.read(2)
+            single_char = str(tmp_dat.decode('utf-16'))
             line_str += single_char
             if single_char == '\n':
                 full_file += line_str

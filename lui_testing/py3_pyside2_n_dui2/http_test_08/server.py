@@ -7,15 +7,15 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.send_header("Content-type", "text/html")
         self.end_headers()
 
-        f = open("page.html", "r")
+        f = open("report2.html", "r")
         str_lst = f.readlines()
         f.close()
 
         for lin in str_lst:
-            self.wfile.write(bytes(lin, 'utf-8'))
+            self.wfile.write(bytes(lin, 'utf-16'))
 
         for lin in str_lst:
-            self.wfile.write(bytes("/*EOF*/", 'utf-8'))
+            self.wfile.write(bytes("/*EOF*/", 'utf-16'))
 
 
 if __name__ == "__main__":
