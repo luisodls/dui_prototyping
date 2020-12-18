@@ -22,18 +22,15 @@ class MainObject(QObject):
             'http://localhost:8182/', stream = True, params = "a"
         )
         full_file = ''
-        line_str = ''
         while True:
-            tmp_dat = r_g.raw.read(2)
-            single_char = str(tmp_dat.decode('utf-16'))
-            line_str += single_char
-            if single_char == '\n':
-                full_file += line_str
-                line_str = ''
-
-            elif line_str[-7:] == '/*EOF*/':
+            tmp_dat = r_g.raw.readline()
+            line_str = str(tmp_dat.decode('utf-8'))
+            if line_str[-7:] == '/*EOF*/':
                 print('/*EOF*/ received')
                 break
+
+            else:
+                full_file += line_str
 
         print("html:", full_file)
         print("type(full_file):", type(full_file))
