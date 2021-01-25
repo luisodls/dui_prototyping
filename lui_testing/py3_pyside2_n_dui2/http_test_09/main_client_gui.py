@@ -44,9 +44,11 @@ class MainObject(QObject):
 
         self.webEngineView.setHtml(full_file)
         '''
+        f_name = "report2.html"
 
-        '''
-        f = open("report3.html", "r")
+        #comment of uncomment next comment to chose how to read file
+        #'''
+        f = open(f_name, "r")
         str_lst = f.readlines()
         f.close()
         full_file = ""
@@ -56,10 +58,12 @@ class MainObject(QObject):
         self.webEngineView.setHtml(full_file)
         '''
 
-        with open('report2.html', 'r') as f:
+        with open(f_name, 'r') as f:
             html = f.read()
             print("type(html) =", type(html))
             self.webEngineView.setHtml(html)
+
+        #'''
 
 
 
