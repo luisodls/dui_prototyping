@@ -45,6 +45,16 @@ class MainObject(QObject):
         self.webEngineView.setHtml(full_file)
         '''
 
+        '''
+        f = open("report3.html", "r")
+        str_lst = f.readlines()
+        f.close()
+        full_file = ""
+        for str_line in str_lst:
+            full_file += str_line + "\n"
+
+        self.webEngineView.setHtml(full_file)
+        '''
 
         with open('report2.html', 'r') as f:
             html = f.read()
