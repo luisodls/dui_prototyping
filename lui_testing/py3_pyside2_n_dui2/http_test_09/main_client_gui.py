@@ -20,7 +20,7 @@ class MainObject(QObject):
         self.window.show()
 
     def loadPage(self):
-        '''
+        server_client_mode = '''
         r_g = requests.get(
             'http://localhost:8182/', stream = True, params = "a"
         )
@@ -44,6 +44,7 @@ class MainObject(QObject):
 
         self.webEngineView.setHtml(full_file)
         '''
+
         f_name = "report2.html"
 
         #comment of uncomment next comment to chose how to read file
