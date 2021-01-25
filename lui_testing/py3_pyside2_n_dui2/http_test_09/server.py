@@ -8,14 +8,14 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
 
         f = open("report2.html", "r")
-        #f = open("dials.report.html", "r")
         str_lst = f.readlines()
         f.close()
 
         for lin in str_lst:
-            self.wfile.write(bytes(lin, 'utf-8'))
+            self.wfile.write(bytes(lin, 'utf-16'))
 
-        self.wfile.write(bytes("/*EOF*/", 'utf-8'))
+        for lin in str_lst:
+            self.wfile.write(bytes("/*EOF*/", 'utf-16'))
 
 
 if __name__ == "__main__":

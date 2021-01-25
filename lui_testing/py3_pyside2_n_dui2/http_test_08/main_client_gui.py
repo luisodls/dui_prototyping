@@ -38,7 +38,7 @@ class MainObject(QObject):
                 print('/*EOF*/ received')
                 break
 
-        print("html:", full_file)
+        #print("html:", full_file)
         print("type(full_file):", type(full_file))
         self.webEngineView.setHtml(full_file)
 
