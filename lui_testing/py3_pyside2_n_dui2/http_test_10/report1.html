@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+
+
+
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8"/>
+
+  <!-- Definitions for compatibility with the ccp4i2 browser -->
+  <script>
+    if (!Function.prototype.bind) {
+      Function.prototype.bind = function(oThis) {
+        if (typeof this !== 'function') {
+          // closest thing possible to the ECMAScript 5
+          // internal IsCallable function
+          throw new TypeError('Function.prototype.bind - what is trying to be bound is not callable');
+        }
+
+        var aArgs   = Array.prototype.slice.call(arguments, 1),
+        fToBind = this,
+        fNOP    = function() {},
+        fBound  = function() {
+          return fToBind.apply(this instanceof fNOP
+                               ? this
+                               : oThis,
+                               aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+        if (this.prototype) {
+          // Function.prototype doesn't have a prototype property
+          fNOP.prototype = this.prototype;
+        }
+        fBound.prototype = new fNOP();
+
+        return fBound;
+      }
+    }
+  if (typeof Float64Array === 'undefined') Float64Array = Float32Array;
+  </script>
+
+  
+  <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/contrib/auto-render.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.5.1/katex.min.css"/>
+  
+
+  
+  <style type="text/css">
+    body {
+      /*font-family: Helmet, Freesans, Helvetica, Arial, sans-serif;*/
+      margin: 8px;
+      min-width: 240px;
+      margin-left: 5%;
+      margin-right: 5%;
+    }
+
+    .plot {
+      float: left;
+      width: 600px;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    .square-plot {
+      float: left;
+      width: 800px;
+      height: 800px;
+      margin-bottom: 20px;
+    }
+
+    .dendrogram-plot {
+      float: left;
+      width: 1000px;
+      height: 1000px;
+      margin-bottom: 20px;
+    }
+
+    .katex-display {
+      text-align: left;
+    }
+  </style>
+  
+</head>
+
+
+
+<body>
+  
+<div class="page-header">
+    <h1>DIALS analysis report</h1>
+</div>
+
+<div class="panel-group">
+    <div class="panel panel-default">
+        <div class="panel-heading" data-toggle="collapse" data-target="#collapse_expt">
+            <h4 class="panel-title">
+                <a>Experiments</a>
+            </h4>
+        </div>
+        <div id="collapse_expt" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            
+        </table>
+    </div>
+                <div class="panel-group">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" data-toggle="collapse" data-target="#collapse_geom">
+                            <h4 class="panel-title">
+                                <a>Experimental geometry</a>
+                            </h4>
+                        </div>
+                        <div id="collapse_geom" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            
+        </table>
+    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_scan_varying">
+        <h4 class="panel-title">
+            <a>Analysis of scan-varying crystal model</a>
+        </h4>
+    </div>
+    <div id="collapse_scan_varying" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h2>DIALS analysis plots</h2>
+
+    <div class="panel-group">
+        <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_strong">
+        <h4 class="panel-title">
+            <a>Analysis of strong reflections</a>
+        </h4>
+    </div>
+    <div id="collapse_strong" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+    
+        <div class="plot_wrapper">
+
+        
+        <div class="col-xs-6 col-sm-6 col-md-4 plot" id="spot_count_per_image">
+        
+
+        </div>
+
+        
+        <div class="col-xs-1 col-sm-1 col-md-1">
+            <button type="button" class="btn btn-info" style="text-align:center" data-toggle="modal" data-target="#spot_count_per_image_help">
+                <span class="glyphicon glyphicon-question-sign"></span>
+                <!--Help-->
+            </button>
+            <!-- Modal -->
+<div id="spot_count_per_image_help" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Spot count per image</h4>
+      </div>
+      <div class="modal-body">
+        <pre>A plot of the distribution of total and indexed spot count with respect to image
+number. A drop off in spot count towards zero at the end of the scan may be
+indicative of radiation damage, whereas a sudden fall followed by a sudden rise
+in spot count may suggest that the crystal has moved out of the beam. Systematic
+variations in spot count with image number may be a result of unit cell
+dimensions, variations in volume of crystal intersecting the beam, or
+diffraction anisotropy. Large separation between the total and indexed spot
+count shows a significant number of unindexed reflections, which may be the
+result of further, unidentified lattices, split reflections, reflections due to
+ice rings, or poor spot-finding parameters.
+</pre>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+        </div>
+        
+
+    </div>
+    <script>
+        var graphs_spot_count_per_image = {"data": [{"name": "#spots", "opacity": 0.4, "type": "scatter", "x": [0, 1, 2, 3, 4, 5, 6, 7, 8], "y": [392, 239, 196, 227, 240, 238, 216, 251, 369]}], "help": "A plot of the distribution of total and indexed spot count with respect to image\nnumber. A drop off in spot count towards zero at the end of the scan may be\nindicative of radiation damage, whereas a sudden fall followed by a sudden rise\nin spot count may suggest that the crystal has moved out of the beam. Systematic\nvariations in spot count with image number may be a result of unit cell\ndimensions, variations in volume of crystal intersecting the beam, or\ndiffraction anisotropy. Large separation between the total and indexed spot\ncount shows a significant number of unindexed reflections, which may be the\nresult of further, unidentified lattices, split reflections, reflections due to\nice rings, or poor spot-finding parameters.\n", "layout": {"title": "Spot count per image", "xaxis": {"title": "Image"}, "yaxis": {"rangemode": "tozero", "title": "Spot count"}}};
+        Plotly.newPlot(spot_count_per_image, graphs_spot_count_per_image.data, graphs_spot_count_per_image.layout);
+    </script>
+    
+
+            </div>
+        </div>
+        
+    </div>
+</div>
+        <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_centroid">
+        <h4 class="panel-title">
+            <a>Analysis of reflection centroids</a>
+        </h4>
+    </div>
+    <div id="collapse_centroid" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+        <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_intensity">
+        <h4 class="panel-title">
+            <a>Analysis of reflection intensities</a>
+        </h4>
+    </div>
+    <div id="collapse_intensity" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+        <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_reference">
+        <h4 class="panel-title">
+            <a>Analysis of reference profiles</a>
+        </h4>
+    </div>
+    <div id="collapse_reference" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+    </div>
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-heading" data-toggle="collapse" data-target="#collapse_scaling">
+                <h4 class="panel-title">
+                    <a>Analysis of scaling results</a>
+                </h4>
+            </div>
+            <div id="collapse_scaling" class="panel-collapse collapse">
+        <div class="panel-body">
+            <p><b>Summary of merging statistics</b></p>
+            <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            
+        </table>
+    </div>
+            <p><b>Merging statistics by resolution bin</b></p>
+            <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            
+        </table>
+    </div>
+        </div>
+    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_scaling_model">
+        <h4 class="panel-title">
+            <a>Scaling model plots</a>
+        </h4>
+    </div>
+    <div id="collapse_scaling_model" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_cc_one_half">
+        <h4 class="panel-title">
+            <a>Analysis by resolution</a>
+        </h4>
+    </div>
+    <div id="collapse_cc_one_half" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_batch">
+        <h4 class="panel-title">
+            <a>Analysis by image number</a>
+        </h4>
+    </div>
+    <div id="collapse_batch" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+            <div class="panel-body">
+                <div class="container-fluid">
+                    
+                        <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            
+        </table>
+    </div>
+                    
+                </div>
+            </div>
+        
+    </div>
+</div>
+    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_misc_plots">
+        <h4 class="panel-title">
+            <a>Miscellanous plots</a>
+        </h4>
+    </div>
+    <div id="collapse_misc_plots" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+    <div class="panel panel-default">
+    <div class="panel-heading" data-toggle="collapse" data-target="#collapse_scaled_intensity_plots">
+        <h4 class="panel-title">
+            <a>Scaled intensity plots</a>
+        </h4>
+    </div>
+    <div id="collapse_scaled_intensity_plots" class="panel-collapse collapse">
+        <div class="panel-body">
+            <div class="container-fluid">
+                
+            </div>
+        </div>
+        
+    </div>
+</div>
+    </div>
+
+</div>
+
+
+  <script>
+    renderMathInElement(document.body);
+  </script>
+</body>
