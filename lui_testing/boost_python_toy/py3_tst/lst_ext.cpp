@@ -8,61 +8,41 @@ char const* greet()
     return "hello, world";
 }
 
-py::list find_closer_hkl_func(float x_mouse_scaled, float y_mouse_scaled, py::list flat_data_lst){
-    /*
-     * finding the closer reflection from an X,Y position in one image
-     */
-
-    int hkl_result = -1;
-    int slice_result = -1;
-    float dst_squared = 999999.0;
-    float x, y, tmp_dst_squared, dx, dy;
-    float reflection_0, reflection_1, reflection_2, reflection_3;
-
-    py::list reflection, img_flat_data;
-
-    for (int j = 0; j < len(flat_data_lst); j++){
-        img_flat_data = py::extract<py::list>(flat_data_lst[j]);
-
-        for (int i = 0; i < len(img_flat_data); i++){
-            reflection = py::extract<py::list>(img_flat_data[i]);
-
-            reflection_0 = py::extract<float>(reflection[0]);
-            reflection_1 = py::extract<float>(reflection[1]);
-            reflection_2 = py::extract<float>(reflection[2]);
-            reflection_3 = py::extract<float>(reflection[3]);
-
-            x = reflection_0 + reflection_2 / 2.0;
-            y = reflection_1 + reflection_3 / 2.0;
-            dx = x - x_mouse_scaled;
-            dy = y - y_mouse_scaled;
-            tmp_dst_squared = dx * dx + dy * dy;
-
-            if( tmp_dst_squared < dst_squared ){
-                hkl_result = i;
-                slice_result = j;
-                dst_squared = tmp_dst_squared;
-            }
-        }
-    }
-    py::list lst_result;
-    lst_result.append(hkl_result);
-    lst_result.append(slice_result);
-    return lst_result;
+int give_int()
+{
+    return 5;
 }
 
-py::list arrange_list(py::list bbox_lst, py::list hkl_lst, int n_imgs){
+py::list square(py::list num_lst)
+{
     /*
-     * from a list of shoe - box bounds and another HKL list
-     * it generates a new list with lists on it with reflections arranged
+     * This example shows how to input a python list
+     * and plays a bit with it
+     */
+    py::list points;
+    int one = 1;
+    int two = 2;
+    int three = 3;
+    points.append(one);
+    points.append(two);
+    points.append(three);
+    points.append(num_lst);
+    return points;
+}
+
+py::list arange_list(py::list bbox_lst, py::list hkl_lst, int n_imgs)
+{
+    /*
+     * This is the function that we actually need.
+     *
+     * from a list of shoe - box bounds
+     * it generates a new list of reflections arranged
      * per image
      */
-
     std::cout << "n_imgs =" << n_imgs << "\n";
 
     int x_ini, y_ini, width, height;
     py::list img_lst, ref_box, tmp_lst, box_dat;
-    std::cout << "\n__________________________________________________________shoeboxes arrange_list START \n";
 
     //TODO make sure there is no way to avoid this loop
     for (int i = 0; i < n_imgs; i++){
@@ -88,25 +68,21 @@ py::list arrange_list(py::list bbox_lst, py::list hkl_lst, int n_imgs){
             local_hkl = "";
             box_dat.append(local_hkl);
         } else {
+            //box_dat.append(py::extract<std::string>(hkl_lst[i]));
             local_hkl = py::extract<py::str>(hkl_lst[i]);
             if(local_hkl == "(0, 0, 0)"){
-                local_hkl = "NOT indexed";
+                local_hkl = "NO Index";
             }
-
             box_dat.append(local_hkl);
         }
 
         for (int idx = py::extract<int>(ref_box[4]);
              idx < py::extract<int>(ref_box[5]);
              idx++){
-            if( idx >= 0 && idx < n_imgs ){
-                tmp_lst = py::extract<py::list>(img_lst[idx]);
-                tmp_lst.append(box_dat);
-            }
+            tmp_lst = py::extract<py::list>(img_lst[idx]);
+            tmp_lst.append(box_dat);
         }
     }
-
-    std::cout << "\n__________________________________________________________shoeboxes arrange_list END \n";
 
     return img_lst;
 }
@@ -114,8 +90,10 @@ BOOST_PYTHON_MODULE(lst_ext)
 {
     using namespace boost::python;
     def("greet", greet);
-    def("arrange_list", &arrange_list, arg("bbox_lst"), arg("hkl_lst"), arg("n_imgs"));
-    def("find_closer_hkl_func", &find_closer_hkl_func, arg("x_mouse_scaled") ,
-        arg("y_mouse_scaled"), arg("flat_data_lst"));
+    def("give_int", give_int);
+    def("square", square);
+    def("arange_list", arange_list, arg("bbox_lst"), arg("hkl_lst"), arg("n_imgs"));
+    //def("arange_list", &arange_list, arg("bbox_lst"), arg("n_imgs"));
+
 
 }
