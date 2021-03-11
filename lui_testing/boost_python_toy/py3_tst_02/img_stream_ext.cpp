@@ -14,17 +14,19 @@ py::list lst_bunch(py::list num_lst)
     /*
      * This example shows how play with strings and lists
      */
-    py::list points;
-    py::str mystring;
+    py::list data_out;
+    py::str string1, string2;
     int four = 4;
 
-    points.append(num_lst);
-    points.append(four);
+    data_out.append(num_lst);
+    data_out.append(four);
 
-    mystring = "cadena cinco";
+    string1 = "cadena tst uno";
+    string2 = "cadena tst dos";
 
-    points.append(mystring);
-    return points;
+    data_out.append(string1);
+    data_out.append(string2);
+    return data_out;
 }
 
 
