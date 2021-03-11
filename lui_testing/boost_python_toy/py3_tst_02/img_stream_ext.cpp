@@ -1,6 +1,6 @@
 #include <boost/python.hpp>
 #include <iostream>
-//#include <string>
+#include <string>
 
 namespace py = boost::python;
 
@@ -15,17 +15,33 @@ py::list lst_bunch(py::list num_lst)
      * This example shows how play with strings and lists
      */
     py::list data_out;
-    py::str string1, string2;
+    py::str py_str;
+
     int four = 4;
+    std::string std_str1, std_str2, std_str3, std_str_sum;
 
     data_out.append(num_lst);
     data_out.append(four);
 
-    string1 = "cadena tst uno";
-    string2 = "cadena tst dos";
+    std_str1 = "cadena tst uno ";
+    std_str2 = "cadena tst dos ";
+    std_str3 = "cadena tst tres ";
 
-    data_out.append(string1);
-    data_out.append(string2);
+    std_str_sum = std_str1;
+    std_str_sum.append(std_str2);
+    std_str_sum.append(std_str3);
+
+    std::cout << "\n std_str_sum = " << std_str_sum << "\n";
+
+    std::cout << "\n std_str1 = " << std_str1 << "\n";
+    std::cout << "\n std_str2 = " << std_str2 << "\n";
+    std::cout << "\n std_str3 = " << std_str3 << "\n";
+
+    py_str = "1 2 3 4";
+
+    data_out.append(py_str);
+    data_out.append(std_str_sum);
+
     return data_out;
 }
 
