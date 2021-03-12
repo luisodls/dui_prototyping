@@ -20,3 +20,12 @@ print("c =", c)
 d = b + c
 print("d =", d)
 
+x_max = 8
+y_max = 9
+data_xyz_flex = flex.double(flex.grid(x_max, y_max), 0)
+for x in range(x_max):
+    for y in range(y_max):
+        i = (x_max + y_max) - (abs(x_max / 2 - x) + abs(y_max / 2 - y))
+        data_xyz_flex[x, y] = float(i)
+
+print("data_xyz_flex = \n", data_xyz_flex.as_numpy_array())
