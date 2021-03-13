@@ -1,24 +1,31 @@
 from subprocess import call as shell_call
 from distutils import sysconfig
+import scitbx
 
 obj_name = "img_stream_ext"
-inc_path = sysconfig.get_python_inc()
-print("\n sysconfig.get_python_inc() =", inc_path)
-for pos, single_shar in enumerate(inc_path):
+py_inc_path = sysconfig.get_python_inc()
+print("\n sysconfig.get_python_inc() =", py_inc_path)
+for pos, single_shar in enumerate(py_inc_path):
     if(single_shar == "/" ):
-        cut_inc_path = inc_path[0:pos]
+        cut_py_inc_path = py_inc_path[0:pos]
 
-
-import scitbx
 scitbx_path = scitbx.__path__[0]
 print("\n scitbx_path =", scitbx_path)
 cut_scitbx_path = scitbx_path[0:-6]
 print("cut_scitbx_path =", cut_scitbx_path)
-com_lin_01 = "g++ -I" + inc_path + " -I" + \
-    cut_inc_path +  " -fPIC -c "+ " -I" + cut_scitbx_path \
-    + " -I/scratch/dials_conda/modules" \
-    + " -I/scratch/dials_conda/build/annlib_adaptbx/include" \
-    + " -I/scratch/dials_conda/build/include" \
+
+dict_conf_vars = sysconfig.get_config_vars()
+print("\n", dict_conf_vars["prefix"])
+prefix_path = dict_conf_vars["prefix"]
+cut_prefix = prefix_path[0:-10]
+print("cut_prefix =", cut_prefix)
+inc_path = cut_prefix + "build/include"
+print("inc_path =", inc_path)
+
+com_lin_01 = "g++ -I" + py_inc_path \
+    + " -I" + cut_py_inc_path +  " -fPIC -c " \
+    + " -I" + cut_scitbx_path \
+    + " -I" + inc_path \
     + " " + obj_name + ".cpp"
 
 
