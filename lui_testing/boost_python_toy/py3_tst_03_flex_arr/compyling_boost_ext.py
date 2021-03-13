@@ -28,7 +28,6 @@ com_lin_01 = "g++ -I" + py_inc_path \
     + " -I" + inc_path \
     + " " + obj_name + ".cpp"
 
-
 print("com_lin_01 =\n", com_lin_01)
 
 lib_path = sysconfig.get_python_lib()
@@ -40,8 +39,6 @@ for pos, single_shar in enumerate(lib_path):
 for pos, single_shar in enumerate(cut_lib_path):
     if(single_shar == "/" ):
         cut_cut_lib_path = cut_lib_path[0:pos]
-
-
 
 
 com_lin_02 = "g++ -shared " + obj_name + ".o -L" +   \
