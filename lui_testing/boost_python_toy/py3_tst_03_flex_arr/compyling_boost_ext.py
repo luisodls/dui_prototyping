@@ -8,13 +8,24 @@ for pos, single_shar in enumerate(inc_path):
     if(single_shar == "/" ):
         cut_inc_path = inc_path[0:pos]
 
+
+import scitbx
+scitbx_path = scitbx.__path__[0]
+print("\n scitbx_path =", scitbx_path)
+cut_scitbx_path = scitbx_path[0:-6]
+print("cut_scitbx_path =", cut_scitbx_path)
 com_lin_01 = "g++ -I" + inc_path + " -I" + \
-    cut_inc_path +  " -fPIC -c " + obj_name + ".cpp"
+    cut_inc_path +  " -fPIC -c "+ " -I" + cut_scitbx_path \
+    + " -I/scratch/dials_conda/modules" \
+    + " -I/scratch/dials_conda/build/annlib_adaptbx/include" \
+    + " -I/scratch/dials_conda/build/include" \
+    + " " + obj_name + ".cpp"
+
 
 print("com_lin_01 =\n", com_lin_01)
 
 lib_path = sysconfig.get_python_lib()
-print("\n sysconfig.get_python_lib() =", lib_path)
+
 for pos, single_shar in enumerate(lib_path):
     if(single_shar == "/" ):
         cut_lib_path = lib_path[0:pos]
@@ -22,6 +33,9 @@ for pos, single_shar in enumerate(lib_path):
 for pos, single_shar in enumerate(cut_lib_path):
     if(single_shar == "/" ):
         cut_cut_lib_path = cut_lib_path[0:pos]
+
+
+
 
 com_lin_02 = "g++ -shared " + obj_name + ".o -L" +   \
     cut_cut_lib_path + " -lboost_python38 -L" +      \

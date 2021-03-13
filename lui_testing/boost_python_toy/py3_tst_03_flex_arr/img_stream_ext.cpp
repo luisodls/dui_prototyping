@@ -1,19 +1,33 @@
 #include <boost/python.hpp>
 #include <iostream>
 #include <string>
+#include <cmath>
+/*
+#include <scitbx/array_family/boost_python/utils.h>
+#include <scitbx/array_family/boost_python/flex_fwd.h>
+#include <scitbx/array_family/shared.h>
+*/
+#include <scitbx/array_family/flex_types.h>
 
 namespace py = boost::python;
+
+using scitbx::af::flex_double;
+using scitbx::af::flex_grid;
+using scitbx::af::flex_int;
 
 char const* greet()
 {
     return "hello, world";
 }
 
-py::list lst_bunch(py::list num_lst)
+py::list lst_bunch(flex_double& data2d)
 {
+    py::list data_out;
+    std::cout << "\n ================= Hi ============== \n";
+
     /*
      * This example shows how play with strings and lists
-     */
+
     py::list data_out;
     py::str py_str;
 
@@ -41,6 +55,7 @@ py::list lst_bunch(py::list num_lst)
 
     data_out.append(py_str);
     data_out.append(std_str_sum);
+    */
 
     return data_out;
 }
