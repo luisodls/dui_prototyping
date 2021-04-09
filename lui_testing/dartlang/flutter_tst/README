@@ -1,0 +1,2 @@
+remember to run elsewhere: "flutter create myapp" and then
+to replace "...lib/main.dart" with a sim link to "main.dart" here
