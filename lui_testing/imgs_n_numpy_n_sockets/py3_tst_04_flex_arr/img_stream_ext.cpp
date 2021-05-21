@@ -9,31 +9,28 @@ using scitbx::af::flex_double;
 using scitbx::af::flex_grid;
 using scitbx::af::flex_int;
 
-py::list lst_bunch(flex_double& data2d)
+std::string img_arr_2_str(flex_double& data2d)
 {
-    py::list data_out;
     std::string std_str = "";
-    int nrow = data2d.accessor().all()[0];
-    int ncol = data2d.accessor().all()[1];
-    int col, row;
+    int d1 = data2d.accessor().all()[0];
+    int d2 = data2d.accessor().all()[1];
+    int i, j;
 
-    std::cout << "nrow = " << nrow << "\n";
-    std::cout << "ncol = " << ncol << "\n";
-    for (row = 0; row < nrow; row++) {
-        for (col = 0; col < ncol; col++) {
+    std::cout << "d1 = " << d1 << "\n";
+    std::cout << "d2 = " << d2 << "\n";
+    for (i = 0; i < d1; i++) {
+        for (j = 0; j < d2; j++) {
             std_str.append(
-                boost::lexical_cast<std::string>(data2d(row, col))
+                boost::lexical_cast<std::string>(data2d(i, j))
             );
             std_str.append(",");
         }
     }
-    data_out.append(std_str);
-
-    return data_out;
+    return std_str;
 }
 
 BOOST_PYTHON_MODULE(img_stream_ext)
 {
     using namespace boost::python;
-    def("lst_bunch", lst_bunch);
+    def("img_arr_2_str", img_arr_2_str);
 }
