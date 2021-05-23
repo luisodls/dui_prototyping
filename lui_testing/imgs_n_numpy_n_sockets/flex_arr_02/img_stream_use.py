@@ -37,7 +37,7 @@ def load_json_w_str():
     #print("str_data =", str_data)
     arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
     np_array_out = arr_1d.reshape(d1, d2)
-    #print("np_array_out =\n", np_array_out)
+    print("np_array_out =\n", np_array_out)
     return np_array_out
 
 
