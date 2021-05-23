@@ -40,11 +40,10 @@ def load_json_w_str():
     #print("np_array_out =\n", np_array_out)
     return np_array_out
 
-
 if __name__ == "__main__":
     print("arr generation")
-    nrol = 10
-    ncol = 15
+    nrol = 100
+    ncol = 150
     data_xy_flex = flex.double(flex.grid(nrol, ncol), 0)
     for col in range(nrol):
         for row in range(ncol):
