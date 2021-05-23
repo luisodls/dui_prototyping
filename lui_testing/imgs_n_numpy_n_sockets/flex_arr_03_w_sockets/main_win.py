@@ -1,5 +1,4 @@
 import sys
-#from PySide import QtUiTools
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -12,19 +11,13 @@ class Form(QObject):
         super(Form, self).__init__(parent)
 
         self.window = QtUiTools.QUiLoader().load("my_win.ui")
-        self.window.pushButton.clicked.connect(self.btn_clk)
+        self.window.LoadButton.clicked.connect(self.btn_clk)
 
         self.my_scene_1 = QGraphicsScene()
-        self.window.graphicsView_1.setScene(self.my_scene_1)
-        self.window.graphicsView_1.setDragMode(QGraphicsView.ScrollHandDrag)
-
-        self.my_scene_2 = QGraphicsScene()
-        self.window.graphicsView_2.setScene(self.my_scene_2)
-        self.window.graphicsView_2.setDragMode(QGraphicsView.ScrollHandDrag)
+        self.window.graphicsView.setScene(self.my_scene_1)
+        self.window.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
 
         print("QGraphicsScenes ready")
-
-        print("dir(self.my_scene_1);", dir(self.my_scene_1))
         self.window.show()
 
     def btn_clk(self):
@@ -32,17 +25,9 @@ class Form(QObject):
 
         fileName = "../../PyQt4_toys/tux_n_chrome.png"
         image1 = QImage(fileName)
-        fileName = "../../PyQt4_toys/tux_n_chrome.png"
-        image2 = QImage(fileName)
-        self.pixmap_1 = QPixmap.fromImage(image1)
-        self.pixmap_2 = QPixmap.fromImage(image2)
+        self.pixmap = QPixmap.fromImage(image1)
 
-        self.my_scene_1.addPixmap(self.pixmap_1)
-        self.my_scene_2.addPixmap(self.pixmap_2)
-
-        print("dir(self.pixmap_1);", dir(self.pixmap_1))
-
-        print("self.btn_clk end")
+        self.my_scene_1.addPixmap(self.pixmap)
 
 
 if __name__ == '__main__':
