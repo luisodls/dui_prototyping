@@ -16,22 +16,16 @@ std::string img_arr_2_str(flex_double& data2d)
     int d2 = data2d.accessor().all()[1];
     int i, j;
 
-    std::cout << "d1 = " << d1 << "\n";
-    std::cout << "d2 = " << d2 << "\n";
+    std::cout << "looping thru an array of: (" << d1 << ", " << d2 << ")\n";
     for (i = 0; i < d1; i++) {
         for (j = 0; j < d2; j++) {
             std_str.append(
                 boost::lexical_cast<std::string>(data2d(i, j))
             );
-            /* TODO
-             * consider in the future to replace the next if
-             * with a removal of the final coma outside the loop
-            */
-            if(i < d1 - 1 or j < d2 - 1){
-                std_str.append(",");
-            }
+            std_str.append(",");
         }
     }
+    std::cout << "loop ended\n";
     return std_str;
 }
 
