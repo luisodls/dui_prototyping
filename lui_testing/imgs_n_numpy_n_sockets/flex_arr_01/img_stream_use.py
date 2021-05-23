@@ -3,7 +3,7 @@ import numpy as np
 from dials.array_family import flex
 from matplotlib import pyplot as plt
 import json
-
+import time
 
 def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
@@ -32,7 +32,10 @@ def load_json_w_str():
     str_data = arr_dic["str_data"]
     print("d1, d2 =", d1, d2)
     print("str_data =", str_data)
+    start_tm = time.time()
     arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+    end_tm = time.time()
+    print("C++ bit took ", end_tm - start_tm)
     np_array_out = arr_1d.reshape(d1, d2)
     print("np_array_out =\n", np_array_out)
     return np_array_out

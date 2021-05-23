@@ -1,8 +1,8 @@
 #include <boost/python.hpp>
-//#include <iostream>
-//#include <string>
+#include <iostream>
+#include <string>
+#include <iomanip>
 #include <scitbx/array_family/flex_types.h>
-//#include <boost/lexical_cast.hpp>
 
 namespace py = boost::python;
 using scitbx::af::flex_double;
@@ -16,15 +16,20 @@ std::string img_arr_2_str(flex_double& data2d)
     int d2 = data2d.accessor().all()[1];
     int i, j;
 
+    std::ostringstream tmp_stream;
+    tmp_stream << std::fixed;
+    tmp_stream << std::setprecision(2);
     std::cout << "looping thru an array of: (" << d1 << ", " << d2 << ")\n";
     for (i = 0; i < d1; i++) {
         for (j = 0; j < d2; j++) {
-            std_str.append(
-                boost::lexical_cast<std::string>(data2d(i, j))
-            );
+            tmp_stream.str("");
+            tmp_stream.clear();
+            tmp_stream << data2d(i, j);
+            std_str.append(tmp_stream.str());
             std_str.append(",");
         }
     }
+
     std::cout << "loop ended\n";
     return std_str;
 }
