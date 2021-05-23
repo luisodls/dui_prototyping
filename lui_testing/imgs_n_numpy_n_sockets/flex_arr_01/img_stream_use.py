@@ -12,7 +12,10 @@ def draw_pyplot(img_arr):
 def save_json_w_str(flex_array_in):
     d1, d2 = flex_array_in.all()
     print("d1, d2 =", d1, d2)
+    start_tm = time.time()
     str_data = img_stream_ext.img_arr_2_str(flex_array_in)
+    end_tm = time.time()
+    print("C++ bit took ", end_tm - start_tm)
 
     #print("str_data =", str_data)
     arr_dic = {"d1": d1, "d2": d2, "str_data": str_data}
@@ -31,21 +34,18 @@ def load_json_w_str():
     d2 = arr_dic["d2"]
     str_data = arr_dic["str_data"]
     print("d1, d2 =", d1, d2)
-    print("str_data =", str_data)
-    start_tm = time.time()
+    #print("str_data =", str_data)
     arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
-    end_tm = time.time()
-    print("C++ bit took ", end_tm - start_tm)
     np_array_out = arr_1d.reshape(d1, d2)
-    print("np_array_out =\n", np_array_out)
+    #print("np_array_out =\n", np_array_out)
     return np_array_out
 
 
 
 if __name__ == "__main__":
     print("arr generation")
-    nrol = 8
-    ncol = 12
+    nrol = 2000
+    ncol = 3000
     data_xy_flex = flex.double(flex.grid(nrol, ncol), 0)
     for col in range(nrol):
         for row in range(ncol):
