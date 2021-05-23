@@ -16,21 +16,19 @@ std::string img_arr_2_str(flex_double& data2d)
     int d2 = data2d.accessor().all()[1];
     int i, j;
 
-    std::ostringstream tmp_stream;
-    tmp_stream << std::fixed;
-    tmp_stream << std::setprecision(2);
-    std::cout << "looping thru an array of: (" << d1 << ", " << d2 << ")\n";
+    std::stringstream stream_data;
+    stream_data << std::fixed;
+    stream_data << std::setprecision(2);
+    stream_data.str("");
+    stream_data.clear();
+    std::cout << "looping thru an array of: (" << d1 << ", " << d2 << ") ...\n";
     for (i = 0; i < d1; i++) {
         for (j = 0; j < d2; j++) {
-            tmp_stream.str("");
-            tmp_stream.clear();
-            tmp_stream << data2d(i, j);
-            std_str.append(tmp_stream.str());
-            std_str.append(",");
+            stream_data << data2d(i, j) << ",";
         }
     }
-
-    std::cout << "loop ended\n";
+    std_str = stream_data.str();
+    std::cout << "... loop ended\n";
     return std_str;
 }
 
