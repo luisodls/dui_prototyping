@@ -35,24 +35,14 @@ class img_w_cpp:
         else:  # assuming "hot descend"
             palette_num = 4
 
-        #######################################################
-
         xmax = np_2d_img.shape[1]
         ymax = np_2d_img.shape[0]
 
         if np_2d_mask is None:
             np_2d_mask = np.zeros((ymax, xmax), "double")
 
-        transposed_data = np.zeros((ymax, xmax), "double")
-        transposed_mask = np.zeros((ymax, xmax), "double")
-
-        transposed_data[:, :] = np_2d_img
-        transposed_mask[:, :] = np_2d_mask
-
-        flex_data_in = flex.double(transposed_data)
-        flex_mask_in = flex.double(transposed_mask)
-
-        #######################################################
+        flex_data_in = flex.double(np_2d_img)
+        flex_mask_in = flex.double(np_2d_mask)
 
         img_array_tmp = self.wx_bmp_arr.gen_bmp(
             flex_data_in, flex_mask_in, show_nums, palette_num
@@ -83,15 +73,10 @@ def load_json_w_str():
     d2 = arr_dic["d2"]
     str_data = arr_dic["str_data"]
     print("d1, d2 =", d1, d2)
-    #print("str_data =", str_data)
     arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
     np_array_out = arr_1d.reshape(d1, d2)
-    #print("np_array_out =\n", np_array_out)
 
-    conv_img = img_w_cpp()
-    rgb_np_img = conv_img(np_2d_img = np_array_out)
-
-    return rgb_np_img
+    return np_array_out
 
 
 class Form(QObject):
@@ -100,6 +85,7 @@ class Form(QObject):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("my_win.ui")
         self.my_scene_1 = QGraphicsScene()
+        self.conv_img = img_w_cpp()
         self.window.graphicsView.setScene(self.my_scene_1)
         self.window.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
         self.window.LoadButton.clicked.connect(self.btn_clk)
@@ -108,19 +94,16 @@ class Form(QObject):
     def btn_clk(self):
         print("self.btn_clk start")
         np_array_img = load_json_w_str()
-        print("here 1")
+
+        rgb_np_img = self.conv_img(np_2d_img = np_array_img)
         q_img = QImage(
-            np_array_img.data,
-            np.size(np_array_img[0:1, :, 0:1]),
-            np.size(np_array_img[:, 0:1, 0:1]),
+            rgb_np_img.data,
+            np.size(rgb_np_img[0:1, :, 0:1]),
+            np.size(rgb_np_img[:, 0:1, 0:1]),
             QImage.Format_RGB32,
         )
-        print("here 2")
         self.pixmap = QPixmap(q_img)
-
-        print("here 3")
         self.my_scene_1.addPixmap(self.pixmap)
-        print("here 4")
 
 
 
