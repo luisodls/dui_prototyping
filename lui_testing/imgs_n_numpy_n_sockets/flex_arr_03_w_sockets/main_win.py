@@ -12,7 +12,7 @@ from dials.array_family import flex
 
 class img_w_cpp:
     def __init__(self):
-        self.wx_bmp_arr = rgb_img()
+        self.cpp_rgb_alg = rgb_img()
 
     def __call__(
         self,
@@ -24,7 +24,7 @@ class img_w_cpp:
         palette="heat",
     ):
 
-        self.wx_bmp_arr.set_min_max(i_min, i_max)
+        self.cpp_rgb_alg.set_min_max(i_min, i_max)
 
         if palette == "invert":
             palette_num = 1
@@ -44,7 +44,7 @@ class img_w_cpp:
         flex_data_in = flex.double(np_2d_img)
         flex_mask_in = flex.double(np_2d_mask)
 
-        img_array_tmp = self.wx_bmp_arr.gen_bmp(
+        img_array_tmp = self.cpp_rgb_alg.gen_bmp(
             flex_data_in, flex_mask_in, show_nums, palette_num
         )
 
@@ -100,7 +100,7 @@ class Form(QObject):
             show_nums = False,
             i_min = np_array_img.min(),
             i_max = np_array_img.max(),
-            palette = "caliente",
+            palette = "heat invert",
         )
         q_img = QImage(
             rgb_np_img.data,
