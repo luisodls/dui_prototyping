@@ -50,6 +50,11 @@ if __name__ == "__main__":
             i = (col + row) / 3
             data_xy_flex[col, row] = float(i)
 
+    for col in range(int(nrol / 3)):
+        for row in range(int(ncol / 3)):
+            data_xy_flex[col, row] = 5.0
+
+
     save_json_w_str(data_xy_flex)
     print("loading json")
     loaded_array = load_json_w_str()
