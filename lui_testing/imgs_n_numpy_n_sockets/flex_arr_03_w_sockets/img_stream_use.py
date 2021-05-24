@@ -42,8 +42,8 @@ def load_json_w_str():
 
 if __name__ == "__main__":
     print("arr generation")
-    nrol = 100
-    ncol = 150
+    nrol = 1000
+    ncol = 1500
     data_xy_flex = flex.double(flex.grid(nrol, ncol), 0)
     for col in range(nrol):
         for row in range(ncol):

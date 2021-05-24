@@ -91,36 +91,36 @@ def load_json_w_str():
     conv_img = img_w_cpp()
     rgb_np_img = conv_img(np_2d_img = np_array_out)
 
-    return np_array_out
+    return rgb_np_img
 
 
 class Form(QObject):
 
     def __init__(self, parent=None):
         super(Form, self).__init__(parent)
-
         self.window = QtUiTools.QUiLoader().load("my_win.ui")
-        self.window.LoadButton.clicked.connect(self.btn_clk)
-
         self.my_scene_1 = QGraphicsScene()
         self.window.graphicsView.setScene(self.my_scene_1)
         self.window.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
-
-        print("QGraphicsScenes ready")
+        self.window.LoadButton.clicked.connect(self.btn_clk)
         self.window.show()
 
     def btn_clk(self):
         print("self.btn_clk start")
         np_array_img = load_json_w_str()
+        print("here 1")
         q_img = QImage(
             np_array_img.data,
-            np.size(np_array_img[0:1, :]),
-            np.size(np_array_img[:, 0:1]),
+            np.size(np_array_img[0:1, :, 0:1]),
+            np.size(np_array_img[:, 0:1, 0:1]),
             QImage.Format_RGB32,
         )
+        print("here 2")
+        self.pixmap = QPixmap(q_img)
 
-        self.pixmap = QPixmap.fromImage(q_img)
+        print("here 3")
         self.my_scene_1.addPixmap(self.pixmap)
+        print("here 4")
 
 
 
