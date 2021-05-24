@@ -95,7 +95,14 @@ class Form(QObject):
         print("self.btn_clk start")
         np_array_img = load_json_w_str()
 
-        rgb_np_img = self.conv_img(np_2d_img = np_array_img)
+        rgb_np_img = self.conv_img(
+            np_2d_img = np_array_img,
+            np_2d_mask = None,
+            show_nums = False,
+            i_min = -3.0,
+            i_max = np_array_img.max(),
+            palette = "heat",
+        )
         q_img = QImage(
             rgb_np_img.data,
             np.size(rgb_np_img[0:1, :, 0:1]),
