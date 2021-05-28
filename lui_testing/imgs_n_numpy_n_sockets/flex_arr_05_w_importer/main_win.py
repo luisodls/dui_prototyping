@@ -55,24 +55,24 @@ class np2bmp_heat(object):
         data2d_min = data2d_ini.min()
         data2d_max = data2d_ini.max()
 
+        print("data2d_min, data2d_max =", data2d_min, data2d_max)
+
         self.local_min_max = [float(data2d_min), float(data2d_max)]
         if(i_min_max == [None, None]):
             print("no max and min provided")
 
         elif(i_min_max[0] > data2d_min or i_min_max[1] < data2d_max):
-            print(data2d_ini)
             print("clipping to [max, min]:", i_min_max, "  ...")
-            np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = None)
+            np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
             print("... done clipping")
-            print(data2d_ini)
 
         self.width = np.size( data2d_ini[0:1, :] )
         self.height = np.size( data2d_ini[:, 0:1] )
 
-        data2d_pos = data2d_ini[:,:] - data2d_min + 1.0
+        data2d_pos = data2d_ini[:,:] - i_min_max[0] + 1.0
         data2d_pos_max = data2d_pos.max()
 
-        calc_pos_max = data2d_max - data2d_min + 1.0
+        calc_pos_max = i_min_max[1] - i_min_max[0] + 1.0
         if(calc_pos_max > data2d_pos_max):
             data2d_pos_max = calc_pos_max
 
@@ -162,7 +162,7 @@ class Form(QObject):
 
         rgb_np = self.bmp_heat.img_2d_rgb(
             data2d = np_array_img, invert = False,
-            sqrt_scale = False, i_min_max = [0, 5000]
+            sqrt_scale = False, i_min_max = [-3, 25]
         )
 
         q_img = QImage(
