@@ -33,35 +33,15 @@ class np2bmp_heat(object):
         self.green_byte[764] = 255
 
 
-    def img_2d_rgb(self, data2d = None, invert = False,
-                   sqrt_scale = False, i_min_max = [None, None]):
-
+    def img_2d_rgb(
+        self, data2d = None, invert = False, i_min_max = [None, None]
+    ):
         data2d_ini = np.copy(data2d)
-        if(sqrt_scale == True):
-            prev_max = data2d_ini.max()
-            prev_min = data2d_ini.min()
-            for x in np.nditer(
-                data2d_ini[:,:], op_flags=['readwrite'],
-                flags=['external_loop']
-            ):
-                x[...] = np.sqrt(x[...])
-
-            if i_min_max[0] > 0:
-                i_min_max[0] = np.sqrt(i_min_max[0])
-
-            if i_min_max[1] > 0:
-                i_min_max[1] = np.sqrt(i_min_max[1])
-
-        data2d_min = data2d_ini.min()
-        data2d_max = data2d_ini.max()
-
-        print("data2d_min, data2d_max =", data2d_min, data2d_max)
-
-        self.local_min_max = [float(data2d_min), float(data2d_max)]
         if(i_min_max == [None, None]):
-            print("no max and min provided")
+            i_min_max = [data2d_ini.min(), data2d_ini.max()]
+            print("no max and min provided, assuming:", i_min_max)
 
-        elif(i_min_max[0] > data2d_min or i_min_max[1] < data2d_max):
+        elif(i_min_max[0] > data2d_ini.min() or i_min_max[1] < data2d_ini.max()):
             print("clipping to [max, min]:", i_min_max, "  ...")
             np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = data2d_ini)
             print("... done clipping")
@@ -77,10 +57,7 @@ class np2bmp_heat(object):
             data2d_pos_max = calc_pos_max
 
         div_scale = 764.0 / data2d_pos_max
-
         data2d_scale = np.multiply(data2d_pos, div_scale)
-
-
         if(invert == True):
             for x in np.nditer(
                 data2d_scale[:,:], op_flags=['readwrite'],
@@ -88,7 +65,6 @@ class np2bmp_heat(object):
             ):
                 x[...] = 764.0 - x[...]
 
-        #img_array = np.empty( (self.height ,self.width, 3),'uint8')
         img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
 
         img_array_r = np.empty( (self.height, self.width), 'int')
@@ -161,8 +137,7 @@ class Form(QObject):
         np_array_img = load_json_w_str()
 
         rgb_np = self.bmp_heat.img_2d_rgb(
-            data2d = np_array_img, invert = False,
-            sqrt_scale = False, i_min_max = [-3, 25]
+            data2d = np_array_img, invert = False, i_min_max = [-3, 25]
         )
 
         q_img = QImage(
