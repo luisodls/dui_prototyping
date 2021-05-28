@@ -59,12 +59,12 @@ class np2bmp_heat(object):
         if(i_min_max == [None, None]):
             print("no max and min provided")
 
-        else:
-            if(i_min_max[0] < data2d_min):
-                data2d_min = i_min_max[0]
-
-            if(i_min_max[1] > data2d_max):
-                data2d_max = i_min_max[1]
+        elif(i_min_max[0] > data2d_min or i_min_max[1] < data2d_max):
+            print(data2d_ini)
+            print("clipping to [max, min]:", i_min_max, "  ...")
+            np.clip(data2d_ini, i_min_max[0], i_min_max[1], out = None)
+            print("... done clipping")
+            print(data2d_ini)
 
         self.width = np.size( data2d_ini[0:1, :] )
         self.height = np.size( data2d_ini[:, 0:1] )
@@ -162,7 +162,7 @@ class Form(QObject):
 
         rgb_np = self.bmp_heat.img_2d_rgb(
             data2d = np_array_img, invert = False,
-            sqrt_scale = False, i_min_max = [None, None]
+            sqrt_scale = False, i_min_max = [0, 5000]
         )
 
         q_img = QImage(
