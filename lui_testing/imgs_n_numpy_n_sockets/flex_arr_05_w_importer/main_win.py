@@ -66,11 +66,9 @@ class np2bmp_heat(object):
                 x[...] = 764.0 - x[...]
 
         img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
-
         img_array_r = np.empty( (self.height, self.width), 'int')
         img_array_g = np.empty( (self.height, self.width), 'int')
         img_array_b = np.empty( (self.height, self.width), 'int')
-
         scaled_i = np.empty( (self.height, self.width), 'int')
         scaled_i[:,:] = data2d_scale[:,:]
 
@@ -99,13 +97,10 @@ class np2bmp_heat(object):
         img_array[:, :, 2] = img_array_r[:,:] #Blue
         img_array[:, :, 1] = img_array_g[:,:] #Green
         img_array[:, :, 0] = img_array_b[:,:] #Red
-
         return img_array
 
 
-
 def load_json_w_str():
-
     with open("arr_img.json") as json_file:
         arr_dic = json.load(json_file)
 
@@ -115,7 +110,6 @@ def load_json_w_str():
     print("d1, d2 =", d1, d2)
     arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
     np_array_out = arr_1d.reshape(d1, d2)
-
     return np_array_out
 
 
@@ -132,14 +126,10 @@ class Form(QObject):
         self.window.show()
 
     def btn_clk(self):
-        print("self.btn_clk start")
-
         np_array_img = load_json_w_str()
-
         rgb_np = self.bmp_heat.img_2d_rgb(
-            data2d = np_array_img, invert = False, i_min_max = [-3, 25]
+            data2d = np_array_img, invert = False, i_min_max = [-2, 50]
         )
-
         q_img = QImage(
             rgb_np.data,
             np.size(rgb_np[0:1, :, 0:1]),
@@ -148,8 +138,6 @@ class Form(QObject):
         )
         tmp_pixmap = QPixmap.fromImage(q_img)
         self.my_scene_1.addPixmap(tmp_pixmap)
-
-        print("self.btn_clk end")
 
 
 if __name__ == '__main__':
