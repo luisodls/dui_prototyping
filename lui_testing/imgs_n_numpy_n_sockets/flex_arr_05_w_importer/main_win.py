@@ -102,9 +102,9 @@ class np2bmp_heat(object):
 
 class np2bmp_monocrome(object):
     def __init__(self):
-        self.red_byte = np.empty( (255), 'int')
+        self.all_chan_byte = np.empty( (255), 'int')
         for i in range(255):
-            self.red_byte[i] = i
+            self.all_chan_byte[i] = i
 
     def img_2d_rgb(
         self, data2d = None, invert = False, i_min_max = [None, None]
@@ -139,21 +139,21 @@ class np2bmp_monocrome(object):
                 x[...] = 254.0 - x[...]
 
         img_array = np.zeros([self.height, self.width, 4], dtype=np.uint8)
-        img_array_r = np.empty( (self.height, self.width), 'int')
+        img_array_all_chan = np.empty( (self.height, self.width), 'int')
         scaled_i = np.empty( (self.height, self.width), 'int')
         scaled_i[:,:] = data2d_scale[:,:]
 
-        img_array_r[:,:] = scaled_i[:,:]
+        img_array_all_chan[:,:] = scaled_i[:,:]
         for x in np.nditer(
-            img_array_r[:,:], op_flags=['readwrite'],
+            img_array_all_chan[:,:], op_flags=['readwrite'],
             flags=['external_loop']
         ):
-            x[...] = self.red_byte[x]
+            x[...] = self.all_chan_byte[x]
 
         img_array[:, :, 3] = 255
-        img_array[:, :, 2] = img_array_r[:,:] #Blue
-        img_array[:, :, 1] = img_array_r[:,:] #Green
-        img_array[:, :, 0] = img_array_r[:,:] #Red
+        img_array[:, :, 2] = img_array_all_chan[:,:] #Blue
+        img_array[:, :, 1] = img_array_all_chan[:,:] #Green
+        img_array[:, :, 0] = img_array_all_chan[:,:] #Red
         return img_array
 
 
@@ -185,9 +185,16 @@ class Form(QObject):
 
     def btn_clk(self):
         np_array_img = load_json_w_str()
+
+        rgb_np = self.bmp_heat.img_2d_rgb(
+            data2d = np_array_img, invert = False, i_min_max = [-2, 25]
+        )
+
+        '''
         rgb_np = self.bmp_m_cro.img_2d_rgb(
             data2d = np_array_img, invert = True, i_min_max = [-2, 50]
         )
+        '''
         q_img = QImage(
             rgb_np.data,
             np.size(rgb_np[0:1, :, 0:1]),
