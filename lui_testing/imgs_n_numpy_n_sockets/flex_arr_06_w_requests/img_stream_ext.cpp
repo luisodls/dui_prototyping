@@ -37,11 +37,6 @@ std::string img_arr_2_str(flex_double& data2d)
     std_str = stream_data.str();
     std::cout << "... loop ended\n";
     return std_str;
-    /*
-{
-    "d1": 2527,
-    "d2": 2463,
-    "str_data": "0.00    */
 }
 
 BOOST_PYTHON_MODULE(img_stream_ext)

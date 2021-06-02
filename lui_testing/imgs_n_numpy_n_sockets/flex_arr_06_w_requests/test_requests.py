@@ -23,10 +23,12 @@ copyright (c) CCP4 - DLS
 
 import sys, json
 import requests
+import time
 
 if __name__ == "__main__":
     my_cmd = {"nod_lst":[1], "cmd_lst":["gi 6"]}
 
+    start_tm = time.time()
     req_get = requests.get(
         'http://localhost:8080/', stream = True, params = my_cmd
     )
@@ -40,5 +42,11 @@ if __name__ == "__main__":
             break
 
         else:
-            print(line_str[:-1])
+            #print(line_str[:-1])
+            print(line_str[0:65])
+            print(line_str[-65:])
+
+
+    end_tm = time.time()
+    print("request took ", end_tm - start_tm)
 
