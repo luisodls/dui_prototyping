@@ -19,13 +19,11 @@ def save_json_w_str(flex_array_in):
     end_tm = time.time()
     print("C++ bit took ", end_tm - start_tm)
 
-    #print("str_data =", str_data)
-    arr_dic = {"d1": d1, "d2": d2, "str_data": str_data}
-    #print("\narr_dic =", arr_dic)
+    print("str_data[0:80] =", str_data[0:80])
+    print("str_data[-80:] =", str_data[-80:])
 
-    print("saving in json file")
-    with open("arr_img.json", "w") as fp:
-        json.dump(arr_dic, fp, indent=4)
+    with open("arr_img.json", 'w') as file_out:
+        file_out.write(str_data + '\n')
 
 def load_json_w_str():
 
@@ -53,6 +51,7 @@ if __name__ == "__main__":
     print("data_xy_flex.all() =", data_xy_flex.all())
 
     save_json_w_str(data_xy_flex)
+
     print("loading json")
     loaded_array = load_json_w_str()
     print("drawing")
