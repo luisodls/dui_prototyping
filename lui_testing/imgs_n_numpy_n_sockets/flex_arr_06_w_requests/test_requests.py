@@ -24,6 +24,8 @@ copyright (c) CCP4 - DLS
 import sys, json
 import requests
 import time
+import json
+import numpy as np
 
 if __name__ == "__main__":
     my_cmd = {"nod_lst":[1], "cmd_lst":["gi 6"]}
@@ -32,7 +34,7 @@ if __name__ == "__main__":
     req_get = requests.get(
         'http://localhost:8080/', stream = True, params = my_cmd
     )
-
+    str_lst = ''
     while True:
         tmp_dat = req_get.raw.readline()
         line_str = str(tmp_dat.decode('utf-8'))
@@ -45,8 +47,23 @@ if __name__ == "__main__":
             #print(line_str[:-1])
             print(line_str[0:65])
             print(line_str[-65:])
-
+            str_lst = line_str
 
     end_tm = time.time()
-    print("request took ", end_tm - start_tm)
+    print("request took ", end_tm - start_tm, "\n converting to dict ...")
+    json_out = json.loads(str_lst)
+    print("... converted")
+    print("type(json_out) =", type(json_out))
+    only_str = json_out[0]
+    data_dict = json.loads(only_str)
+
+
+    d1 = data_dict["d1"]
+    d2 = data_dict["d2"]
+    str_data = data_dict["str_data"]
+    print("d1, d2 =", d1, d2)
+    arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+    np_array_out = arr_1d.reshape(d1, d2)
+    print("np_array_out =", np_array_out)
+
 
