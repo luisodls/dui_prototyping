@@ -4,6 +4,7 @@ from dials.array_family import flex
 from matplotlib import pyplot as plt
 import json
 import time
+import zlib
 from dxtbx.model.experiment_list import ExperimentListFactory
 
 
@@ -16,19 +17,24 @@ def save_json_w_str(flex_array_in):
     print("d1, d2 =", d1, d2)
     start_tm = time.time()
     str_data = img_stream_ext.img_arr_2_str(flex_array_in)
+    byt_data = bytes(str_data.encode('utf-8'))
     end_tm = time.time()
     print("C++ bit took ", end_tm - start_tm)
 
     print("str_data[0:80] =", str_data[0:80])
     print("str_data[-80:] =", str_data[-80:])
 
-    with open("arr_img.json", 'w') as file_out:
-        file_out.write(str_data + '\n')
+    byt_data = zlib.compress(byt_data)
+
+    with open("arr_img.json.zip", 'wb') as file_out:
+        file_out.write(byt_data)
 
 def load_json_w_str():
+    with open("arr_img.json.zip", 'rb') as json_file:
+        compresed = json_file.read()
 
-    with open("arr_img.json") as json_file:
-        arr_dic = json.load(json_file)
+    dic_str = zlib.decompress(compresed)
+    arr_dic = json.loads(dic_str)
 
     d1 = arr_dic["d1"]
     d2 = arr_dic["d2"]

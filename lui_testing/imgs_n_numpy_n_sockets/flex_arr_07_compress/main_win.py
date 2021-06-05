@@ -6,6 +6,7 @@ from PySide2 import QtUiTools
 
 import numpy as np
 import json
+import zlib
 
 from dials_viewer_ext import rgb_img
 from dials.array_family import flex
@@ -158,8 +159,12 @@ class np2bmp_monocrome(object):
 
 
 def load_json_w_str():
-    with open("arr_img.json") as json_file:
-        arr_dic = json.load(json_file)
+    with open("arr_img.json.zip", 'rb') as json_file:
+        compresed = json_file.read()
+
+    dic_str = zlib.decompress(compresed)
+    arr_dic = json.loads(dic_str)
+
 
     d1 = arr_dic["d1"]
     d2 = arr_dic["d2"]
