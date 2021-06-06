@@ -14,8 +14,9 @@ def save_msgpack(flex_arr_in):
 
     np_arr = flex_arr_in.as_numpy_array()
     np_enc = msgpack.packb(np_arr, default=m.encode)
+    print("type(np_enc) =", type(np_enc))
     compresed = zlib.compress(np_enc)
-
+    print("type(compresed) =", type(compresed))
     end_tm = time.time()
     print("packing/compresing took ", end_tm - start_tm)
 
