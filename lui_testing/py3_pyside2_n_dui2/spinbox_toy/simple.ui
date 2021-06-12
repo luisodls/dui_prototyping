@@ -18,7 +18,10 @@
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout">
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
+       <layout class="QHBoxLayout" name="SpinHorizontalLayout">
+        <item>
+         <widget class="QSpinBox" name="MySpinBox"/>
+        </item>
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
@@ -31,9 +34,6 @@
            </size>
           </property>
          </spacer>
-        </item>
-        <item>
-         <widget class="QSpinBox" name="MySpinBox"/>
         </item>
        </layout>
       </item>
