@@ -13,20 +13,14 @@ def draw_pyplot(img_arr):
     plt.show()
 
 def save_json_w_str(flex_array_in):
-    d1, d2 = flex_array_in.all()
-    print("d1, d2 =", d1, d2)
     start_tm = time.time()
     str_data = img_stream_ext.img_arr_2_str(flex_array_in)
+    byt_data = bytes(str_data.encode('utf-8'))
+    byt_data = zlib.compress(byt_data)
     end_tm = time.time()
+    print("C++ and compressing took ", end_tm - start_tm)
     print("str_data[0:80] =", str_data[0:80])
     print("str_data[-80:] =", str_data[-80:])
-    print("C++ bit took ", end_tm - start_tm)
-
-
-    byt_data = bytes(str_data.encode('utf-8'))
-
-
-    byt_data = zlib.compress(byt_data)
 
     with open("arr_img.json.zip", 'wb') as file_out:
         file_out.write(byt_data)
@@ -59,11 +53,9 @@ if __name__ == "__main__":
     print("data_xy_flex.all() =", data_xy_flex.all())
 
     save_json_w_str(data_xy_flex)
-    '''
     print("loading json")
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
-    '''
 
 
