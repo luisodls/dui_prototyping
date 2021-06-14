@@ -65,7 +65,6 @@ if __name__ == "__main__":
             print("template #", num, "is equal to", template_lst[0])
 
 
-    '''
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
     print("type(data_xy_flex) =", type(data_xy_flex))
     print("data_xy_flex.all() =", data_xy_flex.all())
@@ -75,6 +74,5 @@ if __name__ == "__main__":
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
-    '''
 
 
