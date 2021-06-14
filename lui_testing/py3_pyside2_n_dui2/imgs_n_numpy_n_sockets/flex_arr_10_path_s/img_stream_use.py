@@ -44,20 +44,26 @@ def load_json_w_str():
 
 
 if __name__ == "__main__":
-    experiments_path = "/scratch/dui_tst/dui_server_run/run1/imported.expt"
-    print("importing from:", experiments_path)
-    experiments = ExperimentListFactory.from_json_file(experiments_path)
-    my_sweep = experiments.imagesets()[0]
 
-    print("\n my_sweep.get_template        ", my_sweep.get_template())
+    experiments_path_lst = [
+        "/scratch/dui_tst/dui_server_run/run1/imported.expt",
+        "/scratch/dui_tst/dui_server_run/run3/indexed.expt",
+        "/scratch/dui_tst/dui_server_run/run6/refined.expt",
+        "/scratch/dui_tst/dui_server_run/run7/integrated.expt",
+    ]
 
+    template_lst = []
+    for exp_path in experiments_path_lst:
+        experiments = ExperimentListFactory.from_json_file(exp_path)
+        my_sweep = experiments.imagesets()[0]
+        template_lst.append(my_sweep.get_template())
+        print("\n my_sweep.paths               ", my_sweep.paths())
 
-    #print("\n my_sweep.get_path            ", my_sweep.get_path())
-    #print("\n my_sweep.get_raw_data        ", my_sweep.get_raw_data())
-    print("\n my_sweep.get_scan            ", my_sweep.get_scan())
-    print("\n my_sweep.reader              ", my_sweep.reader())
-    #print("\n my_sweep.get_image_identifier", my_sweep.get_image_identifier())
-    print("\n my_sweep.paths               ", my_sweep.paths())
+    print("\n template_lst =", template_lst, "\n")
+    for num, tmp_templ in enumerate(template_lst[1:]):
+        if tmp_templ == template_lst[0]:
+            print("template #", num, "is equal to", template_lst[0])
+
 
     '''
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
