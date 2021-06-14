@@ -48,6 +48,18 @@ if __name__ == "__main__":
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
     my_sweep = experiments.imagesets()[0]
+
+    print("\n my_sweep.get_template        ", my_sweep.get_template())
+
+
+    #print("\n my_sweep.get_path            ", my_sweep.get_path())
+    #print("\n my_sweep.get_raw_data        ", my_sweep.get_raw_data())
+    print("\n my_sweep.get_scan            ", my_sweep.get_scan())
+    print("\n my_sweep.reader              ", my_sweep.reader())
+    #print("\n my_sweep.get_image_identifier", my_sweep.get_image_identifier())
+    print("\n my_sweep.paths               ", my_sweep.paths())
+
+    '''
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
     print("type(data_xy_flex) =", type(data_xy_flex))
     print("data_xy_flex.all() =", data_xy_flex.all())
@@ -57,5 +69,6 @@ if __name__ == "__main__":
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
+    '''
 
 
