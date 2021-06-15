@@ -159,10 +159,24 @@ class np2bmp_monocrome(object):
         img_array[:, :, 0] = img_all_chanl[:,:] #Red
         return img_array
 
+def request_template():
+    my_cmd = {'nod_lst': [1], 'cmd_lst': ["gt"]}
+    start_tm = time.time()
+    req_get = requests.get(
+        'http://localhost:8080/', stream = True, params = my_cmd
+    )
+    end_tm = time.time()
+    tmp_dat = req_get.raw.readline()
+    line_str = str(tmp_dat.decode('utf-8'))
+    print("line_str =", line_str)
+
+    tmp_dat = req_get.raw.readline()
+    line_str = str(tmp_dat.decode('utf-8'))
+    print("line_str =", line_str)
+
 
 def load_json_w_str():
     my_cmd = {"nod_lst":[1], "cmd_lst":["gi 6"]}
-
     start_tm = time.time()
     req_get = requests.get(
         'http://localhost:8080/', stream = True, params = my_cmd
@@ -200,6 +214,7 @@ class Form(QObject):
         self.window.show()
 
     def btn_clk(self):
+        request_template()
         np_array_img = load_json_w_str()
 
         '''
