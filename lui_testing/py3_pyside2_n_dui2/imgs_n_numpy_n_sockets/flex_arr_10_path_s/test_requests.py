@@ -211,10 +211,14 @@ class Form(QObject):
         self.window.graphicsView.setScene(self.my_scene_1)
         self.window.graphicsView.setDragMode(QGraphicsView.ScrollHandDrag)
         self.window.LoadButton.clicked.connect(self.btn_clk)
+        self.window.ReqButton.clicked.connect(self.req_clk)
+
         self.window.show()
 
-    def btn_clk(self):
+    def req_clk(self):
         request_template()
+
+    def btn_clk(self):
         np_array_img = load_json_w_str()
 
         '''
