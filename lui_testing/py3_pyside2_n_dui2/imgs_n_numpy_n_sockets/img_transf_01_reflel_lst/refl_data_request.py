@@ -15,8 +15,12 @@ def list_p_arrange(pos_col, hkl_lst, pan_col, n_imgs):
 
     for i, pos_tri in enumerate(pos_col):
         #my_bar(i)
-        x_ini = pos_tri[0] - 1
-        y_ini = (pos_tri[1] - 1) + pan_col[i] * 213
+
+        x_ini = '{:.2f}'.format(pos_tri[0] - 1)
+        y_ini = '{:.2f}'.format((pos_tri[1] - 1) + pan_col[i] * 213)
+
+        #x_ini = pos_tri[0] - 1
+        #y_ini = (pos_tri[1] - 1) + pan_col[i] * 213
 
         if len(hkl_lst) <= 1:
             local_hkl = ""
