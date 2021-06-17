@@ -41,7 +41,11 @@ def list_p_arrange(pos_col, hkl_lst, pan_col, n_imgs):
             else:
                 size2 = 0
 
-            dat_to_append = [x_ini, y_ini, xrs_size, size2, local_hkl]
+            dat_to_append = [
+                x_ini + "," + y_ini + "," +
+                str(xrs_size) + "," + str(size2),
+                local_hkl
+             ]
 
             if idx >= 0 and idx < n_imgs:
                 img_lst[idx].append(dat_to_append)
