@@ -71,8 +71,8 @@ if __name__ == "__main__":
 
     table = flex.reflection_table.from_file(refl_path)
     pos_col = list(map(list, table["xyzcal.px"]))
-    pan_col = list(map(int, table["panel"]))
     hkl_col = list(map(str, table["miller_index"]))
+    pan_col = list(map(int, table["panel"]))
 
     n_imgs = len(my_sweep.indices())
     pred_spt_flat_data_lst = []
@@ -81,4 +81,7 @@ if __name__ == "__main__":
             pos_col, hkl_col, pan_col, n_imgs
         )
 
-    print("pred_spt_flat_data_lst =", pred_spt_flat_data_lst)
+    for img_num, refl_lst in enumerate(pred_spt_flat_data_lst):
+        print("\n\n img_num[", img_num, "] (refl) = \n", refl_lst)
+
+
