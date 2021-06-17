@@ -61,8 +61,6 @@ if __name__ == "__main__":
     refl_path = "/scratch/dui_tst/dui_server_run/run6/refined.refl"
     print("\n refl_path =", refl_path)
 
-
-
     table = flex.reflection_table.from_file(refl_path)
     pos_col = list(map(list, table["xyzcal.px"]))
     pan_col = list(map(int, table["panel"]))
@@ -74,3 +72,5 @@ if __name__ == "__main__":
         pred_spt_flat_data_lst = list_p_arrange(
             pos_col, hkl_col, pan_col, n_imgs
         )
+
+    print("pred_spt_flat_data_lst =", pred_spt_flat_data_lst)
