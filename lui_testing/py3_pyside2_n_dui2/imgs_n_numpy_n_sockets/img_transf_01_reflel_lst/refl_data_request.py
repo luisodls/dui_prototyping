@@ -4,7 +4,7 @@ import json
 #import zlib
 from dxtbx.model.experiment_list import ExperimentListFactory
 
-def list_p_arrange(pos_col, hkl_lst, pan_col, n_imgs):
+def list_p_arrange(pos_col, hkl_col, pan_col, n_imgs):
     img_lst = []
     for time in range(n_imgs):
         img_lst.append([])
@@ -22,11 +22,11 @@ def list_p_arrange(pos_col, hkl_lst, pan_col, n_imgs):
         #x_ini = pos_tri[0] - 1
         #y_ini = (pos_tri[1] - 1) + pan_col[i] * 213
 
-        if len(hkl_lst) <= 1:
+        if len(hkl_col) <= 1:
             local_hkl = ""
 
         else:
-            local_hkl = hkl_lst[i]
+            local_hkl = hkl_col[i]
             if local_hkl == "(0, 0, 0)":
                 local_hkl = "NOT indexed"
 
@@ -55,18 +55,14 @@ def list_p_arrange(pos_col, hkl_lst, pan_col, n_imgs):
     return img_lst
 
 
-
-if __name__ == "__main__":
-
-    exp_path = "/scratch/dui_tst/dui_server_run/run6/refined.expt"
-    experiments = ExperimentListFactory.from_json_file(exp_path)
+def get_refl_lst(expt_path, refl_path, img_num):
+    experiments = ExperimentListFactory.from_json_file(expt_path)
     my_sweep = experiments.imagesets()[0]
     print("\n my_sweep.paths               ", my_sweep.paths())
     data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
     print("type(data_xy_flex) =", type(data_xy_flex))
     print("data_xy_flex.all() =", data_xy_flex.all())
 
-    refl_path = "/scratch/dui_tst/dui_server_run/run6/refined.refl"
     print("\n refl_path =", refl_path)
 
     table = flex.reflection_table.from_file(refl_path)
@@ -80,8 +76,15 @@ if __name__ == "__main__":
         pred_spt_flat_data_lst = list_p_arrange(
             pos_col, hkl_col, pan_col, n_imgs
         )
+    return pred_spt_flat_data_lst[img_num]
 
-    for img_num, refl_lst in enumerate(pred_spt_flat_data_lst):
-        print("\n\n img_num[", img_num, "] (refl) = \n", refl_lst)
+
+if __name__ == "__main__":
+    expt_path = "/scratch/dui_tst/dui_server_run/run6/refined.expt"
+    refl_path = "/scratch/dui_tst/dui_server_run/run6/refined.refl"
+    img_num = 0
+    refl_lst = get_refl_lst(expt_path, refl_path, img_num)
+
+    print("\n\n img_num[", img_num, "] (refl) = \n", refl_lst)
 
 
