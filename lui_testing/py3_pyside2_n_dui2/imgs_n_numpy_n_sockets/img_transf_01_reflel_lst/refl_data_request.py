@@ -44,7 +44,7 @@ def json_data_request(url, cmd):
 if __name__ == "__main__":
     my_cmd = {'nod_lst': [12], 'cmd_lst': ["grl 0"]}
     json_lst = json_data_request('http://localhost:8080/', my_cmd)
-    for inner_list in json_lst[0:5]:
+    for inner_list in json_lst[:3]:
         print("\n inner_list =", inner_list)
         lst_str1 = inner_list[0].split(',')
         print("lst_str1 =", lst_str1)
@@ -60,9 +60,5 @@ if __name__ == "__main__":
         print("size2 =     ", size2    )
         print("local_hkl = ", local_hkl)
 
-
-'''
-json_lst = [['850.26,578.12,3,2', '(-20, 10, -12)'], ['1258.65,582.44,3,2', '(-22, 0, -4)'], ['1006.61,656.33,3,2', '(-19, 7, -8)'], ['1200.78,655.23,3,2', '(-20, 2, -4)'], ['1306.23,670.43,3,2', '(-20, -1, -2)'], ['1091.22,673.89,3,2', '(-19, 5, -6)'], ['
-'''
 
 
