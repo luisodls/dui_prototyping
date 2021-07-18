@@ -82,10 +82,23 @@ std::string img_arr_2_str(flex_double& data2d)
 std::string num_2_str(int a)
 {
     std::string all_str("Hi there");
-    int x;
-    x = 6 / a;
-    std::cout << " 6 / "<< a << " = " << x << "\n";
+    int x[10];
+    try
+    {
+        for (int i = 0; i < a; i++) {
+            x[i]= i * 2;
+        }
+    }
+    catch(std::exception& e)
+    {
+        std::cerr << "Exception caught : " << e.what() << std::endl;
+    }
+
+    for (int i = 0; i < a; i++) {
+        std::cout << " x[" << i << "] =" << x[i] << "\n";
+    };
     return all_str;
+
 }
 
 BOOST_PYTHON_MODULE(img_stream_ext)

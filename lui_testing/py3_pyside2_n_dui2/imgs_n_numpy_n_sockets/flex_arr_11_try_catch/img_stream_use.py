@@ -60,7 +60,7 @@ if __name__ == "__main__":
     draw_pyplot(loaded_array)
     '''
     try:
-        str_data = img_stream_ext.num_2_str(2)
+        str_data = img_stream_ext.num_2_str(999)
 
     except:
         print("except here")
