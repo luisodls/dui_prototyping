@@ -2,6 +2,6 @@ import img_stream_ext
 #import numpy as np
 
 if __name__ == "__main__":
-    str_data = img_stream_ext.img_arr_2_str()
+    str_data = img_stream_ext.img_arr_2_str(2)
     print("str_data =", str_data)
 
