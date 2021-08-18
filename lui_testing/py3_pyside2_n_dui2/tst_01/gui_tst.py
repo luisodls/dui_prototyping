@@ -24,6 +24,7 @@ class MyTree(QTreeWidget):
         self.show()
 
     def fillTree(self, startDir):
+        self.clear()
         iterate(startDir, self)
 
 
