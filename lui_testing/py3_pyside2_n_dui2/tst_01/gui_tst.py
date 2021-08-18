@@ -28,17 +28,13 @@ class MyTree(QTreeWidget):
 class Client(QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
-
+        mainLayout = QVBoxLayout()
         self.t_view = MyTree()
-
+        mainLayout.addWidget(self.t_view)
         send2serverButton = QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
-
-        mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.t_view)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
-        self.setWindowTitle("DUI front end test with HTTP")
 
     def request_launch(self):
         self.t_view.fillTree(
