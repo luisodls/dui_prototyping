@@ -4,7 +4,9 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 def iterate(currentDir, currentItem):
-    for a_file in os.listdir(currentDir):
+    l_dir = os.listdir(currentDir)
+    print("l_dir =", l_dir)
+    for a_file in l_dir:
         path = os.path.join(currentDir, a_file)
         if os.path.isdir(path):
             dirItem = QTreeWidgetItem(currentItem)
