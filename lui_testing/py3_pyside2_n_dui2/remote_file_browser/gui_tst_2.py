@@ -24,8 +24,10 @@ def iterate(file_path):
     local_dict = {
         "file_name": file_name, "file_path": file_path, "list_child": []
     }
+    debuging = '''
     print("\n", file_path)
     print("file_name =", file_name)
+    '''
     if os.path.isdir(file_path):
         local_dict["isdir"] = True
         for new_file_name in os.listdir(file_path):
