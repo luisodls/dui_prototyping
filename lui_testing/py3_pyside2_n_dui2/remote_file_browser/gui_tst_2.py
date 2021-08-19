@@ -3,44 +3,36 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-'''
-def iterate(currentDir, currentItem):
-    l_dir = os.listdir(currentDir)
-    for file_name in l_dir:
-        path = os.path.join(currentDir, file_name)
-        if os.path.isdir(path):
-            dirItem = QTreeWidgetItem(currentItem)
-            dirItem.setText(0, file_name)
-            iterate(path, dirItem)
-            print("file_name(dir) =", file_name)
-
-        else:
-            fileItem = QTreeWidgetItem(currentItem)
-            fileItem.setText(0, file_name)
-'''
-
-def iterate(file_path):
+def iter_dict(file_path):
     file_name = file_path.split("/")[-1]
     local_dict = {
         "file_name": file_name, "file_path": file_path, "list_child": []
     }
-    debuging = '''
-    print("\n", file_path)
-    print("file_name =", file_name)
-    '''
     if os.path.isdir(file_path):
         local_dict["isdir"] = True
         for new_file_name in os.listdir(file_path):
             new_file_path = os.path.join(file_path, new_file_name)
             local_dict["list_child"].append(
-                iterate(new_file_path)
+                iter_dict(new_file_path)
             )
 
     else:
         local_dict["isdir"] = False
 
-
     return local_dict
+
+
+def iter_gui(list_dict, currentItem):
+    for child in list_dict["list_child"]:
+        if list_dict["isdir"]:
+            dirItem = QTreeWidgetItem(currentItem)
+            dirItem.setText(0, child["file_name"])
+            iter_gui(child, dirItem)
+
+        else:
+            fileItem = QTreeWidgetItem(currentItem)
+            fileItem.setText(0, child["file_name"])
+
 
 class MyTree(QTreeWidget):
     def __init__(self, parent=None):
@@ -49,11 +41,10 @@ class MyTree(QTreeWidget):
 
     def fillTree(self):
         self.clear()
-        #iterate(startDir, self)
-        lst_dic = iterate(
-            "/scratch/dui_prototyping/lui_testing/py3_pyside2_n_dui2"
+        lst_dic = iter_dict(
+            "/scratch/dui_prototyping"
         )
-        print("lst_dic =", lst_dic)
+        iter_gui(lst_dic, self)
 
 
 class Client(QDialog):

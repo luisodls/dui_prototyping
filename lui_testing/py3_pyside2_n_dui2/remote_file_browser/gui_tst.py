@@ -5,9 +5,9 @@ from PySide2.QtGui import *
 
 def iterate(currentDir, currentItem):
     l_dir = os.listdir(currentDir)
-    print("l_dir =", l_dir)
+    #print("l_dir =", l_dir)
     for a_file in l_dir:
-        print("a_file =", a_file)
+        #print("a_file =", a_file)
         path = os.path.join(currentDir, a_file)
         if os.path.isdir(path):
             dirItem = QTreeWidgetItem(currentItem)
@@ -42,7 +42,7 @@ class Client(QDialog):
 
     def request_launch(self):
         self.t_view.fillTree(
-            "/scratch/dui_prototyping/lui_testing/py3_pyside2_n_dui2"
+            "/scratch/dui_prototyping"
         )
         print("Launch \n")
 
