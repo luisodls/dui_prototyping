@@ -19,20 +19,19 @@ def iterate(currentDir, currentItem):
             fileItem.setText(0, file_name)
 '''
 
-def iterate(currentDir, file_name):
+def iterate(file_path):
+    file_name = file_path.split("/")[-1]
     local_dict = {
-        "file_name"  : file_name,"list_child" : []
+        "file_name": file_name, "file_path": file_path, "list_child": []
     }
-    file_path = os.path.join(currentDir, file_name)
+    print("\n", file_path)
+    print("file_name =", file_name)
     if os.path.isdir(file_path):
         local_dict["isdir"] = True
-        ls_dir = os.listdir(file_path)
-        for new_file_name in ls_dir:
-            print(file_path)
+        for new_file_name in os.listdir(file_path):
+            new_file_path = os.path.join(file_path, new_file_name)
             local_dict["list_child"].append(
-                iterate(
-                    file_path, new_file_name
-                )
+                iterate(new_file_path)
             )
 
     else:
@@ -50,7 +49,7 @@ class MyTree(QTreeWidget):
         self.clear()
         #iterate(startDir, self)
         lst_dic = iterate(
-            "/scratch/dui_prototyping/lui_testing", "py3_pyside2_n_dui2"
+            "/scratch/dui_prototyping/lui_testing/py3_pyside2_n_dui2"
         )
         print("lst_dic =", lst_dic)
 
