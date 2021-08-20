@@ -3,9 +3,9 @@ from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
-def iter_gui(list_dict, currentItem):
-    for child in list_dict["list_child"]:
-        if list_dict["isdir"]:
+def iter_gui(myself, currentItem):
+    for child in myself["list_child"]:
+        if myself["isdir"]:
             dirItem = QTreeWidgetItem(currentItem)
             dirItem.setText(0, child["file_name"])
             iter_gui(child, dirItem)

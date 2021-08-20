@@ -42,7 +42,7 @@ class Client(QDialog):
 
     def request_launch(self):
         self.t_view.fillTree(
-            "/scratch/dui_prototyping"
+            "/scratch/dui_tst"
         )
         print("Launch \n")
 
