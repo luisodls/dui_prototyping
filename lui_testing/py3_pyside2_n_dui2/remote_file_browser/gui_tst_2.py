@@ -42,7 +42,7 @@ class MyTree(QTreeWidget):
     def fillTree(self):
         self.clear()
         lst_dic = iter_dict(
-            "/scratch/dui_prototyping"
+            "/scratch/dui_tst/"
         )
         iter_gui(lst_dic, self)
 
