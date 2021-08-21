@@ -1,23 +1,29 @@
-import requests, json
-
+import requests, json, os
 
 def iter_gui(myself):
     if myself["isdir"]:
-        stat = "DIR"
+        print("\n DIR : ", myself["file_path"])
 
     else:
-        stat = " file"
+        print("file : ", myself["file_name"])
 
-    print(stat, " : ", myself["file_name"])
     for child in myself["list_child"]:
         if myself["isdir"]:
             iter_gui(child)
 
+
 if __name__ == "__main__":
+    print()
+
+    path_in = input("path:")
+
+    if path_in == "":
+        path_in = os.environ.get('HOME')
+        print("empty input for path replaced with ", path_in)
 
     req_get = requests.get(
         'http://localhost:8080/', stream = True,
-        params = {"path":"/scratch/dui_tst/"}, timeout = 3
+        params = {"path":path_in}, timeout = 10
     )
     str_lst = ''
     line_str = ''
