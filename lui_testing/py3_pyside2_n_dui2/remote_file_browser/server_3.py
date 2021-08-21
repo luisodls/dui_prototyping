@@ -9,7 +9,7 @@ def iter_dict(file_path):
     }
     if os.path.isdir(file_path):
         local_dict["isdir"] = True
-        for new_file_name in os.listdir(file_path):
+        for new_file_name in sorted(os.listdir(file_path)):
             new_file_path = os.path.join(file_path, new_file_name)
             local_dict["list_child"].append(
                 iter_dict(new_file_path)

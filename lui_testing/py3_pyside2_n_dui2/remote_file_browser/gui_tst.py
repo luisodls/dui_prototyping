@@ -4,7 +4,7 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 def iterate(currentDir, currentItem):
-    l_dir = os.listdir(currentDir)
+    l_dir = sorted(os.listdir(currentDir))
     #print("l_dir =", l_dir)
     for a_file in l_dir:
         #print("a_file =", a_file)

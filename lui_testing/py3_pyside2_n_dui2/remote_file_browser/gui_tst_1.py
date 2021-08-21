@@ -5,7 +5,7 @@ from PySide2.QtGui import *
 
 '''
 def iterate(currentDir, currentItem):
-    l_dir = os.listdir(currentDir)
+    l_dir = sorted(os.listdir(currentDir))
     for file_name in l_dir:
         path = os.path.join(currentDir, file_name)
         if os.path.isdir(path):
@@ -26,7 +26,7 @@ def iterate(currentDir, file_name):
     file_path = os.path.join(currentDir, file_name)
     if os.path.isdir(file_path):
         local_dict["isdir"] = True
-        ls_dir = os.listdir(file_path)
+        ls_dir = sorted(os.listdir(file_path))
         for new_file_name in ls_dir:
             print(file_path)
             local_dict["list_child"].append(

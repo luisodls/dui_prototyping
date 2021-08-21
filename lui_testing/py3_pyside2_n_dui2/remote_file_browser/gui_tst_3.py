@@ -1,4 +1,4 @@
-import requests, json, os, sys
+import requests, json, sys
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -21,6 +21,7 @@ class MyTree(QTreeWidget):
         self.show()
 
     def fillTree(self, lst_dic):
+        self.clear()
         iter_gui(lst_dic, self)
 
 
