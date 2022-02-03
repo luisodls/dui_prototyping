@@ -8,6 +8,18 @@ namespace py = boost::python;
 using scitbx::af::flex_double;
 using scitbx::af::flex_grid;
 using scitbx::af::flex_int;
+using scitbx::af::flex_bool;
+
+std::string mask_arr_2_str(flex_bool& data2d)
+{
+    int d1 = data2d.accessor().all()[0];
+    int d2 = data2d.accessor().all()[1];
+    int buff_size = d1 * d2 * 15 + 30;
+    std::cout << "buff_size =" << buff_size << "\n";
+
+    std::string all_str = "Hi there";
+    return all_str;
+}
 
 std::string img_arr_2_str(flex_double& data2d)
 {
@@ -221,5 +233,6 @@ BOOST_PYTHON_MODULE(img_stream_ext)
 {
     using namespace boost::python;
     def("img_arr_2_str", img_arr_2_str);
+    def("mask_arr_2_str", mask_arr_2_str);
     def("slice_arr_2_str", slice_arr_2_str);
 }

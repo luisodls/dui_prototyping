@@ -63,9 +63,14 @@ if __name__ == "__main__":
     pick_file.close()
 
     mask_flex = mask_tup_obj[0]
-    mask_np_arr = mask_flex.as_numpy_array()
 
+    str_data = img_stream_ext.mask_arr_2_str(mask_flex)
+    print("str_data =", str_data)
+
+    tmp_off = '''
+    mask_np_arr = mask_flex.as_numpy_array()
     draw_pyplot(mask_np_arr)
+    '''
 
     tmp_off = '''
 
