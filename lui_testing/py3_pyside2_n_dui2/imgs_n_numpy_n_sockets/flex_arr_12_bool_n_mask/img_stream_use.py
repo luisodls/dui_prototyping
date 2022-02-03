@@ -43,8 +43,11 @@ def load_json_w_str():
     d2 = arr_dic["d2"]
     str_data = arr_dic["str_data"]
     print("d1, d2 =", d1, d2)
-    #print("str_data =", str_data)
-    arr_1d = np.fromstring(str_data, dtype = float, sep = ',')
+
+    n_tup = tuple(str_data)
+    arr_1d = np.asarray(n_tup, dtype = 'float')
+    print("arr_1d =", arr_1d)
+
     np_array_out = arr_1d.reshape(d1, d2)
     #print("np_array_out =\n", np_array_out)
     return np_array_out
