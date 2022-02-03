@@ -5,7 +5,14 @@ from matplotlib import pyplot as plt
 import json
 import time
 import zlib
-from dxtbx.model.experiment_list import ExperimentListFactory
+import pickle
+
+from dxtbx.datablock import DataBlockFactory
+from dxtbx.model import Experiment, ExperimentList
+from dxtbx.model.experiment_list import (
+    ExperimentListFactory,
+    InvalidExperimentListError,
+)
 
 
 def draw_pyplot(img_arr):
@@ -44,11 +51,24 @@ def load_json_w_str():
 
 
 if __name__ == "__main__":
-    experiments_path = "/scratch/dui_tst/dui_server_run/run1/imported.expt"
+    experiments_path = "/scratch/dui_tst/dui_server_run/run2/masked.expt"
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
-    my_sweep = experiments.imagesets()[0]
-    data_xy_flex = my_sweep.get_raw_data(0)[0].as_double()
+
+    imageset_tmp = experiments.imagesets()[0]
+    mask_file = imageset_tmp.external_lookup.mask.filename
+
+    pick_file = open(mask_file, "rb")
+    mask_tup_obj = pickle.load(pick_file)
+    pick_file.close()
+
+    mask_flex = mask_tup_obj[0]
+    mask_np_arr = mask_flex.as_numpy_array()
+
+    draw_pyplot(mask_np_arr)
+
+    tmp_off = '''
+
     print("type(data_xy_flex) =", type(data_xy_flex))
     print("data_xy_flex.all() =", data_xy_flex.all())
 
@@ -57,6 +77,8 @@ if __name__ == "__main__":
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
+
+    '''
 
 
 
