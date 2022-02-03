@@ -21,7 +21,7 @@ def draw_pyplot(img_arr):
 
 def save_json_w_str(flex_array_in):
     start_tm = time.time()
-    str_data = img_stream_ext.img_arr_2_str(flex_array_in)
+    str_data = img_stream_ext.mask_arr_2_str(flex_array_in)
     byt_data = bytes(str_data.encode('utf-8'))
     byt_data = zlib.compress(byt_data)
     end_tm = time.time()
@@ -63,18 +63,7 @@ if __name__ == "__main__":
     pick_file.close()
 
     mask_flex = mask_tup_obj[0]
-
-    str_data = img_stream_ext.mask_arr_2_str(mask_flex)
-    print("str_data = \n", str_data[0:50], "\n ... \n", str_data[-50:])
-
-    byt_data = bytes(str_data.encode('utf-8'))
-    byt_data = zlib.compress(byt_data)
-
-    with open("arr_img.json.zip", 'wb') as file_out:
-        file_out.write(byt_data)
-
-    #size = 29763  arr_img.json.zip
-    #size = 11167  arr_img.json.zip
+    save_json_w_str(mask_flex)
 
     loaded_array = load_json_w_str()
     print("drawing")

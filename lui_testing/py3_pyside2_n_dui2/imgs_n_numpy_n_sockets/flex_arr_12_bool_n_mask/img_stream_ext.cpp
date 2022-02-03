@@ -48,11 +48,11 @@ std::string mask_arr_2_str(flex_bool& data2d)
             // writing intensity
             d_num = bool(data2d(i, j));
             if(d_num == true){
-                strcpy(&ch_buff[pos], "1");
+                strcpy(&ch_buff[pos], "1.0,");
             } else {
-                strcpy(&ch_buff[pos], "0");
+                strcpy(&ch_buff[pos], "0.0,");
             }
-            pos++;
+            pos = pos + 4;
         }
     }
     std::cout << "... Loop END\n";
