@@ -65,25 +65,20 @@ if __name__ == "__main__":
     mask_flex = mask_tup_obj[0]
 
     str_data = img_stream_ext.mask_arr_2_str(mask_flex)
-    print("str_data =", str_data)
+    print("str_data = \n", str_data[0:50], "\n ... \n", str_data[-50:])
 
-    tmp_off = '''
-    mask_np_arr = mask_flex.as_numpy_array()
-    draw_pyplot(mask_np_arr)
-    '''
+    byt_data = bytes(str_data.encode('utf-8'))
+    byt_data = zlib.compress(byt_data)
 
-    tmp_off = '''
+    with open("arr_img.json.zip", 'wb') as file_out:
+        file_out.write(byt_data)
 
-    print("type(data_xy_flex) =", type(data_xy_flex))
-    print("data_xy_flex.all() =", data_xy_flex.all())
+    #size = 24274 ... arr_img.json.zip
 
-    save_json_w_str(data_xy_flex)
-    print("loading json")
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
 
-    '''
 
 
 
