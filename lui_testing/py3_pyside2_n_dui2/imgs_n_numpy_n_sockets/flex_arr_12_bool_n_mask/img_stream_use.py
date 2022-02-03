@@ -73,7 +73,8 @@ if __name__ == "__main__":
     with open("arr_img.json.zip", 'wb') as file_out:
         file_out.write(byt_data)
 
-    #size = 24274 ... arr_img.json.zip
+    #size = 29763  arr_img.json.zip
+    #size = 11167  arr_img.json.zip
 
     loaded_array = load_json_w_str()
     print("drawing")
