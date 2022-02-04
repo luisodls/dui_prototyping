@@ -190,31 +190,32 @@ std::string slice_mask_2_str( flex_bool& data2d,
 
     // looping thru the sliced array in big jumps of size inv_scale
     int mini_x, mini_y;
-    bool mini_count;
+    //int n_0, n_1;
+    bool local_bool;
     scaled_dx = 0;
     for (x = x1; x < x2; x += inv_scale) {
         scaled_dy = 0;
         for (y = y1; y < y2; y += inv_scale) {
-
-            // if inv_scale is 1 there is no need to average
-            // pixel intensities since is going 1 by 1
             if(inv_scale == 1){
-                mini_count = bool(data2d(x, y));
+                local_bool = bool(data2d(x, y));
             } else {
-                mini_count = false;
+                //n_0 = 0;
+                //n_1 = 0;
+                local_bool = true;
                 for (mini_x = x;
                       mini_x < x + inv_scale and mini_x < d1;
                        mini_x++) {
                     for (mini_y = y;
                           mini_y < y + inv_scale and mini_y < d2;
                            mini_y++) {
-                        if( bool(data2d(mini_x, mini_y)) == true );
-                            mini_count = true;
+                        if( bool(data2d(mini_x, mini_y)) == false ){
+                            local_bool = false;
+                        }
                     }
                 }
             }
 
-            if(mini_count == true){
+            if(local_bool == true){
                 strcpy(&ch_buff[pos], "1");
             } else {
                 strcpy(&ch_buff[pos], "0");

@@ -19,10 +19,10 @@ def draw_pyplot(img_arr):
     plt.show()
 
 
-def save_json_w_str(flex_array_in, x1, y1, x2, y2):
+def save_json_w_str(flex_array_in, inv_scale, x1, y1, x2, y2):
     start_tm = time.time()
     str_data = img_stream_ext.slice_mask_2_str(
-        flex_array_in, 1,x1, y1, x2, y2
+        flex_array_in, inv_scale, x1, y1, x2, y2
     )
     byt_data = bytes(str_data.encode('utf-8'))
     byt_data = zlib.compress(byt_data)
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     pick_file.close()
 
     mask_flex = mask_tup_obj[0]
-    save_json_w_str(mask_flex, 850, 1000, 950, 1200)
+    save_json_w_str(mask_flex, 5, 850, 1000, 950, 1200)
 
     loaded_array = load_json_w_str()
     print("drawing")
