@@ -49,10 +49,8 @@ def load_json_w_str():
 
     n_tup = tuple(str_data)
     arr_1d = np.asarray(n_tup, dtype = 'float')
-    print("arr_1d =", arr_1d)
 
     np_array_out = arr_1d.reshape(d1, d2)
-    #print("np_array_out =\n", np_array_out)
     return np_array_out
 
 
@@ -75,9 +73,6 @@ if __name__ == "__main__":
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
-
-    #x[1000:1200]
-    #y[850:950]
 
 
 
