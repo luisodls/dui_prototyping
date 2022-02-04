@@ -14,14 +14,16 @@ from dxtbx.model.experiment_list import (
     InvalidExperimentListError,
 )
 
-
 def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
-def save_json_w_str(flex_array_in):
+
+def save_json_w_str(flex_array_in, x1, y1, x2, y2):
     start_tm = time.time()
-    str_data = img_stream_ext.mask_arr_2_str(flex_array_in)
+    str_data = img_stream_ext.slice_mask_2_str(
+        flex_array_in, 1,x1, y1, x2, y2
+    )
     byt_data = bytes(str_data.encode('utf-8'))
     byt_data = zlib.compress(byt_data)
     end_tm = time.time()
@@ -31,6 +33,7 @@ def save_json_w_str(flex_array_in):
 
     with open("arr_img.json.zip", 'wb') as file_out:
         file_out.write(byt_data)
+
 
 def load_json_w_str():
     with open("arr_img.json.zip", 'rb') as json_file:
@@ -54,6 +57,7 @@ def load_json_w_str():
 
 
 if __name__ == "__main__":
+
     experiments_path = "/scratch/dui_tst/dui_server_run/run2/masked.expt"
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
@@ -66,11 +70,15 @@ if __name__ == "__main__":
     pick_file.close()
 
     mask_flex = mask_tup_obj[0]
-    save_json_w_str(mask_flex)
+    save_json_w_str(mask_flex, 850, 1000, 950, 1200)
 
     loaded_array = load_json_w_str()
     print("drawing")
     draw_pyplot(loaded_array)
+
+    #x[1000:1200]
+    #y[850:950]
+
 
 
 
