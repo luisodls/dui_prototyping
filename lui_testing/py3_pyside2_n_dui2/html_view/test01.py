@@ -131,12 +131,14 @@ class Form(QObject):
 
         main_box = QVBoxLayout()
         main_box.addWidget(self.html_view)
-        self.window.HtmlWidget.setLayout(main_box)
+
+        self.window.InerWidget.setLayout(main_box)
         self.window.show()
 
     def clicked(self):
         print("clicked")
-        self.html_view.load(QUrl("https://google.com"))
+        self.html_view.load(QUrl("http://qt-project.org/"))
+        #self.html_view.show()
 
 
 if __name__ == '__main__':
