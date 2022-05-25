@@ -14,6 +14,13 @@ char const* greet()
     return "hello, world";
 }
 
+
+std::string cadena1()
+{
+    std::string std_str = "Aa Bb";
+    return std_str;
+}
+
 py::list lst_bunch(flex_double& data2d)
 {
     py::list data_out;
@@ -33,37 +40,6 @@ py::list lst_bunch(flex_double& data2d)
         }
     }
     data_out.append(std_str);
-    /*
-     * This example shows how play with strings and lists
-
-    py::list data_out;
-    py::str py_str;
-
-    int four = 4;
-    std::string std_str1, std_str2, std_str3, std_str_sum;
-
-    data_out.append(num_lst);
-    data_out.append(four);
-
-    std_str1 = "cadena tst uno ";
-    std_str2 = "cadena tst dos ";
-    std_str3 = "cadena tst tres ";
-
-    std_str_sum = std_str1;
-    std_str_sum.append(std_str2);
-    std_str_sum.append(std_str3);
-
-    std::cout << "\n std_str_sum = " << std_str_sum << "\n";
-
-    std::cout << "\n std_str1 = " << std_str1 << "\n";
-    std::cout << "\n std_str2 = " << std_str2 << "\n";
-    std::cout << "\n std_str3 = " << std_str3 << "\n";
-
-    py_str = "1 2 3 4";
-
-    data_out.append(py_str);
-    data_out.append(std_str_sum);
-    */
 
     return data_out;
 }
@@ -125,10 +101,32 @@ py::list arange_list(py::list bbox_lst, py::list hkl_lst, int n_imgs)
 
     return img_lst;
 }
+
+std::string add_elem_as_str(flex_double& data2d)
+{
+    std::string std_str = "";
+    int nrow = data2d.accessor().all()[0];
+    int ncol = data2d.accessor().all()[1];
+    int col, row, tot = 0;
+
+    std::cout << "nrow = " << nrow << "\n";
+    std::cout << "ncol = " << ncol << "\n";
+    for (row = 0; row < nrow; row++) {
+        for (col = 0; col < ncol; col++) {
+            tot = tot + data2d(row, col);
+        }
+    }
+    std_str.append(boost::lexical_cast<std::string>(tot));
+    return std_str;
+}
+
+
 BOOST_PYTHON_MODULE(img_stream_ext)
 {
     using namespace boost::python;
     def("greet", greet);
+    def("cadena1", cadena1);
     def("lst_bunch", lst_bunch);
     def("arange_list", arange_list, arg("bbox_lst"), arg("hkl_lst"), arg("n_imgs"));
+    def("add_elem_as_str", add_elem_as_str);
 }
