@@ -1,12 +1,9 @@
+
 import img_stream_ext
 import numpy as np
 from dials.array_family import flex
 
 import resource, sys
-resource.setrlimit(resource.RLIMIT_STACK, (2**29,-1))
-sys.setrecursionlimit(10**6)
-
-print(img_stream_ext.greet())
 
 x_max = 4000
 y_max = 3000
@@ -17,10 +14,20 @@ for x in range(x_max):
         i = (x + y) / 2
         data_xyz_flex[x, y] = float(i)
 print("building data end")
+small_str_tst = img_stream_ext.slice_arr_2_str(
+    data_xyz_flex, 1, 25, 35, 45, 55
+)
+print(
+    "small_str_tst ... =", small_str_tst[0:15],
+    small_str_tst[-15:len(small_str_tst) - 1]
+)
 
-print("data_xyz_flex = \n", data_xyz_flex.as_numpy_array())
-print("cadena1 =", img_stream_ext.cadena1())
-print("here 1")
-str_tst = img_stream_ext.build_str(data_xyz_flex)
-print("here 2")
-print("len(str_tst) =", len(str_tst), ">>")
+big_str_tst = img_stream_ext.slice_arr_2_str(
+    data_xyz_flex, 1, 25, 35, 2500, 2500
+)
+print("len(big_str_tst) =", len(big_str_tst), ">>")
+
+print(
+    "big_str_tst ... =", big_str_tst[0:50],
+    big_str_tst[-50:len(big_str_tst)]
+)
