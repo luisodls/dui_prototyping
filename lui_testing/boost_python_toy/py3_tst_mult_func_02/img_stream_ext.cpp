@@ -173,10 +173,14 @@ std::string slice_arr_2_str( flex_double& data2d,
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
 
+    std::cout << "adding <<0>>  char to array \n";
+
     //finishing array with 0 char
-    pos_size = sprintf( std_str, "\0");
+    pos_size = sprintf( std_str, 0);
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
+
+    std::cout << " char array to std.string \n";
 
     std::string str_out = std::string(ch_buff, pos);
     delete[] ch_buff;

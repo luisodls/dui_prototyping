@@ -17,10 +17,13 @@ print("building data end")
 small_str_tst = img_stream_ext.slice_arr_2_str(
     data_xyz_flex, 1, 25, 35, 45, 55
 )
+'''
 print(
     "small_str_tst ... =", small_str_tst[0:15],
     "  ...  ", small_str_tst[-15:len(small_str_tst)]
 )
+'''
+print("small_str_tst =", small_str_tst)
 
 big_str_tst = img_stream_ext.slice_arr_2_str(
     data_xyz_flex, 1, 25, 35, 2500, 2500
