@@ -176,8 +176,7 @@ std::string slice_arr_2_str( flex_double& data2d,
     std::cout << "adding <<0>>  char to array \n";
 
     //finishing array with 0 char
-    sprintf( std_str, 0);
-    strcpy(&ch_buff[pos], std_str);
+    strcpy(&ch_buff[pos], "\0");
     pos++;
 
     std::cout << " char array to std.string \n";
