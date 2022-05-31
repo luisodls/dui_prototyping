@@ -19,7 +19,7 @@ small_str_tst = img_stream_ext.slice_arr_2_str(
 )
 print(
     "small_str_tst ... =", small_str_tst[0:15],
-    small_str_tst[-15:len(small_str_tst) - 1]
+    "  ...  ", small_str_tst[-15:len(small_str_tst)]
 )
 
 big_str_tst = img_stream_ext.slice_arr_2_str(
@@ -29,5 +29,5 @@ print("len(big_str_tst) =", len(big_str_tst), ">>")
 
 print(
     "big_str_tst ... =", big_str_tst[0:50],
-    big_str_tst[-50:len(big_str_tst)]
+    "  ....  ", big_str_tst[-50:len(big_str_tst)]
 )
