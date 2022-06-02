@@ -39,26 +39,30 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     return str_data
 '''
 
-if __name__ == "__main__":
-    a = np.arange(60, dtype=float).reshape(6,10)
+def scale_np_arr(a, inv_scale):
     print("a =\n", a)
-    '''
-    for x in np.nditer(a, op_flags=['readwrite'], flags = ['external_loop']):
-        x[...]=x*2
-    '''
-    b = np.zeros((3,10))
-    for row_num in range(b.shape[0]):
-        for sub_row_num in range(2):
-            b[row_num, :] += a[row_num * 2 + sub_row_num, :]
+    a_d0 = a.shape[0]
+    a_d1 = a.shape[1]
+    small_d0 = int(a_d0 / inv_scale)
+    b = np.zeros((small_d0, a_d1))
+    for row_num in range(small_d0):
+        for sub_row_num in range(inv_scale):
+            b[row_num, :] += a[row_num * inv_scale + sub_row_num, :]
 
     print("b =\n", b)
-
-    c = np.zeros((3,5))
+    small_d1 = int(a_d1 / inv_scale)
+    c = np.zeros((small_d0, small_d1))
     for col_num in range(c.shape[1]):
-        for sub_col_num in range(2):
-            c[:, col_num] += b[:, col_num * 2 + sub_col_num]
+        for sub_col_num in range(inv_scale):
+            c[:, col_num] += b[:, col_num * inv_scale + sub_col_num]
 
     print("c =\n", c)
     a_scl = np.copy(c)
-    a_scl = a_scl / 4.0
+    a_scl = a_scl / float(inv_scale ** 2)
     print("a_scl =\n", a_scl)
+
+
+if __name__ == "__main__":
+    d0, d1 = 15, 12
+    big_arr = np.arange(d0 * d1, dtype=float).reshape(d0, d1)
+    scaled_arr = scale_np_arr(big_arr, 3)
