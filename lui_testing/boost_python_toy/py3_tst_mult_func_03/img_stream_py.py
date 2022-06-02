@@ -1,3 +1,4 @@
+import numpy as np
 def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
     data_xy_flex = data2d.as_double()
     np_arr = data_xy_flex.as_numpy_array()
@@ -37,3 +38,27 @@ def get_json_w_img_2d(experiments_list_path, img_num):
 
     return str_data
 '''
+
+if __name__ == "__main__":
+    a = np.arange(60, dtype=float).reshape(6,10)
+    print("a =\n", a)
+    '''
+    for x in np.nditer(a, op_flags=['readwrite'], flags = ['external_loop']):
+        x[...]=x*2
+    '''
+    b = np.zeros((3,10))
+    for row_num in range(b.shape[0]):
+        for sub_row_num in range(2):
+            b[row_num, :] += a[row_num * 2 + sub_row_num, :]
+
+    print("b =\n", b)
+
+    c = np.zeros((3,5))
+    for col_num in range(c.shape[1]):
+        for sub_col_num in range(2):
+            c[:, col_num] += b[:, col_num * 2 + sub_col_num]
+
+    print("c =\n", c)
+    a_scl = np.copy(c)
+    a_scl = a_scl / 4.0
+    print("a_scl =\n", a_scl)
