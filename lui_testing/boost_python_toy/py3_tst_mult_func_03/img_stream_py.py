@@ -39,30 +39,39 @@ def get_json_w_img_2d(experiments_list_path, img_num):
     return str_data
 '''
 
-def scale_np_arr(a, inv_scale):
-    print("a =\n", a)
-    a_d0 = a.shape[0]
-    a_d1 = a.shape[1]
+def scale_np_arr(big_np_arr, inv_scale):
+    a_d0 = big_np_arr.shape[0]
+    a_d1 = big_np_arr.shape[1]
     small_d0 = int(a_d0 / inv_scale)
-    b = np.zeros((small_d0, a_d1))
+    short_arr = np.zeros((small_d0, a_d1))
     for row_num in range(small_d0):
+        row_cou = 0
         for sub_row_num in range(inv_scale):
-            b[row_num, :] += a[row_num * inv_scale + sub_row_num, :]
+            big_row = row_num * inv_scale + sub_row_num
+            if big_row < a_d0:
+                short_arr[row_num,:] += big_np_arr[big_row, :]
+                row_cou += 1
 
-    print("b =\n", b)
+        short_arr[row_num,:] /= float(row_cou)
+
     small_d1 = int(a_d1 / inv_scale)
-    c = np.zeros((small_d0, small_d1))
-    for col_num in range(c.shape[1]):
+    small_arr = np.zeros((small_d0, small_d1))
+    for col_num in range(small_arr.shape[1]):
+        col_cou = 0
         for sub_col_num in range(inv_scale):
-            c[:, col_num] += b[:, col_num * inv_scale + sub_col_num]
+            big_col = col_num * inv_scale + sub_col_num
+            if big_col < a_d1:
+                small_arr[:,col_num] += short_arr[:,big_col]
+                col_cou += 1
 
-    print("c =\n", c)
-    a_scl = np.copy(c)
-    a_scl = a_scl / float(inv_scale ** 2)
-    print("a_scl =\n", a_scl)
+        small_arr[:,col_num] /= float(col_cou)
 
+    return small_arr
 
 if __name__ == "__main__":
-    d0, d1 = 15, 12
+    d0, d1 = 15, 10
     big_arr = np.arange(d0 * d1, dtype=float).reshape(d0, d1)
-    scaled_arr = scale_np_arr(big_arr, 3)
+    print("big_arr =\n", big_arr)
+    scaled_arr = scale_np_arr(big_arr, 5)
+    print("scaled_arr =\n", scaled_arr)
+
