@@ -70,8 +70,11 @@ std::string slice_arr_2_str( flex_double& data2d,
     std::cout << "x1, y1, x2, y2 = " << x1 << "," << y1 << "," <<
                                         x2 << "," << y2 << "," << "\n";
     // creating a char buffer full of spaces
+    /*
     char * ch_buff;
     ch_buff = new char[buff_size];
+    */
+    char static ch_buff[999999];
 
     memset(ch_buff,' ',buff_size);
 
@@ -182,7 +185,7 @@ std::string slice_arr_2_str( flex_double& data2d,
     std::cout << " char array to std.string \n";
 
     std::string str_out = std::string(ch_buff, pos);
-    delete[] ch_buff;
+    //delete[] ch_buff;
     std::cout << "done C++ \n";
     return str_out;
 

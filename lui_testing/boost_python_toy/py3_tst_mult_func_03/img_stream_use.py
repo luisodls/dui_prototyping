@@ -1,3 +1,4 @@
+import time
 
 #import img_stream_ext
 import img_stream_py
@@ -7,8 +8,8 @@ from dials.array_family import flex
 
 import resource, sys
 
-x_max = 6
-y_max = 5
+x_max = 5000
+y_max = 4000
 print("building data start")
 data_xyz_flex = flex.double(flex.grid(x_max, y_max), 0)
 for x in range(x_max):
@@ -19,7 +20,8 @@ print("building data end")
 '''
 small_str_tst = img_stream_ext.slice_arr_2_str(
     data_xyz_flex, 1, 25, 35, 45, 55
-)'''
+)
+
 small_str_tst = img_stream_py.slice_arr_2_str(
     data_xyz_flex, 1, 25, 35, 45, 55
 )
@@ -28,18 +30,22 @@ print(
     "small_str_tst ... =", small_str_tst[0:25],
     "  ...  ", small_str_tst[-25:len(small_str_tst)]
 )
+'''
 print("____________________________________________________________")
 '''
 big_str_tst = img_stream_ext.slice_arr_2_str(
     data_xyz_flex, 1, 25, 35, 2500, 2500
-)
+)'''
+
+start_tm = time.time()
 big_str_tst = img_stream_py.slice_arr_2_str(
-    data_xyz_flex, 1, 25, 35, 2500, 2500
+    data_xyz_flex, 7, 25, 35, 2500, 2500
 )
+end_tm = time.time()
+print("scaling and converting took ", end_tm - start_tm)
 print("len(big_str_tst) =", len(big_str_tst), ">>")
 
 print(
     "big_str_tst ... =", big_str_tst[0:50],
     "  ....  ", big_str_tst[-50:len(big_str_tst)]
 )
-'''
