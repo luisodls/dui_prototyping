@@ -4,23 +4,15 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
     data_xy_flex = data2d.as_double()
     big_np_arr = data_xy_flex.as_numpy_array()
 
-    np_arr = scale_np_arr(big_np_arr, inv_scale)
+    np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
     d1 = np_arr.shape[0]
     d2 = np_arr.shape[1]
     str_tup = str(tuple(np_arr.ravel()))
-    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
-             + ",\"str_data\":\"" + str_tup[1:-1] + "\"}"
+    clean_str = str_tup.replace(" ", "")
+    str_data = "{\"str_data\":\"" + clean_str[1:-1]+ "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
 
     return str_data
-
-'''
-    str_data = img_stream_ext.slice_arr_2_str(
-        data_xy_flex, inv_scale,
-        int(float(x1)), int(float(y1)),
-        int(float(x2)), int(float(y2))
-    )
-'''
 
 def scale_np_arr(big_np_arr, inv_scale):
     a_d0 = big_np_arr.shape[0]

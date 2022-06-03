@@ -46,9 +46,11 @@ std::string slice_arr_2_str( flex_double& data2d,
     std::cout << "\n inv_scale ="<< inv_scale << " \n";
 
     // verifying some variables related to array bounds
+    /*
     std::cout << " x1= " << x1 << "\n y1= " << y1 <<
                 "\n x2= " << x2 << "\n y2= " << y2 <<"\n";
     std::cout << " d1= " << d1 << "\n d2= " << d2 << "\n";
+    */
     if(x1 >= d1 or x2 > d1 or x1 < 0 or x2 <= 0 or
        y1 >= d2 or y2 > d2 or y1 < 0 or y2 <= 0 or
        x1 > x2 or y1 > y2
@@ -64,11 +66,13 @@ std::string slice_arr_2_str( flex_double& data2d,
     char std_str[15];
     dx = x2 - x1;
     dy = y2 - y1;
-    std::cout << "dx, dy  = " << dx << "," << dy << "\n";
+    //std::cout << "dx, dy  = " << dx << "," << dy << "\n";
     int buff_size = dx * dy * 15 + 30;
+    /*
     std::cout << "buff_size =" << buff_size << "\n";
     std::cout << "x1, y1, x2, y2 = " << x1 << "," << y1 << "," <<
                                         x2 << "," << y2 << "," << "\n";
+    */
     // creating a char buffer full of spaces
     char * ch_buff;
     ch_buff = new char[buff_size];
@@ -93,7 +97,7 @@ std::string slice_arr_2_str( flex_double& data2d,
     double d_tot, mini_count;
     scaled_dx = 0;
 
-    std::cout << "Here before loop \n";
+    //std::cout << "Here before loop \n";
 
     for (x = x1; x < x2; x += inv_scale) {
         scaled_dy = 0;
@@ -135,7 +139,7 @@ std::string slice_arr_2_str( flex_double& data2d,
             }
 
             // writing intensity
-            pos_size = sprintf( std_str, "%.2f", d_num);
+            pos_size = sprintf( std_str, "%.1f", d_num);
             strcpy(&ch_buff[pos], std_str);
             pos = pos + pos_size;
 
@@ -146,9 +150,10 @@ std::string slice_arr_2_str( flex_double& data2d,
         }
         scaled_dx++;
     }
+    /*
     std::cout << "after loop, scaled_dx, scaled_dy ="
               << scaled_dx << ", " << scaled_dy << " \n";
-
+    */
     // moving backwards to overwrite the last comma
     // that was written inside loop
     pos--;
@@ -173,13 +178,13 @@ std::string slice_arr_2_str( flex_double& data2d,
     strcpy(&ch_buff[pos], std_str);
     pos = pos + pos_size;
 
-    std::cout << "adding <<0>>  char to array \n";
+    //std::cout << "adding <<0>>  char to array \n";
 
     //finishing array with 0 char
     strcpy(&ch_buff[pos], "\0");
     pos++;
 
-    std::cout << " char array to std.string \n";
+    //std::cout << " char array to std.string \n";
 
     std::string str_out = std::string(ch_buff, pos);
     delete[] ch_buff;
