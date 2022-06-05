@@ -34,13 +34,31 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
     return str_data
 
 def mask_arr_2_str(mask_flex):
+
+
+    tm = time.time()
     bool_np_arr = mask_flex.as_numpy_array()
+    print("convert time =", tm - time.time())
+
     d1 = bool_np_arr.shape[0]
     d2 = bool_np_arr.shape[1]
+
+    tm = time.time()
     fl_np_arr = np.zeros((d1, d2))
     fl_np_arr += bool_np_arr
-    str_tup = str(tuple(fl_np_arr.ravel()))
+    print("convert 1 time =", tm - time.time())
+
+    tm = time.time()
+    tup_dat = tuple(fl_np_arr.ravel())
+    print("convert 2 time =", tm - time.time())
+
+    tm = time.time()
+    str_tup = str(tup_dat)
+    print("convert 3 time =", tm - time.time())
+
+    tm = time.time()
     replace_coma = str_tup.replace(".0, ", "")
+    print("convert 4 time =", tm - time.time())
 
     str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
              + ",\"str_data\":\"" + replace_coma[1:-3] + "\"}"
