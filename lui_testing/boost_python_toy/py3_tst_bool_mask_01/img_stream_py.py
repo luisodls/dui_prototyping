@@ -33,6 +33,22 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
 
     return str_data
 
+def mask_arr_2_str(mask_flex):
+    bool_np_arr = mask_flex.as_numpy_array()
+    d1 = bool_np_arr.shape[0]
+    d2 = bool_np_arr.shape[1]
+    fl_np_arr = np.zeros((d1, d2))
+    fl_np_arr += bool_np_arr
+    str_tup = str(tuple(fl_np_arr.ravel()))
+    replace_coma = str_tup.replace(".0, ", "")
+
+    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
+             + ",\"str_data\":\"" + replace_coma[1:-3] + "\"}"
+
+
+    return str_data
+
+
 def scale_np_arr(big_np_arr, inv_scale):
     a_d0 = big_np_arr.shape[0]
     a_d1 = big_np_arr.shape[1]
@@ -62,14 +78,4 @@ def scale_np_arr(big_np_arr, inv_scale):
 
     rd_arr = np.round(small_arr, 1)
     return rd_arr
-
-if __name__ == "__main__":
-    d0, d1 = 5000, 4000
-    big_arr = np.arange(d0 * d1, dtype=float).reshape(d0, d1)
-    print("big_arr =\n", big_arr)
-    start_tm = time.time()
-    scaled_arr = scale_np_arr(big_arr, 5)
-    end_tm = time.time()
-    print("scaling took ", end_tm - start_tm)
-    #print("scaled_arr =\n", scaled_arr)
 
