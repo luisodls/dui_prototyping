@@ -33,40 +33,6 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
 
     return str_data
 
-def mask_arr_2_str(mask_flex):
-
-
-    tm = time.time()
-    bool_np_arr = mask_flex.as_numpy_array()
-    print("convert time =", time.time() - tm)
-
-    d1 = bool_np_arr.shape[0]
-    d2 = bool_np_arr.shape[1]
-
-    tm = time.time()
-    fl_np_arr = np.zeros((d1, d2), np.float64)
-    fl_np_arr += bool_np_arr
-    print("convert 1 time =", time.time() - tm)
-
-    tm = time.time()
-    tup_dat = tuple(fl_np_arr.ravel())
-    print("convert 2 time =", time.time() - tm)
-
-    tm = time.time()
-    str_tup = str(tup_dat)
-
-    print("convert 3 time =", time.time() - tm)
-
-    tm = time.time()
-    replace_coma = str_tup.replace(".0, ", "")
-    print("convert 4 time =", time.time() - tm)
-
-    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
-             + ",\"str_data\":\"" + replace_coma[1:-3] + "\"}"
-
-
-    return str_data
-
 
 def scale_np_arr(big_np_arr, inv_scale):
     a_d0 = big_np_arr.shape[0]
@@ -98,3 +64,16 @@ def scale_np_arr(big_np_arr, inv_scale):
     rd_arr = np.round(small_arr, 1)
     return rd_arr
 
+def mask_arr_2_str(mask_flex):
+
+    bool_np_arr = mask_flex.as_numpy_array()
+    d1 = bool_np_arr.shape[0]
+    d2 = bool_np_arr.shape[1]
+
+    str_tup = str(bool_np_arr.ravel().tobytes())
+    replace_x = str_tup.replace("\\x0", "")
+    str_stream = replace_x[2:-1]
+    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
+             + ",\"str_data\":\"" + str_stream + "\"}"
+
+    return str_data

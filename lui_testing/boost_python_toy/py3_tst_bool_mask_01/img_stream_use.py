@@ -8,8 +8,8 @@ from dials.array_family import flex
 
 import resource, sys
 
-x_max = 2500
-y_max = 2500
+x_max = 3000
+y_max = 3000
 print("building data start")
 data_bool_flex = flex.bool(flex.grid(x_max, y_max), 0)
 for x in range(x_max):
@@ -33,7 +33,9 @@ print("converting in C++ took ", cpp_end_tm - cpp_start_tm)
 print("converting in Python took ", py_end_tm - py_start_tm)
 
 print("len(cpp_str_tst) =", len(cpp_str_tst))
+#print( "cpp_str_tst =", cpp_str_tst)
 print( "cpp_str_tst =", cpp_str_tst[:50], "  ...  ", cpp_str_tst[-50:])
 print("len(py_str_tst) =", len(py_str_tst))
+#print( "py_str_tst  =", py_str_tst)
 print( "py_str_tst  =", py_str_tst[:50], "  ...  ", py_str_tst[-50:])
 
