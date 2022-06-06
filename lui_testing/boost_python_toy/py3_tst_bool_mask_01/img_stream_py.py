@@ -74,8 +74,14 @@ def mask_np_2_str(bool_np_arr):
     str_tup = str(bool_np_arr.ravel().tobytes())
     replace_x = str_tup.replace("\\x0", "")
     str_stream = replace_x[2:-1]
+    '''
     str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
              + ",\"str_data\":\"" + str_stream + "\"}"
+    '''
+
+    str_data = "{\"str_data\":\"" + str_stream + \
+                "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
+
 
     return str_data
 
@@ -83,7 +89,7 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
     print("\n inv_scale =", inv_scale)
     bool_np_arr = data2d.as_numpy_array()
     slice_np_arr = bool_np_arr[x1:x2,y1:y2]
-    print("slice_np_arr =\n", slice_np_arr)
+    #print("slice_np_arr =\n", slice_np_arr)
     a_d0 = slice_np_arr.shape[0]
     a_d1 = slice_np_arr.shape[1]
     print("a_d0, a_d1 = ", a_d0, a_d1)
@@ -97,7 +103,7 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
                     short_arr[row_num,:], slice_np_arr[big_row, :]
                 )
 
-    print("short_arr =\n", short_arr)
+    #print("short_arr =\n", short_arr)
 
     small_d1 = int(0.995 + a_d1 / inv_scale)
     print("small_d0, small_d1 = ", small_d0, small_d1)
@@ -111,7 +117,7 @@ def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
                     small_arr[:,col_num], short_arr[:,big_col]
                 )
 
-    print("small_arr =\n", small_arr)
+    #print("small_arr =\n", small_arr)
 
     str_buff = mask_np_2_str(small_arr)
 
