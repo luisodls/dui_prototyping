@@ -83,40 +83,53 @@ def mask_np_2_str(bool_np_arr):
 
 
 def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
-    print("\n inv_scale =", inv_scale)
+
     bool_np_arr = data2d.as_numpy_array()
-    slice_np_arr = bool_np_arr[x1:x2,y1:y2]
-    #print("slice_np_arr =\n", slice_np_arr)
-    a_d0 = slice_np_arr.shape[0]
-    a_d1 = slice_np_arr.shape[1]
-    print("a_d0, a_d1 = ", a_d0, a_d1)
-    small_d0 = int(0.995 + a_d0 / inv_scale)
-    short_arr = np.zeros((small_d0, a_d1), dtype = bool)
-    for row_num in range(small_d0):
-        for sub_row_num in range(inv_scale):
-            big_row = row_num * inv_scale + sub_row_num
-            if big_row < a_d0:
-                short_arr[row_num,:] = np.bitwise_or(
-                    short_arr[row_num,:], slice_np_arr[big_row, :]
-                )
+    big_d0 = bool_np_arr.shape[0]
+    big_d1 = bool_np_arr.shape[1]
 
-    #print("short_arr =\n", short_arr)
+    if(
+        x1 >= big_d0 or x2 > big_d0 or x1 < 0 or x2 <= 0 or
+        y1 >= big_d1 or y2 > big_d1 or y1 < 0 or y2 <= 0 or
+        x1 > x2 or y1 > y2
+    ):
+        print("\n ***  array bounding error  *** \n")
+        return "Error"
 
-    small_d1 = int(0.995 + a_d1 / inv_scale)
-    print("small_d0, small_d1 = ", small_d0, small_d1)
-    small_arr = np.zeros((small_d0, small_d1), dtype = bool)
+    else:
+        print("\n ***  array bounding OK  *** \n")
+        slice_np_arr = bool_np_arr[x1:x2,y1:y2]
+        a_d0 = slice_np_arr.shape[0]
+        a_d1 = slice_np_arr.shape[1]
+        print("a_d0, a_d1 = ", a_d0, a_d1)
 
-    for col_num in range(small_d1):
-        for sub_col_num in range(inv_scale):
-            big_col = col_num * inv_scale + sub_col_num
-            if big_col < a_d1:
-                small_arr[:,col_num] = np.bitwise_or(
-                    small_arr[:,col_num], short_arr[:,big_col]
-                )
+        small_d0 = int(0.995 + a_d0 / inv_scale)
+        short_arr = np.zeros((small_d0, a_d1), dtype = bool)
+        for row_num in range(small_d0):
+            for sub_row_num in range(inv_scale):
+                big_row = row_num * inv_scale + sub_row_num
+                if big_row < a_d0:
+                    short_arr[row_num,:] = np.bitwise_or(
+                        short_arr[row_num,:], slice_np_arr[big_row, :]
+                    )
 
-    #print("small_arr =\n", small_arr)
+        #print("short_arr =\n", short_arr)
 
-    str_buff = mask_np_2_str(small_arr)
+        small_d1 = int(0.995 + a_d1 / inv_scale)
+        print("small_d0, small_d1 = ", small_d0, small_d1)
+        small_arr = np.zeros((small_d0, small_d1), dtype = bool)
 
-    return str_buff
+        for col_num in range(small_d1):
+            for sub_col_num in range(inv_scale):
+                big_col = col_num * inv_scale + sub_col_num
+                if big_col < a_d1:
+                    small_arr[:,col_num] = np.bitwise_or(
+                        small_arr[:,col_num], short_arr[:,big_col]
+                    )
+
+        #print("small_arr =\n", small_arr)
+
+        str_buff = mask_np_2_str(small_arr)
+
+        return str_buff
 
