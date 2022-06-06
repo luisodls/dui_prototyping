@@ -39,7 +39,6 @@ for inv_scale in range(1, 40, 1):
     )
     cpp_end_tm = time.time() - cpp_start_tm
 
-
     py_start_tm = time.time()
     scaled_py_str = img_stream_py.slice_mask_2_str(
         data_bool_flex, inv_scale, 3, 4, 1500, 1100

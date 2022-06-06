@@ -18,7 +18,6 @@ def slice_arr_2_str( data2d, inv_scale, x1, y1, x2, y2):
     else:
         print("\n ***  array bounding OK  *** \n")
 
-
     np_arr = scale_np_arr(big_np_arr[x1:x2,y1:y2], inv_scale)
 
     d1 = np_arr.shape[0]
@@ -64,8 +63,10 @@ def scale_np_arr(big_np_arr, inv_scale):
     rd_arr = np.round(small_arr, 1)
     return rd_arr
 
+
 def mask_arr_2_str(data2d_flex):
     return mask_np_2_str(data2d_flex.as_numpy_array())
+
 
 def mask_np_2_str(bool_np_arr):
     d1 = bool_np_arr.shape[0]
@@ -74,16 +75,12 @@ def mask_np_2_str(bool_np_arr):
     str_tup = str(bool_np_arr.ravel().tobytes())
     replace_x = str_tup.replace("\\x0", "")
     str_stream = replace_x[2:-1]
-    '''
-    str_data = "{\"d1\":" + str(d1) + ",\"d2\":" + str(d2) \
-             + ",\"str_data\":\"" + str_stream + "\"}"
-    '''
 
     str_data = "{\"str_data\":\"" + str_stream + \
                 "\",\"d1\":" + str(d1) + ",\"d2\":" + str(d2) + "}"
 
-
     return str_data
+
 
 def slice_mask_2_str(data2d, inv_scale, x1, y1, x2, y2):
     print("\n inv_scale =", inv_scale)
