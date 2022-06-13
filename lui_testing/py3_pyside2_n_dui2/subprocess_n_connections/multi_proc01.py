@@ -1,5 +1,5 @@
 from multiprocessing import Process, Pipe
-import time
+
 def func(conn, num):
     num_times_2 = num * 2
     conn.send(num_times_2)
