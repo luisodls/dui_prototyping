@@ -8,19 +8,19 @@ from dials.array_family import flex
 
 help_message = """
 
-This program is used to view the reflections with debugging purposes.
-This program does not perform any calculation ... just visualizations
+This program is used to remove reflections from a reflection list
 
 Example for invoking from CLI:
 
-dials.reflection_viewer observations.refl
+dials.reflection_remove observations.refl 5,8,9,15
 """
 def in_table(data_in_one):
     if isinstance(data_in_one, flex.reflection_table):
         table = data_in_one
-        print("entered Table")
+        print("entered reflection Table")
 
-
+    else:
+        print("NOT entered reflection Table")
 
 
 class Script:
