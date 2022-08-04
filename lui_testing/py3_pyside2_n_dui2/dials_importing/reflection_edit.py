@@ -13,7 +13,9 @@ This program is used to remove reflections from a reflection list
 Example for invoking from CLI:
 
 dials.reflection_remove observations.refl 5,8,9,15
+
 """
+
 def in_table(data_in_one):
     if isinstance(data_in_one, flex.reflection_table):
         table = data_in_one
@@ -30,7 +32,7 @@ class Script:
         """Initialise the script."""
         from dials.util.options import ArgumentParser
 
-        usage = "dials.reflection_viewer [options] experiment.expt"
+        usage = "dials.reflection_remove [options] reflection.refl"
 
         # Create the parser
         self.parser = ArgumentParser(
