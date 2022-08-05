@@ -16,10 +16,20 @@ dials.reflection_remove observations.refl 5,8,9,15
 
 """
 
-def in_table(data_in_one):
+def in_table(data_in_one, params):
     if isinstance(data_in_one, flex.reflection_table):
         table = data_in_one
         print("entered reflection Table")
+
+        table.as_file(params.output.reflections)
+        print("params.output.reflections=", params.output.reflections)
+
+        '''
+        logger.info(
+            "Saved %s reflections to %s", len(reflections), params.output.reflections
+        )
+        '''
+
 
     else:
         print("NOT entered reflection Table")
@@ -38,9 +48,9 @@ class Script:
         phil_scope = libtbx.phil.parse(
             """
             output {
-                reflections = refined.refl
+                reflections = reduced.refl
                     .type = str
-                    .help = "The filename for reflections with updated predictions"
+                    .help = "The filename for reflections with updated (less) reflections"
 
                 log = dials.refine.log
                     .type = str
@@ -58,7 +68,6 @@ class Script:
     def run(self, args=None):
 
         from dials.util.options import flatten_reflections
-        #from dials.viewer.viewer_interface import extract_n_show
 
         # Parse the command line
         params, options = self.parser.parse_args(args, show_diff_phil=True)
@@ -67,8 +76,7 @@ class Script:
             self.parser.print_help()
             return
 
-        #extract_n_show(table[0])
-        in_table(table[0])
+        in_table(table[0], params)
 
 @dials.util.show_mail_handle_errors()
 def run(args=None):
