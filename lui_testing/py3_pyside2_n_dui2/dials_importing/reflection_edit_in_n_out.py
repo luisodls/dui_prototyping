@@ -34,9 +34,25 @@ class Script:
 
         usage = "dials.reflection_remove [options] reflection.refl"
 
+        # The phil scope
+        phil_scope = libtbx.phil.parse(
+            """
+            output {
+                reflections = refined.refl
+                    .type = str
+                    .help = "The filename for reflections with updated predictions"
+
+                log = dials.refine.log
+                    .type = str
+
+            }
+            """
+        )
+
         # Create the parser
         self.parser = ArgumentParser(
-            usage=usage, epilog=help_message, read_reflections=True
+            usage=usage, epilog=help_message,
+            phil=phil_scope, read_reflections=True
         )
 
     def run(self, args=None):
@@ -64,20 +80,3 @@ if __name__ == "__main__":
     run()
 
 
-
-##########################################################################
-
-# The phil scope
-phil_scope = libtbx.phil.parse(
-    """
-    output {
-        reflections = refined.refl
-            .type = str
-            .help = "The filename for reflections with updated predictions"
-
-        log = dials.refine.log
-            .type = str
-
-    }
-    """
-)
