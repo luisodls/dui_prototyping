@@ -18,18 +18,25 @@ dials.reflection_remove observations.refl 5,8,9,15
 
 def in_table(data_in_one, params):
     if isinstance(data_in_one, flex.reflection_table):
-        table = data_in_one
+        table = data_in_one.copy()
         print("entered reflection Table")
 
-        table.as_file(params.output.reflections)
-        print("params.output.reflections=", params.output.reflections)
+        print("type(table) =", type(table))
+        print("len(table) =", len(table))
 
-        '''
+        num2pop = 25
+
+        cut_table = table[0:num2pop - 1]
+        cut_table.extend(table[num2pop:])
+
+        to_view_later = '''
         logger.info(
             "Saved %s reflections to %s", len(reflections), params.output.reflections
         )
         '''
 
+        cut_table.as_file(params.output.reflections)
+        print("params.output.reflections=", params.output.reflections)
 
     else:
         print("NOT entered reflection Table")
