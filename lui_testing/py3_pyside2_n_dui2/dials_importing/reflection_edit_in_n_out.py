@@ -24,9 +24,13 @@ def in_table(data_in_one, params):
         print("type(table) =", type(table))
         print("len(table) =", len(table))
 
-        num2pop = 25
+        lst2pop = [3,5,12,56]
+        prev_pos = lst2pop[0]
+        cut_table = table[0:prev_pos - 1]
+        for num2pop in lst2pop[1:]:
+            cut_table.extend(table[prev_pos:num2pop - 1])
+            prev_pos = num2pop
 
-        cut_table = table[0:num2pop - 1]
         cut_table.extend(table[num2pop:])
 
         to_view_later = '''
