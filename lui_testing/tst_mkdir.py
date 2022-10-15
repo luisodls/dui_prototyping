@@ -27,7 +27,6 @@ for file_ini in lst_ini:
     num_sub_lst += 1
     num_str = "{:0>4s}".format(str(num_sub_lst))
     #print("num_sub_lst =", num_str)
-
     dir_name = lst_dir_name[pos_dir]
     file_end = dir_name + "/" + file_ini[0:-11] + num_str + ".cbf.gz"
     print("file_ini =", file_ini, " //  file_end =", file_end)
