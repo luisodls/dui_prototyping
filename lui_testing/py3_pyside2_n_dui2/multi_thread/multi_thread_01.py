@@ -16,6 +16,17 @@ class my_one(QThread):
             time.sleep(1)
 
 
+class MultiRunner(QObject):
+    def __init__(self):
+        super(MultiRunner, self).__init__()
+        self.thread_lst = []
+
+    def run_one_work(self):
+        new_thread = my_one(len(self.thread_lst) + 1)
+        new_thread.start()
+        self.thread_lst.append(new_thread)
+
+
 class MainImgViewObject(QObject):
     def __init__(self, parent = None):
         super(MainImgViewObject, self).__init__(parent)
@@ -23,15 +34,13 @@ class MainImgViewObject(QObject):
         self.window = QtUiTools.QUiLoader().load("main.ui")
         self.window.setWindowTitle("test")
         print("inside QObject")
+        self.m_run = MultiRunner()
         self.window.RunPushButton.clicked.connect(self.run_one_clicked)
         self.window.show()
-        self.thread_lst = []
 
     def run_one_clicked(self):
         print("run_one_clicked(MainImgViewObject)")
-        new_thread = my_one(len(self.thread_lst) + 1)
-        new_thread.start()
-        self.thread_lst.append(new_thread)
+        self.m_run.run_one_work()
 
 
 def main():
