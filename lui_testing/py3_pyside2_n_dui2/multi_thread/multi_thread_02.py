@@ -12,7 +12,7 @@ class my_one(QThread):
     def run(self):
         print("times entered =", self.times)
         for rept in range(self.times):
-            print("rep n", rept, " of ", self.times)
+            print("Times:  ", rept + 1, "/", self.times)
             time.sleep(1)
 
 
