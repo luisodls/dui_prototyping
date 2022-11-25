@@ -8,12 +8,17 @@ class Client(QDialog):
         super(Client, self).__init__(parent)
         mainLayout = QVBoxLayout()
 
-        OpenButton = QPushButton("\n ... Launch Open \n")
-        OpenButton.clicked.connect(self.open_launch)
+        OpenButton = QPushButton("\n ... Open file \n")
+        OpenButton.clicked.connect(self.open_file)
         mainLayout.addWidget(OpenButton)
+
+        DirButton = QPushButton("\n ... Open Dir \n")
+        DirButton.clicked.connect(self.open_dir)
+        mainLayout.addWidget(DirButton)
+
         self.setLayout(mainLayout)
 
-    def open_launch(self):
+    def open_file(self):
         print("Launch \n")
 
 
@@ -30,6 +35,13 @@ class Client(QDialog):
         except FileNotFoundError:
             print("No file selected")
 
+    def open_dir(self):
+
+        new_dir = QFileDialog.getExistingDirectory(
+            parent = self,
+            caption = "Open Directory", dir = "/home"
+        )
+        print("Opened:", new_dir)
 
 
 if __name__ == '__main__':
