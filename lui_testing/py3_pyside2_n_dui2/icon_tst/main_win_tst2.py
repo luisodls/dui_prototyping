@@ -60,7 +60,6 @@ class MainObject(QObject):
 
 
 if __name__ == "__main__":
-
     script = os.path.realpath(__file__)
     print("SCript path:", script)
     print("__file__:", __file__)
