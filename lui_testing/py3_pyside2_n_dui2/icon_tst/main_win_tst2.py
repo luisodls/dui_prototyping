@@ -5,6 +5,31 @@ from PySide2.QtGui import *
 
 import os, sys
 
+class Button(QToolButton):
+    usr_click = Signal()
+    def __init__(self):
+        super().__init__()
+        self.icon_path_n = "icon_resources" + os.sep + "new_layout.png"
+        self.icon_path_cl = "icon_resources" + os.sep + "new_layout_clear.png"
+        self.txt_n = "aaaaaa \n bbbbbbbb"
+        self.txt_cl = "      ...     \n       "
+        self.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
+        self.setText(self.txt_n)
+        self.setIcon(QIcon(self.icon_path_cl))
+        self.setIconSize(QSize(38, 42))
+        self.clicked.connect(self.emmit_click)
+
+    def enterEvent(self, event):
+        self.setIcon(QIcon(self.icon_path_n))
+        self.setText(self.txt_n)
+
+    def leaveEvent(self, event):
+        self.setIcon(QIcon(self.icon_path_cl))
+        self.setText(self.txt_cl)
+
+    def emmit_click(self):
+        self.usr_click.emit()
+
 class MainObject(QObject):
     def __init__(self, parent = None):
         super(MainObject, self).__init__(parent)
@@ -16,29 +41,10 @@ class MainObject(QObject):
         self.window.pushButton.clicked.connect(self.but_clic)
         self.enable_state = True
 
-        ##################################################################################
-        nxt_butt = QToolButton()
-        nxt_butt.setToolButtonStyle(Qt.ToolButtonTextBesideIcon)
-        nxt_butt.setText("AAAAAaaaaa....\nBBBBBeeeeee..")
-        #nxt_butt.setFont(self.small_font)
-        #nxt_butt.clicked.connect(self.nxt_clicked)
-        #nxt_butt.setAutoRaise(True)
+        nxt_butt = Button()
+        nxt_butt.usr_click. connect(self.tool_butt_click)
 
-        icon_path = "icon_resources" + os.sep + "new_layout.png"
-        print("icon_path =", icon_path)
-        nxt_butt.setIcon(QIcon(icon_path, mode = QIcon.Normal))
-        '''
-        nxt_butt.setIcon(
-            QIcon(
-                self.ui_dir_path + os.sep + "resources" \
-                + os.sep + "new_layout.png", mode = QIcon.Active
-            )
-        )
-        '''
-        ##################################################################################
         self.window.TstVerticalLayout.addWidget(nxt_butt)
-
-
         self.window.show()
 
     def gray_but(self):
@@ -48,6 +54,9 @@ class MainObject(QObject):
 
     def but_clic(self):
         print("pushButton clicked")
+
+    def tool_butt_click(self):
+        print("tool_butt_click")
 
 
 if __name__ == "__main__":
