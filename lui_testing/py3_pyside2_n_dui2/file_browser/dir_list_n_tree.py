@@ -24,15 +24,18 @@ class MyDirView(QListWidget):
 class MyDirView(QTreeWidget):
     def __init__(self, parent = None):
         super(MyDirView, self).__init__(parent)
-        self.clicked.connect(self.someting_click)
+        self.clicked[QModelIndex].connect(self.someting_click)
 
     def add_dummy_item(self, str_in, num):
-        tst_item = QListWidgetItem(str_in)
-        tst_item.setIcon(QIcon("../icon_tst/icon_resources/new_layout.png"))
+        print("adding ", str_in)
+        tst_item = QTreeWidgetItem(self)
+        tst_item.setText(0, str_in)
+        tst_item.setIcon(0, QIcon("../icon_tst/icon_resources/new_layout.png"))
         tst_item.tst_num = 50 - num
-        self.addItem(tst_item)
+        self.addTopLevelItem((tst_item))
 
-    def someting_click(self, item):
+    def someting_click(self, it_index):
+        item = self.itemFromIndex(it_index)
         print("tst_num =", item.tst_num)
 
 
@@ -45,7 +48,7 @@ class MainObject(QObject):
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
         self.lst_vw =  MyDirView()
-        for nm in range(10):
+        for nm in range(30):
             self.lst_vw.add_dummy_item("a" * nm, nm)
 
         self.window.verticalLayout.addWidget(self.lst_vw)
