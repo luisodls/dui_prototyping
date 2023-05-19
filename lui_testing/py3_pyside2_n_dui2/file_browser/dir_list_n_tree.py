@@ -5,10 +5,10 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 import os, sys
-'''
-class MyDirView(QListWidget):
+
+class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
-        super(MyDirView, self).__init__(parent)
+        super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
 
     def add_dummy_item(self, str_in, num):
@@ -19,11 +19,11 @@ class MyDirView(QListWidget):
 
     def someting_click(self, item):
         print("tst_num =", item.tst_num)
-'''
 
-class MyDirView(QTreeWidget):
+
+class MyDirView_tree(QTreeWidget):
     def __init__(self, parent = None):
-        super(MyDirView, self).__init__(parent)
+        super(MyDirView_tree, self).__init__(parent)
         self.clicked[QModelIndex].connect(self.someting_click)
 
     def add_dummy_item(self, str_in, num):
@@ -47,11 +47,16 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
-        self.lst_vw =  MyDirView()
+        self.lst_vw =  MyDirView_list()
         for nm in range(30):
             self.lst_vw.add_dummy_item("a" * nm, nm)
 
-        self.window.verticalLayout.addWidget(self.lst_vw)
+        self.tre_vw =  MyDirView_tree()
+        for nm in range(30):
+            self.tre_vw.add_dummy_item("a" * nm, nm)
+
+        self.window.horiz_2_views_Layout.addWidget(self.lst_vw)
+        self.window.horiz_2_views_Layout.addWidget(self.tre_vw)
         self.window.show()
 
 
