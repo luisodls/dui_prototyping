@@ -14,21 +14,20 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
-        self.mod = QFileSystemModel()
-        self.mod.setRootPath(QDir.homePath())
-
         self.lst_vw =  QListWidget()
         self.window.verticalLayout.addWidget(self.lst_vw)
 
-        self.lst_vw.clicked.connect(self.someting_click)
+        self.lst_vw.itemClicked.connect(self.someting_click)
         self.window.show()
 
-    def someting_click(self, event):
-        print("\n\n event =", event)
+    def someting_click(self, item):
+        print("\n item =", item)
+        print("tst_num =", item.tst_num)
 
-    def add_something_dummy(self, str_in):
+    def add_something_dummy(self, str_in, num):
         tst_item = QListWidgetItem(str_in)
         tst_item.setIcon(QIcon("../icon_tst/icon_resources/import.png"))
+        tst_item.tst_num = 50 - num
         self.lst_vw.addItem(tst_item)
 
 
@@ -40,6 +39,6 @@ if __name__ == "__main__":
     m_obj = MainObject()
 
     for nm in range(10):
-        m_obj.add_something_dummy("a" * nm)
+        m_obj.add_something_dummy("a" * nm, nm)
 
     sys.exit(app.exec_())
