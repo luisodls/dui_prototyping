@@ -6,16 +6,19 @@ from PySide2.QtGui import *
 
 import os, sys
 
-class MyDirView(QListWidget):
+class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
-        super(MyDirView, self).__init__(parent)
+        super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
+        self.setWrapping(True)
 
-    def add_dummy_item(self, str_in, num):
-        tst_item = QListWidgetItem(str_in)
-        tst_item.setIcon(QIcon("../icon_tst/icon_resources/import.png"))
-        tst_item.tst_num = 50 - num
-        self.addItem(tst_item)
+    def enter_list(self, lst_in):
+        self.clear()
+        for single_file in lst_in:
+            tst_item = QListWidgetItem(single_file["name"])
+            tst_item.setIcon(QIcon("../icon_tst/icon_resources/import.png"))
+            tst_item.tst_num = single_file["numb"]
+            self.addItem(tst_item)
 
     def someting_click(self, item):
         print("tst_num =", item.tst_num)
@@ -29,12 +32,24 @@ class MainObject(QObject):
         self.window = QtUiTools.QUiLoader().load(ui_path)
         self.window.setWindowTitle("CCP4 DUI Cloud")
 
-        self.lst_vw =  MyDirView()
-        for nm in range(10):
-            self.lst_vw.add_dummy_item("a" * nm, nm)
+        self.lst_vw =  MyDirView_list()
+        self.lst_dir = []
 
-        self.window.verticalLayout.addWidget(self.lst_vw)
+        for nm in range(30):
+            self.lst_dir.append(
+                {
+                    "name":   "a" * nm,
+                    "numb":     50 - nm
+                }
+            )
+
+        self.window.horiz_2_views_Layout.addWidget(self.lst_vw)
+        self.window.RefreshButton.clicked.connect(self.Refresh_butt_clic)
         self.window.show()
+
+    def Refresh_butt_clic(self):
+        print("Refresh_butt_clic")
+        self.lst_vw.enter_list(self.lst_dir)
 
 
 if __name__ == "__main__":

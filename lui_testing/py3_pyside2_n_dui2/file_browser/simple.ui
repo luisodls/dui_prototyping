@@ -20,7 +20,7 @@
       <layout class="QHBoxLayout" name="horiz_2_views_Layout"/>
      </item>
      <item>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="RefreshButton">
        <property name="text">
         <string>PushButton</string>
        </property>
