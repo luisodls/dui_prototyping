@@ -10,6 +10,8 @@ class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
+        self.setWrapping(True)
+        print(dir(self))
 
     def add_dummy_item(self, str_in, num):
         tst_item = QListWidgetItem(str_in)
