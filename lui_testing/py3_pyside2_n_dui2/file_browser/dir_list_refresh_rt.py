@@ -5,6 +5,7 @@ from PySide2 import QtUiTools
 from PySide2.QtGui import *
 
 import os, sys
+import random
 
 class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
@@ -21,9 +22,6 @@ class MyDirView_list(QListWidget):
             tst_item.tst_num = single_file["numb"]
             self.items_list.append(tst_item)
 
-        self.draw_items()
-
-    def draw_items(self):
         self.clear()
         for tst_item in self.items_list:
             self.addItem(tst_item)
@@ -44,9 +42,12 @@ class MainObject(QObject):
         self.lst_dir = []
 
         for nm in range(30):
+            x = random.randint(0,15)
+            y = random.randint(0,15)
+
             self.lst_dir.append(
                 {
-                    "name":   "a" * nm,
+                    "name":   str(x) * y,
                     "numb":     50 - nm
                 }
             )
@@ -58,7 +59,6 @@ class MainObject(QObject):
 
     def Refresh_butt_clic(self):
         print("Refresh_butt_clic")
-        self.lst_vw.draw_items()
 
 if __name__ == "__main__":
 
