@@ -7,6 +7,19 @@ from PySide2.QtGui import *
 import os, sys
 import random
 
+def sort_dict_list(lst_in):
+    list_size = len(lst_in)
+    for i in range(list_size):
+        min_index = i
+        for j in range(i + 1, list_size):
+            if lst_in[min_index]["name"] > lst_in[j]["name"]:
+                min_index = j
+
+        lst_in[i], lst_in[min_index] = lst_in[min_index], lst_in[i]
+
+    return lst_in
+
+
 class MyDirView_list(QListWidget):
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
@@ -15,6 +28,7 @@ class MyDirView_list(QListWidget):
         self.setResizeMode(QListView.Adjust)
 
     def enter_list(self, lst_in):
+        lst_in = sort_dict_list(lst_in)
         self.items_list = []
         for single_file in lst_in:
             tst_item = QListWidgetItem(single_file["name"])
