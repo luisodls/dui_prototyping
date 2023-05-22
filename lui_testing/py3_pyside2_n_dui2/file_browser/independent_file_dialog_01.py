@@ -51,13 +51,20 @@ class Client(QDialog):
         self.build_content()
         mainLayout.addWidget(self.lst_vw)
 
-        OpenButton = QPushButton("\n ... refresh list \n")
+        OpenButton = QPushButton(" Open ")
         OpenButton.clicked.connect(self.open_file)
         mainLayout.addWidget(OpenButton)
+
+        CancelButton = QPushButton(" Cancel ")
+        CancelButton.clicked.connect(self.cancel_opp)
+        mainLayout.addWidget(CancelButton)
 
         self.setLayout(mainLayout)
 
     def build_content(self):
+
+
+        '''
         lst_dir = []
         for nm in range(30):
             x = random.randint(0,15)
@@ -69,6 +76,17 @@ class Client(QDialog):
                     "numb":     50 - nm
                 }
             )
+        '''
+
+        os_listdir = os.listdir("/")
+        lst_dir = []
+        for nm, f_name in enumerate(os_listdir):
+            lst_dir.append(
+                {
+                    "name":   f_name,
+                    "numb":   nm
+                }
+            )
 
         self.lst_vw.enter_list(lst_dir)
 
@@ -76,6 +94,8 @@ class Client(QDialog):
         print("Launch open_file ")
         self.build_content()
 
+    def cancel_opp(self):
+        print("Cancel clicked")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
