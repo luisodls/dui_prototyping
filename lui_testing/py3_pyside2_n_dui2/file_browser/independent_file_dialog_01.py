@@ -27,11 +27,23 @@ class MyDirView_list(QListWidget):
 
     def enter_list(self, lst_in):
         lst_in = sort_dict_list(lst_in)
+
+        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
+        FilePixMapi = getattr(QStyle, 'SP_FileIcon')
+        icon_dict = {
+            "Dir":self.style().standardIcon(DirPixMapi),
+            "File":self.style().standardIcon(FilePixMapi)
+        }
         self.items_list = []
         for single_file in lst_in:
             tst_item = QListWidgetItem(single_file["name"])
-            tst_item.setIcon(QIcon("../icon_tst/icon_resources/import.png"))
-            tst_item.tst_num = single_file["numb"]
+            tst_item.isdir = single_file["isdir"]
+            if tst_item.isdir:
+                tst_item.setIcon(icon_dict["Dir"])
+
+            else:
+                tst_item.setIcon(icon_dict["File"])
+
             self.items_list.append(tst_item)
 
         self.clear()
@@ -39,7 +51,7 @@ class MyDirView_list(QListWidget):
             self.addItem(tst_item)
 
     def someting_click(self, item):
-        print("tst_num =", item.tst_num)
+        print("isdir =", item.isdir)
 
 
 class Client(QDialog):
@@ -62,29 +74,13 @@ class Client(QDialog):
         self.setLayout(mainLayout)
 
     def build_content(self):
-
-
-        '''
-        lst_dir = []
-        for nm in range(30):
-            x = random.randint(0,15)
-            y = random.randint(0,15)
-
-            lst_dir.append(
-                {
-                    "name":   str(x) * y,
-                    "numb":     50 - nm
-                }
-            )
-        '''
-
         os_listdir = os.listdir("/")
         lst_dir = []
         for nm, f_name in enumerate(os_listdir):
+            f_isdir = os.path.isdir("/" + f_name)
             lst_dir.append(
                 {
-                    "name":   f_name,
-                    "numb":   nm
+                    "name":   f_name, "isdir":  f_isdir
                 }
             )
 
