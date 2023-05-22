@@ -64,13 +64,44 @@ class MyDirView_list(QListWidget):
             {"isdir":item.f_isdir, "path":item.f_path}
         )
 
+##############################################################################
+class PathButtons(QWidget):
+    def __init__(self, parent = None):
+        super(PathButtons, self).__init__()
+        main_h_lay = QHBoxLayout()
+
+        for tst_time in range(9):
+            new_butt = QPushButton(str(tst_time) * tst_time)
+            main_h_lay.addWidget(new_butt)
+
+        self.setLayout(main_h_lay)
 
 
 
+class PathBar(QWidget):
+    def __init__(self, parent = None):
+        super(PathBar, self).__init__(parent)
+        mainLayout = QVBoxLayout()
+        path_buttons = PathButtons(self)
+        scroll_path = QScrollArea()
+        scroll_path.setWidget(path_buttons)
+        mainLayout.addWidget(scroll_path)
+        self.setLayout(mainLayout)
+
+        self.bt_size = self.height()
+        print("self.bt_size", self.bt_size)
+        self.setFixedHeight(self.bt_size * 3)
+
+
+##############################################################################
 class Client(QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
         mainLayout = QVBoxLayout()
+
+        path_bar = PathBar(self)
+        mainLayout.addWidget(path_bar)
+
         self.current_file = None
         self.lst_vw =  MyDirView_list()
         self.build_content(os.sep)
