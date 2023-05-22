@@ -19,9 +19,12 @@ def sort_dict_list(lst_in):
 
 
 class MyDirView_list(QListWidget):
+
+    file_clickled = Signal(dict)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
         self.itemClicked.connect(self.someting_click)
+        self.itemDoubleClicked.connect(self.someting_2_clicks)
         self.setWrapping(True)
         self.setResizeMode(QListView.Adjust)
 
@@ -39,7 +42,6 @@ class MyDirView_list(QListWidget):
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
             tst_item.f_path = str(single_file["path"])
-            print("tst_item.f_path =", tst_item.f_path)
             if tst_item.f_isdir:
                 tst_item.setIcon(icon_dict["Dir"])
 
@@ -53,17 +55,26 @@ class MyDirView_list(QListWidget):
             self.addItem(tst_item)
 
     def someting_click(self, item):
-        print("isdir = ", item.f_isdir)
-        print("path = ", item.f_path)
+        self.file_clickled.emit(
+            {"isdir":item.f_isdir, "path":item.f_path}
+        )
+
+    def someting_2_clicks(self, item):
+        self.file_clickled.emit(
+            {"isdir":item.f_isdir, "path":item.f_path}
+        )
+
+
 
 
 class Client(QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
         mainLayout = QVBoxLayout()
-
+        self.current_file = None
         self.lst_vw =  MyDirView_list()
         self.build_content(os.sep)
+        self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
 
         OpenButton = QPushButton(" Open ")
@@ -77,23 +88,40 @@ class Client(QDialog):
         self.setLayout(mainLayout)
 
     def build_content(self, ini_path):
+        parents_list = ini_path.split(os.sep)[1:-1]
+        print("parents_list =", parents_list)
+
         os_listdir = os.listdir(ini_path)
         lst_dir = []
         for nm, f_name in enumerate(os_listdir):
             f_path = ini_path + f_name
-            print("f_path =", f_path)
             f_isdir = os.path.isdir(f_path)
             lst_dir.append(
                 {
-                    "name":   f_name, "isdir":  f_isdir, "path": f_path
+                    "name": f_name, "isdir":  f_isdir, "path": f_path
                 }
             )
 
         self.lst_vw.enter_list(lst_dir)
 
+    def fill_clik(self, fl_dic):
+        print("isdir = ", fl_dic["isdir"])
+        print("path = ", fl_dic["path"])
+        if fl_dic == self.current_file and self.current_file["isdir"]:
+            self.build_content(self.current_file["path"] + os.sep)
+
+        self.current_file = fl_dic
+
     def open_file(self):
-        print("Launch open_file ")
-        self.build_content("/home/")
+        try:
+            if self.current_file["isdir"]:
+                self.build_content(self.current_file["path"] + os.sep)
+
+            else:
+                print("Opened: ", self.current_file["path"])
+
+        except TypeError:
+            print("no file selected yet")
 
     def cancel_opp(self):
         print("Cancel clicked")
