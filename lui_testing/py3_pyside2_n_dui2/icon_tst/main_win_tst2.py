@@ -17,6 +17,8 @@ class Button(QToolButton):
         self.setText(self.txt_n)
         self.setIcon(QIcon(self.icon_path_cl))
         self.setIconSize(QSize(38, 42))
+        self.setAutoRaise(True)
+
         self.clicked.connect(self.emmit_click)
 
     def enterEvent(self, event):
