@@ -37,8 +37,10 @@ class MyDirView_list(QListWidget):
         self.items_list = []
         for single_file in lst_in:
             tst_item = QListWidgetItem(single_file["name"])
-            tst_item.isdir = single_file["isdir"]
-            if tst_item.isdir:
+            tst_item.f_isdir = single_file["isdir"]
+            tst_item.f_path = str(single_file["path"])
+            print("tst_item.f_path =", tst_item.f_path)
+            if tst_item.f_isdir:
                 tst_item.setIcon(icon_dict["Dir"])
 
             else:
@@ -51,7 +53,8 @@ class MyDirView_list(QListWidget):
             self.addItem(tst_item)
 
     def someting_click(self, item):
-        print("isdir =", item.isdir)
+        print("isdir = ", item.f_isdir)
+        print("path = ", item.f_path)
 
 
 class Client(QDialog):
@@ -60,7 +63,7 @@ class Client(QDialog):
         mainLayout = QVBoxLayout()
 
         self.lst_vw =  MyDirView_list()
-        self.build_content()
+        self.build_content(os.sep)
         mainLayout.addWidget(self.lst_vw)
 
         OpenButton = QPushButton(" Open ")
@@ -73,14 +76,16 @@ class Client(QDialog):
 
         self.setLayout(mainLayout)
 
-    def build_content(self):
-        os_listdir = os.listdir("/")
+    def build_content(self, ini_path):
+        os_listdir = os.listdir(ini_path)
         lst_dir = []
         for nm, f_name in enumerate(os_listdir):
-            f_isdir = os.path.isdir("/" + f_name)
+            f_path = ini_path + f_name
+            print("f_path =", f_path)
+            f_isdir = os.path.isdir(f_path)
             lst_dir.append(
                 {
-                    "name":   f_name, "isdir":  f_isdir
+                    "name":   f_name, "isdir":  f_isdir, "path": f_path
                 }
             )
 
@@ -88,7 +93,7 @@ class Client(QDialog):
 
     def open_file(self):
         print("Launch open_file ")
-        self.build_content()
+        self.build_content("/home/")
 
     def cancel_opp(self):
         print("Cancel clicked")
