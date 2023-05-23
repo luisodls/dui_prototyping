@@ -88,7 +88,6 @@ class PathButtons(QWidget):
             self.main_h_lay.addWidget(new_butt)
 
 
-
 class PathBar(QWidget):
     def __init__(self, parent = None):
         super(PathBar, self).__init__(parent)
@@ -104,8 +103,11 @@ class PathBar(QWidget):
     def update_list(self, new_list):
         self.path_buttons.update_list(new_list)
         my_H_bar = self.scroll_path.horizontalScrollBar()
-        my_H_bar.setMaximum(100)
-        my_H_bar.setValue(200)
+        try:
+            self.scroll_path.ensureWidgetVisible(self.path_buttons.lst_butt[-1])
+
+        except IndexError:
+            print("no widgets yes")
 
 
 class Client(QDialog):
