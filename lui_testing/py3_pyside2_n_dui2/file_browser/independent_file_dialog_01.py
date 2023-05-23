@@ -69,7 +69,6 @@ class PathButtons(QWidget):
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
         self.main_h_lay = QHBoxLayout()
-        self.main_h_lay.setSizeConstraint(QLayout.SetNoConstraint)
         self.lst_butt = []
         self.main_h_lay.addStretch()
         self.setLayout(self.main_h_lay)
@@ -81,9 +80,13 @@ class PathButtons(QWidget):
 
         self.lst_butt = []
         for dir_name in new_list:
+            new_lab = QLabel(os.sep)
             new_butt = QPushButton(dir_name)
+            self.lst_butt.append(new_lab)
             self.lst_butt.append(new_butt)
+            self.main_h_lay.addWidget(new_lab)
             self.main_h_lay.addWidget(new_butt)
+
 
 
 class PathBar(QWidget):
@@ -100,6 +103,10 @@ class PathBar(QWidget):
 
     def update_list(self, new_list):
         self.path_buttons.update_list(new_list)
+        my_H_bar = self.scroll_path.horizontalScrollBar()
+        my_H_bar.setMaximum(100)
+        my_H_bar.setValue(200)
+
 
 class Client(QDialog):
     def __init__(self, parent=None):
