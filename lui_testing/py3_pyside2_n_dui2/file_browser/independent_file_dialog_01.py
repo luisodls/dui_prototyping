@@ -69,28 +69,21 @@ class PathButtons(QWidget):
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
         self.main_h_lay = QHBoxLayout()
-
-        tmp_butt = QPushButton("  ")
-        self.main_h_lay.addWidget(tmp_butt)
-
+        self.main_h_lay.setSizeConstraint(QLayout.SetNoConstraint)
+        self.lst_butt = []
+        self.main_h_lay.addStretch()
         self.setLayout(self.main_h_lay)
 
     def update_list(self, new_list):
-        try:
-            while self.main_h_lay.count():
-                item = self.main_h_lay.takeAt(0)
-                widget = item.widget()
-                if widget is not None:
-                    widget.deleteLater()
+        for single_butt in self.lst_butt:
+            single_butt.deleteLater()
+            self.main_h_lay.removeWidget(single_butt)
 
-        except AttributeError:
-            print("not needed to clear layout yet")
-            #logging.info("not needed to clear layout yet")
-
+        self.lst_butt = []
         for dir_name in new_list:
             new_butt = QPushButton(dir_name)
+            self.lst_butt.append(new_butt)
             self.main_h_lay.addWidget(new_butt)
-
 
 
 class PathBar(QWidget):
@@ -98,14 +91,12 @@ class PathBar(QWidget):
         super(PathBar, self).__init__(parent)
         mainLayout = QVBoxLayout()
         self.path_buttons = PathButtons(self)
-        scroll_path = QScrollArea()
-        scroll_path.setWidget(self.path_buttons)
-        mainLayout.addWidget(scroll_path)
+        self.scroll_path = QScrollArea()
+        self.scroll_path.setWidgetResizable(True)
+        self.scroll_path.setWidget(self.path_buttons)
+        mainLayout.addWidget(self.scroll_path)
         self.setLayout(mainLayout)
-
-        self.bt_size = self.height()
-        print("self.bt_size", self.bt_size)
-        self.setFixedHeight(self.bt_size * 3)
+        self.setFixedHeight(self.height() * 3)
 
     def update_list(self, new_list):
         self.path_buttons.update_list(new_list)
