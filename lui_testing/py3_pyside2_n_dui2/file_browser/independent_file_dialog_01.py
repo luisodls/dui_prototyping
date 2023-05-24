@@ -96,18 +96,17 @@ class PathBar(QWidget):
         self.scroll_path = QScrollArea()
         self.scroll_path.setWidgetResizable(True)
         self.scroll_path.setWidget(self.path_buttons)
+        self.hscrollbar = self.scroll_path.horizontalScrollBar()
+        self.hscrollbar.rangeChanged.connect(self.scroll2right)
         mainLayout.addWidget(self.scroll_path)
         self.setLayout(mainLayout)
         self.setFixedHeight(self.height() * 3)
 
+    def scroll2right(self, minimum, maximum):
+        self.hscrollbar.setValue(maximum)
+
     def update_list(self, new_list):
         self.path_buttons.update_list(new_list)
-        my_H_bar = self.scroll_path.horizontalScrollBar()
-        try:
-            self.scroll_path.ensureWidgetVisible(self.path_buttons.lst_butt[-1])
-
-        except IndexError:
-            print("no widgets yes")
 
 
 class Client(QDialog):
