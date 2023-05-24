@@ -55,6 +55,7 @@ class MyDirView_list(QListWidget):
 
 
 class PathButtons(QWidget):
+    up_dir_clickled = Signal(str)
     def __init__(self, parent = None):
         super(PathButtons, self).__init__()
         self.main_h_lay = QHBoxLayout()
@@ -68,20 +69,30 @@ class PathButtons(QWidget):
             self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
+        path_str = "/"
         for dir_name in new_list:
             new_lab = QLabel(os.sep)
             new_butt = QPushButton(dir_name)
+            path_str += dir_name + os.sep
+            new_butt.own_path = path_str
+            new_butt.clicked.connect(self.dir_clicked)
             self.lst_butt.append(new_lab)
             self.lst_butt.append(new_butt)
             self.main_h_lay.addWidget(new_lab)
             self.main_h_lay.addWidget(new_butt)
 
+    def dir_clicked(self):
+        next_path = str(self.sender().own_path)
+        self.up_dir_clickled.emit(next_path)
+
 
 class PathBar(QWidget):
+    clicked_up_dir = Signal(str)
     def __init__(self, parent = None):
         super(PathBar, self).__init__(parent)
         mainLayout = QVBoxLayout()
         self.path_buttons = PathButtons(self)
+        self.path_buttons.up_dir_clickled.connect(self.up_dir)
         self.scroll_path = QScrollArea()
         self.scroll_path.setWidgetResizable(True)
         self.scroll_path.setWidget(self.path_buttons)
@@ -97,6 +108,9 @@ class PathBar(QWidget):
     def update_list(self, new_list):
         self.path_buttons.update_list(new_list)
 
+    def up_dir(self, next_path):
+        self.clicked_up_dir.emit(next_path)
+
 
 class Client(QDialog):
     def __init__(self, parent=None):
@@ -104,9 +118,9 @@ class Client(QDialog):
         mainLayout = QVBoxLayout()
 
         self.path_bar = PathBar(self)
+        self.path_bar.clicked_up_dir.connect(self.build_content)
         mainLayout.addWidget(self.path_bar)
 
-        self.current_file = None
         self.lst_vw =  MyDirView_list()
         self.build_content(os.sep)
         self.lst_vw.file_clickled.connect(self.fill_clik)
@@ -123,6 +137,7 @@ class Client(QDialog):
         self.setLayout(mainLayout)
 
     def build_content(self, ini_path):
+        self.current_file = None
         parents_list = ini_path.split(os.sep)[1:-1]
         self.path_bar.update_list(parents_list)
 
