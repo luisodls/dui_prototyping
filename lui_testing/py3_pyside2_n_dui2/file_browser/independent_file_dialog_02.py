@@ -193,6 +193,7 @@ class OpenFileDialog(QDialog):
     def cancel_opp(self):
         print("Cancel clicked")
 
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     F_diag = OpenFileDialog()
