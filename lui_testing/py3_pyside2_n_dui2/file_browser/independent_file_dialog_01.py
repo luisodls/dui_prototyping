@@ -19,7 +19,6 @@ def sort_dict_list(lst_in):
 
 
 class MyDirView_list(QListWidget):
-
     file_clickled = Signal(dict)
     def __init__(self, parent = None):
         super(MyDirView_list, self).__init__(parent)
@@ -27,27 +26,21 @@ class MyDirView_list(QListWidget):
         self.itemDoubleClicked.connect(self.someting_2_clicks)
         self.setWrapping(True)
         self.setResizeMode(QListView.Adjust)
+        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
+        FilePixMapi = getattr(QStyle, 'SP_FileIcon')
+        self.icon_dict = {
+            "True":self.style().standardIcon(DirPixMapi),
+            "False":self.style().standardIcon(FilePixMapi)
+        }
 
     def enter_list(self, lst_in):
         lst_in = sort_dict_list(lst_in)
-
-        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
-        FilePixMapi = getattr(QStyle, 'SP_FileIcon')
-        icon_dict = {
-            "Dir":self.style().standardIcon(DirPixMapi),
-            "File":self.style().standardIcon(FilePixMapi)
-        }
         self.items_list = []
         for single_file in lst_in:
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
             tst_item.f_path = str(single_file["path"])
-            if tst_item.f_isdir:
-                tst_item.setIcon(icon_dict["Dir"])
-
-            else:
-                tst_item.setIcon(icon_dict["File"])
-
+            tst_item.setIcon(self.icon_dict[str(tst_item.f_isdir)])
             self.items_list.append(tst_item)
 
         self.clear()
@@ -55,14 +48,10 @@ class MyDirView_list(QListWidget):
             self.addItem(tst_item)
 
     def someting_click(self, item):
-        self.file_clickled.emit(
-            {"isdir":item.f_isdir, "path":item.f_path}
-        )
+        self.file_clickled.emit({"isdir":item.f_isdir, "path":item.f_path})
 
     def someting_2_clicks(self, item):
-        self.file_clickled.emit(
-            {"isdir":item.f_isdir, "path":item.f_path}
-        )
+        self.someting_click(item)
 
 
 class PathButtons(QWidget):
@@ -74,9 +63,9 @@ class PathButtons(QWidget):
         self.setLayout(self.main_h_lay)
 
     def update_list(self, new_list):
-        for single_butt in self.lst_butt:
-            single_butt.deleteLater()
-            self.main_h_lay.removeWidget(single_butt)
+        for single_widget in self.lst_butt:
+            single_widget.deleteLater()
+            self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
         for dir_name in new_list:
@@ -97,12 +86,12 @@ class PathBar(QWidget):
         self.scroll_path.setWidgetResizable(True)
         self.scroll_path.setWidget(self.path_buttons)
         self.hscrollbar = self.scroll_path.horizontalScrollBar()
-        self.hscrollbar.rangeChanged.connect(self.scroll2right)
+        self.hscrollbar.rangeChanged.connect(self.scroll_2_right)
         mainLayout.addWidget(self.scroll_path)
         self.setLayout(mainLayout)
         self.setFixedHeight(self.height() * 3)
 
-    def scroll2right(self, minimum, maximum):
+    def scroll_2_right(self, minimum, maximum):
         self.hscrollbar.setValue(maximum)
 
     def update_list(self, new_list):
