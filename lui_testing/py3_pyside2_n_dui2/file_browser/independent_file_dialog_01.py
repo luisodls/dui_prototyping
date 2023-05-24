@@ -124,7 +124,6 @@ class Client(QDialog):
 
     def build_content(self, ini_path):
         parents_list = ini_path.split(os.sep)[1:-1]
-        print("parents_list =", parents_list)
         self.path_bar.update_list(parents_list)
 
         os_listdir = os.listdir(ini_path)
@@ -141,10 +140,9 @@ class Client(QDialog):
         self.lst_vw.enter_list(lst_dir)
 
     def fill_clik(self, fl_dic):
-        print("isdir = ", fl_dic["isdir"])
         print("path = ", fl_dic["path"])
-        if fl_dic == self.current_file and self.current_file["isdir"]:
-            self.build_content(self.current_file["path"] + os.sep)
+        if fl_dic == self.current_file:
+            self.open_file()
 
         self.current_file = fl_dic
 
