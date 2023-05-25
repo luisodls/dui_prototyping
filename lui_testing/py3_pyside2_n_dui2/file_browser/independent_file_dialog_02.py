@@ -119,7 +119,7 @@ class OpenFileDialog(QDialog):
         mainLayout = QVBoxLayout()
         self.show_hidden_check = QCheckBox("Show Hidden Files")
         self.show_hidden_check.setChecked(False)
-        self.show_hidden_check.stateChanged.connect(self.re_build_content)
+        self.show_hidden_check.stateChanged.connect(self.refresh_content)
         hi_h_layout = QHBoxLayout()
         hi_h_layout.addStretch()
         hi_h_layout.addWidget(self.show_hidden_check)
@@ -150,9 +150,9 @@ class OpenFileDialog(QDialog):
 
     def build_content(self, ini_path):
         self.curr_path = ini_path
-        self.re_build_content()
+        self.refresh_content()
 
-    def re_build_content(self):
+    def refresh_content(self):
         show_hidden = self.show_hidden_check.isChecked()
         self.current_file = None
         parents_list = self.curr_path.split(os.sep)[1:-1]
