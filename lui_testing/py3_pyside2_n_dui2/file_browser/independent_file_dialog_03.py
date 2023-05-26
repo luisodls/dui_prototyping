@@ -155,7 +155,7 @@ class OpenFileDialog(QDialog):
 
     def build_paren_list(self):
         print("self.curr_path", self.curr_path)
-        parents_list = [self.ini_path]
+        parents_list = [self.ini_path[:-1]]
         rest_of_path = self.curr_path[len(self.ini_path):]
         print("rest_of_path = ", rest_of_path, "\n")
         for single_dir in rest_of_path.split(os.sep)[:-1]:
