@@ -39,8 +39,7 @@ class MyDirView_list(QListWidget):
         for single_file in lst_in:
             tst_item = QListWidgetItem(single_file["name"])
             tst_item.f_isdir = single_file["isdir"]
-            #tst_item.f_path = str(single_file["path"])
-            tst_item.f_path = list(single_file["path"])
+            tst_item.f_path = str(single_file["path"])
             tst_item.setIcon(self.icon_dict[str(tst_item.f_isdir)])
             self.items_list.append(tst_item)
 
@@ -112,13 +111,6 @@ class PathBar(QWidget):
     def up_dir(self, next_path):
         self.clicked_up_dir.emit(next_path)
 
-def lst2str(ini_lst):
-    str_out = ""
-    for single_str in ini_lst:
-        str_out += single_str
-
-    return str_out
-
 
 class OpenFileDialog(QDialog):
     def __init__(self, parent=None):
@@ -138,8 +130,8 @@ class OpenFileDialog(QDialog):
         mainLayout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        #self.build_content([os.sep])
-        self.build_content(["/home/lui/"])
+        self.ini_path = "/scratch/"
+        self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
 
@@ -157,33 +149,30 @@ class OpenFileDialog(QDialog):
         mainLayout.addLayout(low_h_layout)
         self.setLayout(mainLayout)
 
-    def build_content(self, ini_path):
-        print("ini_path = ", ini_path)
-        self.curr_path = ini_path
+    def build_content(self, path_in):
+        self.curr_path = path_in
         self.refresh_content()
+
+    def build_paren_list(self):
+        parents_list = [self.ini_path]
+        rest_of_path = self.curr_path[len(self.ini_path):]
+        print("rest_of_path = ", rest_of_path)
+        for single_dir in rest_of_path.split(os.sep)[:-1]:
+            parents_list.append(single_dir)
+
+        self.path_bar.update_list(parents_list)
 
     def refresh_content(self):
         show_hidden = self.show_hidden_check.isChecked()
         self.current_file = None
-        #parents_list = self.curr_path.split(os.sep)[1:-1]
-        parents_list = self.curr_path
-        self.path_bar.update_list(parents_list)
+        self.build_paren_list()
 
-        #os_listdir = os.listdir(self.curr_path)
-
-        print("self.curr_path =", self.curr_path)
-
-        os_listdir = os.listdir(lst2str(self.curr_path))
+        os_listdir = os.listdir(self.curr_path)
         lst_dir = []
         for nm, f_name in enumerate(os_listdir):
             if f_name[0] != "." or show_hidden:
-                #f_path = self.curr_path + f_name
-
-                f_path = list(self.curr_path)
-                f_path.append(f_name)
-
-                #f_isdir = os.path.isdir(f_path)
-                f_isdir = os.path.isdir(lst2str(f_path))
+                f_path = self.curr_path + f_name
+                f_isdir = os.path.isdir(f_path)
                 lst_dir.append(
                     {
                         "name": f_name, "isdir":  f_isdir, "path": f_path
@@ -202,10 +191,7 @@ class OpenFileDialog(QDialog):
     def open_file(self):
         try:
             if self.current_file["isdir"]:
-                #self.build_content(self.current_file["path"] + os.sep)
-                new_path_list = list(self.current_file["path"])
-                new_path_list.append(os.sep)
-                self.build_content(lst2str(new_path_list))
+                self.build_content(self.current_file["path"] + os.sep)
 
             else:
                 print("Opened: ", self.current_file["path"])
