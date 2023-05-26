@@ -69,7 +69,7 @@ class PathButtons(QWidget):
             self.main_h_lay.removeWidget(single_widget)
 
         self.lst_butt = []
-        path_str = "/"
+        path_str = ""
         for dir_name in new_list:
             new_lab = QLabel(os.sep)
             new_butt = QPushButton(dir_name)
@@ -130,7 +130,7 @@ class OpenFileDialog(QDialog):
         mainLayout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        self.ini_path = "/scratch/"
+        self.ini_path = "/scratch/AAAA/"
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
@@ -154,9 +154,10 @@ class OpenFileDialog(QDialog):
         self.refresh_content()
 
     def build_paren_list(self):
+        print("self.curr_path", self.curr_path)
         parents_list = [self.ini_path]
         rest_of_path = self.curr_path[len(self.ini_path):]
-        print("rest_of_path = ", rest_of_path)
+        print("rest_of_path = ", rest_of_path, "\n")
         for single_dir in rest_of_path.split(os.sep)[:-1]:
             parents_list.append(single_dir)
 
