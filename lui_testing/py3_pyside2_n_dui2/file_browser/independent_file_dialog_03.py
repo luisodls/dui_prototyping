@@ -71,15 +71,17 @@ class PathButtons(QWidget):
         self.lst_butt = []
         path_str = ""
         for dir_name in new_list:
-            new_lab = QLabel(os.sep)
             new_butt = QPushButton(dir_name)
             path_str += dir_name + os.sep
             new_butt.own_path = path_str
             new_butt.clicked.connect(self.dir_clicked)
-            self.lst_butt.append(new_lab)
             self.lst_butt.append(new_butt)
-            self.main_h_lay.addWidget(new_lab)
             self.main_h_lay.addWidget(new_butt)
+
+            new_lab = QLabel(os.sep)
+            self.lst_butt.append(new_lab)
+            self.main_h_lay.addWidget(new_lab)
+
 
     def dir_clicked(self):
         next_path = str(self.sender().own_path)
