@@ -132,7 +132,7 @@ class OpenFileDialog(QDialog):
         mainLayout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        self.ini_path = "/scratch/AAAA/"
+        self.ini_path = "/home/"
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
