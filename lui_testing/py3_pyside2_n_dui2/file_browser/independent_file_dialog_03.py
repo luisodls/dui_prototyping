@@ -78,7 +78,7 @@ class PathButtons(QWidget):
             self.lst_butt.append(new_butt)
             self.main_h_lay.addWidget(new_butt)
 
-            new_lab = QLabel(os.sep)
+            new_lab = QLabel(">")
             self.lst_butt.append(new_lab)
             self.main_h_lay.addWidget(new_lab)
 
@@ -132,7 +132,8 @@ class OpenFileDialog(QDialog):
         mainLayout.addWidget(self.path_bar)
 
         self.lst_vw =  MyDirView_list()
-        self.ini_path = "/home/"
+        #self.ini_path = "/home/"
+        self.ini_path = "/Users/luiso/"
         self.build_content(self.ini_path)
         self.lst_vw.file_clickled.connect(self.fill_clik)
         mainLayout.addWidget(self.lst_vw)
