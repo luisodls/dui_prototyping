@@ -256,6 +256,58 @@ def do_request(cmd_in):
     lst_out = json.loads(str_lst)
     return lst_out
 
+to_consider = '''
+
+class get_req_json_dat(QObject):
+    def __init__(self, parent = None, params_in = None):
+        uni_url = 'http://127.0.0.1:45678/'
+        #uni_url = 'http://127.0.0.1:45679/'
+        #uni_url = 'http://supercomputo.cimav.edu.mx:45678/'
+        super(get_req_json_dat, self).__init__(parent)
+        try:
+            req_get = requests.get(
+                uni_url, stream = True, params = params_in, timeout = 45
+            )
+            print("starting request")
+            str_lst = ''
+            line_str = ''
+            json_out = ""
+            times_loop = 10
+            for count_times in range(times_loop):
+                tmp_dat = req_get.raw.readline()
+                line_str = str(tmp_dat.decode('utf-8'))
+                if '/*EOF*/' in line_str:
+                    print('/*EOF*/ received')
+                    break
+
+                else:
+                    str_lst = line_str
+                    #print("str_lst =", str_lst)
+
+                if count_times == times_loop - 1:
+                    print('to many "lines" in http response')
+                    json_out = None
+
+            if json_out is not None:
+                print("\n\n str_lst = ", str_lst)
+                json_out = json.loads(str_lst)
+
+        except ConnectionError:
+            print(" ... Connection err catch (get_req_json_dat) ...")
+            json_out = None
+
+        except requests.exceptions.RequestException:
+            print(
+                "..requests.exceptions.RequestException (get_req_json_dat)"
+            )
+            json_out = None
+
+        return json_out
+
+
+
+'''
+
 
 if __name__ == "__main__":
     to_try_later = '''
