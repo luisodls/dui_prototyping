@@ -1,10 +1,12 @@
-import http.server
-import socketserver
+#import http.server
 from urllib.parse import urlparse, parse_qs
 import time
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import ssl
 
-class ReqHandler(http.server.BaseHTTPRequestHandler):
 
+#class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+class ThreadingTCPServer(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
@@ -19,7 +21,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         self.wfile.write(bytes('123456789012345678901234567890\n', 'utf-8'))
 
         print("starting to send numbers ...")
-        for num in range(3):
+        for num in range(9):
             num_str = ' num = ' + str(num) + '\n'
             time.sleep(0.5)
             print("sending <<", num_str, ">> str ")
@@ -32,11 +34,18 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     PORT = 8080
-    with socketserver.TCPServer(("", PORT), ReqHandler) as http_daemon:
-        print("serving at port", PORT)
-        try:
-            http_daemon.serve_forever()
+    #httpd = HTTPServer(("", PORT), SimpleHTTPRequestHandler)
+    httpd = HTTPServer(("", PORT), ThreadingTCPServer)
+    httpd.socket = ssl.wrap_socket (
+        httpd.socket, keyfile = "testeando.key",
+        certfile = "testeando.pem", server_side = True
+    )
 
-        except KeyboardInterrupt:
-            http_daemon.server_close()
+    print("serving at port", PORT, "with:ThreadingTCPServer")
+    try:
+        httpd.serve_forever()
+
+    except KeyboardInterrupt:
+        print("\n Keyboard-Interrupt received")
+        httpd.server_close()
 

@@ -6,7 +6,10 @@ print('entered:', command)
 
 cmd = {'command': [command]}
 
-r_g = requests.get('http://localhost:8080/', stream = True, params = cmd)
+r_g = requests.get(
+    'https://localhost:8080/', stream = True,
+    params = cmd, verify = False
+)
 
 line_str = ''
 while True:
