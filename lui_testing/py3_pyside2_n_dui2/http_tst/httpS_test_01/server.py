@@ -36,10 +36,16 @@ if __name__ == "__main__":
     PORT = 8080
     #httpd = HTTPServer(("", PORT), SimpleHTTPRequestHandler)
     httpd = HTTPServer(("", PORT), ThreadingTCPServer)
-    httpd.socket = ssl.wrap_socket (
+
+    context = ssl.SSLContext()
+    #context.verify_mode = cert_reqs
+    context.load_cert_chain("testeando.pem", "testeando.key")
+    httpd.socket = context.wrap_socket(httpd.socket)
+
+    '''httpd.socket = ssl.wrap_socket (
         httpd.socket, keyfile = "testeando.key",
         certfile = "testeando.pem", server_side = True
-    )
+    )'''
 
     print("serving at port", PORT, "with:ThreadingTCPServer")
     try:
