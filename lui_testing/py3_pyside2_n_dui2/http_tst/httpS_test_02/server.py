@@ -36,22 +36,16 @@ if __name__ == "__main__":
     with socketserver.ThreadingTCPServer(
         ("", PORT), ReqHandler
     ) as http_daemon:
-
         context = ssl.SSLContext()
         context.load_cert_chain(
             "../httpS_test_01/testeando.pem", "../httpS_test_01/testeando.key"
         )
         http_daemon.socket = context.wrap_socket(http_daemon.socket)
-
         print("serving at port", PORT, "with:ThreadingTCPServer")
-        http_daemon.serve_forever()
+        try:
+            http_daemon.serve_forever()
 
-    to_remove = '''
-    try:
-        http_daemon.serve_forever()
-
-    except KeyboardInterrupt:
-        print("\n Keyboard-Interrupt received")
-        http_daemon.server_close()
-    '''
+        except KeyboardInterrupt:
+            print("\n Keyboard-Interrupt received")
+            http_daemon.server_close()
 
