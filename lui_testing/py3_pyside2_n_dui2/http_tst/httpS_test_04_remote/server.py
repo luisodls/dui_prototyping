@@ -31,15 +31,17 @@ class ReqHandler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    PORT = 8080
-    HOST = "localhost"
+    PORT = 45678
+    #PORT = 8080
+    HOST = "serverip"
+    #HOST = "localhost"
 
     with socketserver.ThreadingTCPServer(
         (HOST, PORT), ReqHandler
     ) as http_daemon:
         context = ssl.SSLContext()
         context.load_cert_chain(
-            "../tmp_dummy.pem", "../tmp_dummy.key"
+            "tmp_cimav.pem", "tmp_cimav.key"
         )
         http_daemon.socket = context.wrap_socket(http_daemon.socket)
         print(
