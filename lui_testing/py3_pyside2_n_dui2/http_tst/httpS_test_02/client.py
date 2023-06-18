@@ -8,7 +8,10 @@ cmd = {'command': [command]}
 
 r_g = requests.get(
     'https://localhost:8080/', stream = True,
-    params = cmd, verify = False
+    #params = cmd, verify = "../httpS_test_01/testeando.key"
+    #params = cmd, verify = "../httpS_test_01/testeando.csr"
+    params = cmd, verify = "../httpS_test_01/testeando.pem"
+    #params = cmd, verify = False
 )
 
 line_str = ''

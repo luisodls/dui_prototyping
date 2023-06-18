@@ -6,9 +6,13 @@ print('entered:', command)
 
 cmd = {'command': [command]}
 
-r_g = requests.get(
+'''r_g = requests.get(
     'https://localhost:8080/', stream = True,
     params = cmd, verify = "../tmp_dummy.pem"
+)'''
+r_g = requests.get(
+    'https://supercomputo.cimav.edu.mx:45678/', stream = True,
+    params = cmd, verify = "tmp_cimav.pem"
 )
 
 line_str = ''
