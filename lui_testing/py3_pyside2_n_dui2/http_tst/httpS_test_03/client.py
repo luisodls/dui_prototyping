@@ -1,10 +1,12 @@
 import requests
 import time
 
-command = str(input(">> "))
-print('entered:', command)
+cmd_in = str(input(">> "))
+print('entered:', cmd_in)
 
-cmd = {'command': [command]}
+cmd = {
+    'command': [cmd_in]
+}
 
 r_g = requests.get(
     'https://localhost:8080/', stream = True,

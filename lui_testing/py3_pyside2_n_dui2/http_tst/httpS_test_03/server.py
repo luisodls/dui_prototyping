@@ -1,4 +1,3 @@
-#import http.server, socketserver
 from urllib.parse import urlparse, parse_qs
 import time
 from http.server import HTTPServer, BaseHTTPRequestHandler, socketserver
@@ -11,16 +10,13 @@ class ReqHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         url_path = self.path
-        print('urlparse(self.path).query', parse_qs(urlparse(url_path).query))
-
-        self.wfile.write(bytes('Test #4\n', 'utf-8'))
-        self.wfile.write(bytes('1234567890\n', 'utf-8'))
-        self.wfile.write(bytes('12345678901234567890\n', 'utf-8'))
-        self.wfile.write(bytes('123456789012345678901234567890\n', 'utf-8'))
+        print("url_path =", url_path)
+        url_path_query = parse_qs(urlparse(url_path).query)
+        print('url_path_query =', url_path_query)
 
         print("starting to send numbers ...")
         for num in range(9):
-            num_str = ' num = ' + str(num) + '\n'
+            num_str = ' num = ' + str(num) + str(url_path_query) * num + '\n'
             time.sleep(0.5)
             print("sending <<", num_str, ">> str ")
             self.wfile.write(bytes(num_str, 'utf-8'))
@@ -51,4 +47,3 @@ if __name__ == "__main__":
         except KeyboardInterrupt:
             print("\n Keyboard-Interrupt received")
             http_daemon.server_close()
-
