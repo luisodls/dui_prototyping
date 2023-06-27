@@ -20,34 +20,42 @@ def available_cores() -> int:
             )
         else:
             if classad.cpus_provisioned:
+                print("returning classad.cpus_provisioned")
                 return classad.cpus_provisioned
 
     nproc = os.environ.get("NSLOTS", 0)
     try:
         nproc = int(nproc)
         if nproc >= 1:
+            print("returning os.environ.get(\"NSLOTS\", 0)")
             return nproc
+
     except ValueError:
         pass
 
     try:
+        print("returning len(os.sched_getaffinity(0))")
         return len(os.sched_getaffinity(0))
     except AttributeError:
         pass
 
     try:
+        print("returning len(psutil.Process().cpu_affinity())")
         return len(psutil.Process().cpu_affinity())
     except AttributeError:
         pass
 
     nproc = os.cpu_count()
     if nproc is not None:
+        print("returning os.cpu_count")
         return nproc
 
     nproc = psutil.cpu_count()
     if nproc is not None:
+        print("returning psutil.cpu_count()")
         return nproc
 
+    print("returning default 1")
     return 1
 
 
