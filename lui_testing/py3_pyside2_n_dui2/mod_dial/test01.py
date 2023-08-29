@@ -20,7 +20,7 @@ class Form(QObject):
         dlg.setText("This is a question dialog")
         dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
         dlg.setIcon(QMessageBox.Question)
-        button = dlg.exec_()
+        button = dlg.exec()
 
         if button == QMessageBox.Yes:
             print("Yes !")
