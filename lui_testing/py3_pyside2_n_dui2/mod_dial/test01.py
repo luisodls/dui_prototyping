@@ -9,15 +9,24 @@ class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("simple.ui")
-
-        self.num = 0
         self.window.Button1.clicked.connect(self.clicked)
         self.window.show()
 
     def clicked(self):
         print("clicked")
-        self.num += 1
-        print("self.num =", self.num)
+
+        dlg = QMessageBox()
+        dlg.setWindowTitle("I have a question!")
+        dlg.setText("This is a question dialog")
+        dlg.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel)
+        dlg.setIcon(QMessageBox.Question)
+        button = dlg.exec_()
+
+        if button == QMessageBox.Yes:
+            print("Yes !")
+        else:
+            print("Cancel !")
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
