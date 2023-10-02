@@ -15,7 +15,8 @@ class Form(QObject):
         self.html_view = QWebEngineView()
 
         main_box = QVBoxLayout()
-        main_box.addWidget(self.html_view)
+        #main_box.addWidget(self.html_view)
+        main_box.addWidget(QLabel("Testing"))
 
         self.window.InerWidget.setLayout(main_box)
         self.window.show()
@@ -23,8 +24,7 @@ class Form(QObject):
     def clicked(self):
         print("clicked")
         #self.html_view.load(QUrl("http://qt-project.org/"))
-        #self.html_view.load(QUrl.fromLocalFile("/tmp/run3/dials.report.html"))
-        self.html_view.load(QUrl.fromLocalFile("/tmp/run7/dials.scale.html"))
+        #self.html_view.load(QUrl.fromLocalFile("/tmp/run7/dials.scale.html"))
 
 
          #self.html_view.show()
