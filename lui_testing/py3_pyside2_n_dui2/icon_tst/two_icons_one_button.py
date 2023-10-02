@@ -8,24 +8,23 @@ class imgButton(QPushButton):
         super(imgButton, self).__init__(parent)
         hor_low_lay = QHBoxLayout(self)
 
-        DirPixMapi = getattr(QStyle, 'SP_DirIcon')
-        FilePixMapi = getattr(QStyle, 'SP_ArrowUp')
-        tmp_ico = self.style().standardIcon(DirPixMapi)
-        tmp_ico1 = self.style().standardIcon(FilePixMapi)
-        tmp_lab = QLabel()
-        tmp_lab.setPixmap(tmp_ico.pixmap(tmp_ico.actualSize(QSize(48, 48))))
+        #DirPixMapi = getattr(QStyle, 'SP_DirIcon')
+        #FilePixMapi = getattr(QStyle, 'SP_ArrowUp')
+        #tmp_ico = self.style().standardIcon(DirPixMapi)
+        #tmp_ico1 = self.style().standardIcon(FilePixMapi)
+        tmp_lab = QLabel("\n txt 1 \n")
+        #tmp_lab.setPixmap(tmp_ico.pixmap(tmp_ico.actualSize(QSize(48, 48))))
         hor_low_lay.addWidget(tmp_lab)
-        tmp_lab1 = QLabel()
-        tmp_lab1.setPixmap(tmp_ico1.pixmap(tmp_ico1.actualSize(QSize(48, 48))))
+        tmp_lab1 = QLabel("\n txt 2 \n")
+        #tmp_lab1.setPixmap(tmp_ico1.pixmap(tmp_ico1.actualSize(QSize(48, 48))))
         hor_low_lay.addWidget(tmp_lab1)
 
         ver_top_lay = QVBoxLayout()
         ver_top_lay.addWidget(QLabel("Dir Up"))
         ver_top_lay.addLayout(hor_low_lay)
         self.setLayout(ver_top_lay)
-
-        print("\n", tmp_ico.availableSizes(), "\n")
-        print("\n", tmp_ico1.availableSizes(), "\n")
+        #print("\n", tmp_ico.availableSizes(), "\n")
+        #print("\n", tmp_ico1.availableSizes(), "\n")
 
 
 class MyWidget(QWidget):
@@ -38,6 +37,7 @@ class MyWidget(QWidget):
         self_v_layout.addWidget(self.button)
         self_v_layout.addWidget(QLabel("click  \u2191 "))
         self.setLayout(self_v_layout)
+        self.button.resize(150, 150)
         self.show()
 
     def press_butt(self):
