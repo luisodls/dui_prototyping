@@ -18,7 +18,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
             '    </head>                                  ',
             '    <body>                                   ',
             '        <h1> Test # 02 </h1>           ',
-            '        <p>Hi from the HTTP Server #2 </p>   ',
+            '        <p>Hi from the HTTP Server test number: 2 </p>   ',
             '    </body>                                  ',
             '</html>                                      '
         ]
@@ -29,8 +29,10 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     PORT = 8080
+    str_2_print = "http://localhost:" + str(PORT) + "/"
+    socketserver.TCPServer.allow_reuse_address = True
     with socketserver.TCPServer(("", PORT), ReqHandler) as http_daemon:
-        print("serving at port", PORT)
+        print("URL -> ", str_2_print)
         try:
             http_daemon.serve_forever()
 
