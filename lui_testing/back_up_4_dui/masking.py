@@ -60,8 +60,8 @@ phil_scope = parse(
       .help = "then the whole panel is masked out"
 
     circle = None
-      .type = ints(3)
-      .help = "An untrusted circle (xc, yc, r)"
+      .type = ints()
+      .help = "An untrusted circle (xc, yc, r, panel_number)"
 
     rectangle = None
       .type = ints()
@@ -215,6 +215,9 @@ def generate_mask(
     detector = imageset.get_detector()
     beam = imageset.get_beam()
 
+    print("\n\n   ####################### test  ################## \n\n")
+
+
     # Create the mask for each panel
     masks = []
     for index, single_panel in enumerate(detector):
@@ -242,15 +245,30 @@ def generate_mask(
                     continue
 
                 if region.circle is not None:
-                    xc, yc, radius = region.circle
-                    logger.debug(
-                        "Generating circle mask:\n"
-                        + f" panel = {region.panel}\n"
-                        + f" xc = {xc}\n"
-                        + f" yc = {yc}\n"
-                        + f" radius = {radius}"
-                    )
-                    mask_untrusted_circle(mask, xc, yc, radius)
+
+                    if len(region.circle) == 3:
+                        xc, yc, radius = region.circle
+                        panel_number = 0
+
+                    elif len(region.circle) == 4:
+                        xc, yc, radius, panel_number = region.circle
+
+                    else:
+                        logger.debug(
+                            "error generating mask(circle)"
+                        )
+                        continue
+
+                    if index == panel_number or (index == 0 and panel_number == None):
+                        logger.debug(
+                            "Generating circle mask:\n"
+                            + f" panel = {region.panel}\n"
+                            + f" xc = {xc}\n"
+                            + f" yc = {yc}\n"
+                            + f" radius = {radius}\n"
+                            + f" panel_number = {panel_number}"
+                        )
+                        mask_untrusted_circle(mask, xc, yc, radius)
                 if region.rectangle is not None:
 
                     if len(region.rectangle) == 4:
@@ -259,6 +277,12 @@ def generate_mask(
 
                     elif len(region.rectangle) == 5:
                         x0, x1, y0, y1, panel_number = region.rectangle
+
+                    else:
+                        logger.debug(
+                            "error generating mask(circle)"
+                        )
+                        continue
 
                     if index == panel_number or (index == 0 and panel_number == None):
                         logger.debug(
