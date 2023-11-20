@@ -1,0 +1,23 @@
+[project]
+name = "dui_tst"
+version = "1.0"
+description = "test N1 for toml"
+license = { text="GPL" }
+dependencies = []
+
+[project.urls]
+homepage = "https://github.com/luisodls/dui_prototyping"
+repository = "https://github.com/luisodls/dui_prototyping"
+
+[tool.setuptools]
+# data to be included is specified in MANIFEST.in
+include-package-data = true
+
+[tool.setuptools.packages]
+find = {}
+
+[project.scripts]
+dui_tst = "src.__main__:main"
+
+target-version = ['py37']
+include = '\.pyi?$'
