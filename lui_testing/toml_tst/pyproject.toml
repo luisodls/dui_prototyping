@@ -17,6 +17,6 @@ include-package-data = true
 find = {}
 
 [project.scripts]
-dui_tst = "src.__main__:main"
+dui_tst = "src:__main__:main"
 
 target-version = "py37"
