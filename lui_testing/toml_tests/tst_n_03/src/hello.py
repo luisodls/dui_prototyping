@@ -1,8 +1,7 @@
-def imprime_algo(str_out):
-    print(str_out)
+from writing import imprime_algo
 
 def main():
-    imprime_algo("Hi there")
+    imprime_algo("Hi there #2")
 
 
 if __name__ == "__main__":
