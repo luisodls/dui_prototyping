@@ -1,8 +1,8 @@
 [project]
-name = "hello"
+name = "my_prog"
 version = "1.0.0"
 description = "Hello CLI"
 requires-python = ">=3.11"
 
 [project.scripts]
-hello = "hello:main"
+my_prog = "hello:main"
