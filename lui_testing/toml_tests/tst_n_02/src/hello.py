@@ -1,4 +1,6 @@
+def imprime_algo(str_out):
+    print(str_out)
 
-def cli():
-    """Prints a greeting."""
-    print("Hello, World!")
+
+def main():
+    imprime_algo("Hi there")
