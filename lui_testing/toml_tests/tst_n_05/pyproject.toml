@@ -6,3 +6,7 @@ requires-python = ">=3.11"
 
 [project.scripts]
 my_prog = "hello:main"
+
+
+[tool.setuptools.package-data]
+"in_dir.res_txt" = ["*.txt"]
