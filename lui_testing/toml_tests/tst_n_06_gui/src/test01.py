@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -16,25 +16,25 @@ class Form(QObject):
 
         main_box = QVBoxLayout()
         main_box.addWidget(self.html_view)
-        #main_box.addWidget(QLabel("Testing"))
 
         self.window.InerWidget.setLayout(main_box)
         self.window.show()
 
     def clicked(self):
         print("clicked")
-        self.html_view.load(QUrl("http://qt-project.org/"))
-        '''self.html_view.load(
-            QUrl.fromLocalFile(
-                "/home/luiso/dui_dev/dui_prototyping/lui_testing/data4test/report_node_3.html"
-            )
-        )'''
+        abs_path = str(os.path.dirname(os.path.abspath(__file__)))
+        html_path = abs_path + "/in_dir/res_txt/dummy.html"
+        print("html_path =", html_path)
 
+        self.html_view.load(QUrl.fromLocalFile(html_path))
         self.html_view.show()
 
 
-if __name__ == '__main__':
+def main():
     app = QApplication(sys.argv)
     form = Form()
     sys.exit(app.exec_())
 
+
+if __name__ == '__main__':
+    main()

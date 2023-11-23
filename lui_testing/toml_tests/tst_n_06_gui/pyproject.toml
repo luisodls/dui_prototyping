@@ -1,12 +1,12 @@
 [project]
-name = "my_prog"
+name = "my_gui_prog"
 version = "1.0.0"
-description = "Hello CLI"
+description = "HTML GUI"
 requires-python = ">=3.11"
 
-[project.scripts]
-my_prog = "hello:main"
-
+[project.gui-scripts]
+my_prog = "test01:main"
 
 [tool.setuptools.package-data]
-"in_dir.res_txt" = ["*.txt"]
+"in_dir.res_txt" = ["*.html"]
+"" = [*.ui"]
