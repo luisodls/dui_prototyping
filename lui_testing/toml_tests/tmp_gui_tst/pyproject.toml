@@ -1,0 +1,8 @@
+[project]
+name = "my_gui_prog"
+version = "1.0.0"
+description = "Test GUI"
+requires-python = ">=3.11"
+
+[project.gui-scripts]
+my_prog = "as_simple_as_it_gets:main"
