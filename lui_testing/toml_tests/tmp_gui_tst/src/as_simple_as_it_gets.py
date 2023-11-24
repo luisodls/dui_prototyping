@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import (QApplication, QGridLayout, QPushButton, QStyle, QWidget)
+from PySide2.QtWidgets import *
 
 class Window(QWidget):
     def __init__(self):
@@ -16,7 +16,7 @@ def main():
     app = QApplication([])
     w = Window()
     w.show()
-    app.exec()
+    app.exec_()
 
 
 if __name__ == "__main__":
