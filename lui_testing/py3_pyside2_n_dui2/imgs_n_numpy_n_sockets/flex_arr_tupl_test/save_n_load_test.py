@@ -56,7 +56,10 @@ def load_json_w_str():
 
 if __name__ == "__main__":
     #data_xy_flex = build_img_arr(18,36)
-    experiments_path = "/scratch/dui_tst/dui_server_run/run1/imported.expt"
+
+    experiments_path = "/home/lui/diff_data/temp_run/imported.expt"
+    #experiments_path = "/scratch/dui_tst/dui_server_run/run1/imported.expt"
+
     print("importing from:", experiments_path)
     experiments = ExperimentListFactory.from_json_file(experiments_path)
     my_sweep = experiments.imagesets()[0]

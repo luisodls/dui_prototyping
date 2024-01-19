@@ -1,13 +1,10 @@
 import numpy as np
 from matplotlib import pyplot as plt
-
-'''
-
 import tempfile
 
+'''
 fp = tempfile.TemporaryFile()
 fp.write(b'Hello world!')
-
 '''
 
 def build_img_arr(nrow, ncol):
@@ -29,41 +26,43 @@ def draw_pyplot(img_arr):
 
 def save_np_array(np_array_in):
     np.save(
-        "arr_img", np_array_in,
+        tmp_fil, np_array_in,
         allow_pickle = False, fix_imports = False
     )
 
 def save_comp_np_array(np_array_in):
     np.savez_compressed(
-        "arr_img", my_img = np_array_in
+        tmp_fil, my_img = np_array_in
     )
 
 def load_np_array():
     img_arr_load = np.load(
-        "arr_img.npy", mmap_mode = None, allow_pickle = False,
+        tmp_fil, mmap_mode = None, allow_pickle = False,
         fix_imports = False, encoding = 'ASCII'
     )
     return img_arr_load
 
 def load_comp_np_array():
     dict_load = np.load(
-        "arr_img.npz", mmap_mode = None, allow_pickle = False,
+        tmp_fil, mmap_mode = None, allow_pickle = False,
     )
     img_arr_load = dict_load["my_img"]
     return img_arr_load
 
 
 if __name__ == "__main__":
-    ncol = 130
-    nrow = 50
-    img_arr = build_img_arr(nrow, ncol)
+    tmp_fil = tempfile.TemporaryFile()
 
+    ncol = 90
+    nrow = 120
+    img_arr = build_img_arr(nrow, ncol)
     '''
     save_np_array(img_arr)
+    tmp_fil.seek(0)
     loaded_array = load_np_array()
     '''
-
     save_comp_np_array(img_arr)
+    tmp_fil.seek(0)
     loaded_array = load_comp_np_array()
     #'''
 
