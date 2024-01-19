@@ -1,6 +1,15 @@
 import numpy as np
 from matplotlib import pyplot as plt
 
+'''
+
+import tempfile
+
+fp = tempfile.TemporaryFile()
+fp.write(b'Hello world!')
+
+'''
+
 def build_img_arr(nrow, ncol):
     img_arr = np.arange(nrow * ncol).reshape(nrow, ncol)
     img_arr[

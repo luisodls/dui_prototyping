@@ -32,7 +32,7 @@ def save_comp_np_array(np_array_in):
 
 def convert_to_ram_np_array(np_array_in):
     #mem_fil = io.BytesIO()
-    mem_fil = io.FileIO()
+    mem_fil = io.FileIO(1)
     #mem_fil = io.StringIO()
     '''
     ['BlockingIOError', 'BufferedIOBase', 'BufferedRWPair', 'BufferedRandom', 'BufferedReader', 'BufferedWriter', 'BytesIO', 'DEFAULT_BUFFER_SIZE', 'FileIO', 'IOBase', 'IncrementalNewlineDecoder', 'RawIOBase', 'SEEK_CUR', 'SEEK_END', 'SEEK_SET', 'StringIO', 'TextIOBase', 'TextIOWrapper', 'UnsupportedOperation', '__all__', '__author__', '__builtins__', '__doc__', '__file__', '__getattr__', '__loader__', '__name__', '__package__', '__spec__', '_io', 'abc', 'open', 'open_code', 'text_encoding']
@@ -84,10 +84,11 @@ if __name__ == "__main__":
     '''
 
     bit_img = convert_to_ram_np_array(img_arr)
-    loaded_bin_array = convert_back(bit_img)
     print("1")
-    draw_pyplot(loaded_bin_array)
+    loaded_bin_array = convert_back(bit_img)
     print("2")
+    draw_pyplot(loaded_bin_array)
+    print("3")
 
     '''
     start_tm2 = time.time()
