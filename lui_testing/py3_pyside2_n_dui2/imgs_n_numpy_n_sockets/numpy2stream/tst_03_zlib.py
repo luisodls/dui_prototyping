@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import zlib
 
 def build_img_arr(nrow, ncol):
     img_arr = np.arange(nrow * ncol, dtype = float).reshape(nrow, ncol)
@@ -39,9 +40,16 @@ def load_np_array(arr_bit):
     return img_arr_load
 
 if __name__ == "__main__":
-    nrow = 900
-    ncol = 1400
+    nrow = 6
+    ncol = 4
     img_arr = build_img_arr(nrow, ncol)
     bin_dat = save_np_array(img_arr)
-    loaded_array = load_np_array(bin_dat)
+    print("bin_dat =\n", bin_dat)
+    zcomp_data = zlib.compress(bin_dat)
+    print("zcomp_data =\n", zcomp_data)
+
+    decomp_data = zlib.decompress(zcomp_data)
+    print("decomp_data =\n", decomp_data)
+
+    loaded_array = load_np_array(decomp_data)
     draw_pyplot(loaded_array)
