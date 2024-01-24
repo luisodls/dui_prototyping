@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import tempfile
 
 def build_img_arr(nrow, ncol):
     img_arr = np.arange(nrow * ncol, dtype = float).reshape(nrow, ncol)
@@ -14,31 +13,35 @@ def build_img_arr(nrow, ncol):
         int(ncol / 4): int(ncol * 3 / 4)
     ] = np.min(img_arr)
 
-    print("\nimg_arr =\n", img_arr)
+    #print("\nimg_arr =\n", img_arr)
     return img_arr
 
 def draw_pyplot(img_arr):
-    print("\nimg_arr =\n",img_arr)
+    #print("\nimg_arr =\n",img_arr)
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
-def save_np_array(np_array_in):
-    return np_array_in.tobytes(order='C')
+def save_np_array(np_arr):
+    d1 = np_arr.shape[0]
+    d2 = np_arr.shape[1]
+    img_arr = np.zeros(d1 * d2 + 2, dtype = float)
+    img_arr[0] = float(d1)
+    img_arr[1] = float(d2)
+    img_arr[2:] = np_arr.ravel()
+    byte_info = img_arr.tobytes(order='C')
+    return byte_info
 
 def load_np_array(arr_bit):
     arr_1d = np.frombuffer(arr_bit, dtype = float)
-    img_arr_load = arr_1d.reshape(8, 12)
+    img_arr_load = arr_1d[2:].reshape(
+        int(arr_1d[0]), int(arr_1d[1])
+    )
     return img_arr_load
 
 if __name__ == "__main__":
-    tmp_fil = tempfile.TemporaryFile()
-
-    nrow = 8
-    ncol = 12
+    nrow = 900
+    ncol = 1400
     img_arr = build_img_arr(nrow, ncol)
-
     bin_dat = save_np_array(img_arr)
-    tmp_fil.seek(0)
     loaded_array = load_np_array(bin_dat)
-
     draw_pyplot(loaded_array)
