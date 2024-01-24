@@ -2,11 +2,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 import tempfile
 
-'''
-fp = tempfile.TemporaryFile()
-fp.write(b'Hello world!')
-'''
-
 def build_img_arr(nrow, ncol):
     img_arr = np.arange(nrow * ncol).reshape(nrow, ncol)
     img_arr[
@@ -31,8 +26,9 @@ def save_np_array(np_array_in):
     )
 
 def save_comp_np_array(np_array_in):
+    print("saving with allow_pickle = True")
     np.savez_compressed(
-        tmp_fil, my_img = np_array_in
+        tmp_fil, my_img = np_array_in, allow_pickle = True
     )
 
 def load_np_array():
@@ -43,8 +39,9 @@ def load_np_array():
     return img_arr_load
 
 def load_comp_np_array():
+    print("opening with allow_pickle = True")
     dict_load = np.load(
-        tmp_fil, mmap_mode = None, allow_pickle = False,
+        tmp_fil, mmap_mode = None, allow_pickle = True,
     )
     img_arr_load = dict_load["my_img"]
     return img_arr_load
@@ -53,8 +50,8 @@ def load_comp_np_array():
 if __name__ == "__main__":
     tmp_fil = tempfile.TemporaryFile()
 
-    ncol = 90
-    nrow = 120
+    ncol = 190
+    nrow = 70
     img_arr = build_img_arr(nrow, ncol)
     '''
     save_np_array(img_arr)
