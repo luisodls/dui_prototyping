@@ -10,4 +10,4 @@ my_prog = "test01:main"
 
 [tool.setuptools.package-data]
 "in_dir.res_txt" = ["*.html"]
-"." = [*.ui"]
+"simple" = [*.ui"]
