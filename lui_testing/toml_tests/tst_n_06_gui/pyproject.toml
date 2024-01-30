@@ -12,4 +12,4 @@ my_prog = "test01:main"
 "in_dir.res_txt" = ["*.html"]
 
 [tool.setuptools.packages.find]
-where = ["src/res1/*.ui"]
+where = ["src/res1/simple.ui"]
