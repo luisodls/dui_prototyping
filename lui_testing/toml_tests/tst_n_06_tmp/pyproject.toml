@@ -10,3 +10,6 @@ my_gui_prog = "launch:main"
 
 [tool.setuptools.package-data]
 "in_dir.res_txt" = ["*.txt"]
+
+[tool.setuptools.packages.find]
+where = ["src/rec_n1"]
