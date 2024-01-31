@@ -4,7 +4,7 @@ version = "1.0.0"
 description = "HTML GUI"
 requires-python = ">=3.11"
 
-[project.scripts]
+[project.gui-scripts]
 my_gui_prog = "test01:main"
 
 
