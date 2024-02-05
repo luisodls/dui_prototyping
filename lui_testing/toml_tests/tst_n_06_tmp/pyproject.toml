@@ -2,7 +2,7 @@
 name = "my_gui_prog"
 version = "1.0.0"
 description = "Hello CLI"
-requires-python = ">=3.11"
+requires-python = ">=3.7"
 
 [project.gui-scripts]
 my_gui_prog = "launch:main"
