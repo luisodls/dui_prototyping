@@ -11,4 +11,5 @@ my_gui_prog = "launch:main"
 [tool.setuptools.package-data]
 "rec_n1" = ["simple.ui"]
 
-
+[tool.setuptools.data_files]
+"in_dir.res_txt" = ["*.html"]
