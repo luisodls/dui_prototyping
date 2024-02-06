@@ -12,7 +12,15 @@ from PySide2 import QtUiTools
 class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("rec_n1/simple.ui")
+
+
+        ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = ui_dir_path + os.sep + "rec_n1/simple.ui"
+        print("ui_path =" + ui_path)
+        self.window = QtUiTools.QUiLoader().load(ui_path)
+
+
+        #self.window = QtUiTools.QUiLoader().load("rec_n1/simple.ui")
 
         self.window.Button1.clicked.connect(self.clicked)
         self.html_view = QWebEngineView()
