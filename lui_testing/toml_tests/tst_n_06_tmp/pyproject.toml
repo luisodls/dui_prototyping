@@ -1,14 +1,10 @@
 [project]
 name = "my_gui_prog"
 version = "1.0.0"
-description = "Hello CLI"
+description = "html GUI"
 requires-python = ">=3.7"
 
 [project.gui-scripts]
 my_gui_prog = "launch:main"
-
-
-[tool.setuptools.package-data]
-"rec_n1" = ["somple.ui"]
 
 
