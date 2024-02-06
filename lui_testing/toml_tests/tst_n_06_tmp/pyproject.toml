@@ -9,6 +9,6 @@ my_gui_prog = "launch:main"
 
 
 [tool.setuptools.package-data]
-"rec_n1" = ["simple.ui"]
+"rec_n1" = ["somple.ui"]
 
 
