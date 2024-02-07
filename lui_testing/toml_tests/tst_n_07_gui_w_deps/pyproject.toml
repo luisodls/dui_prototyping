@@ -5,7 +5,7 @@ description = "html GUI"
 requires-python = ">=3.7"
 dependencies = [
   'requests > 2',
-  'PySide2 > 5.10.0'
+  'PySide2 > 5.3.0'
 ]
 
 
