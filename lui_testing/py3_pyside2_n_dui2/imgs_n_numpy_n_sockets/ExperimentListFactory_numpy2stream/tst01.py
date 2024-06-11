@@ -65,30 +65,31 @@ def get_experiments(experiment_path):
 
 
 if __name__ == "__main__":
-    print("got here #1")
-    experiments = get_experiments(
-        #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
-        "/tmp/run_dui2_nodes/run1/imported.expt"
-    )
-    print("got here #2")
-    my_sweep = experiments.imagesets()[0]
-    print("got here #3")
-    raw_dat = my_sweep.get_raw_data(5)
-    print("got here #4")
-    data_xy_flex = raw_dat[0].as_double()
-    print("got here #5")
-    np_arr = data_xy_flex.as_numpy_array()
-    print("got here #6")
-    bin_dat = save_np_array(np_arr)
-    print("got here #7")
-    zcomp_data = zlib.compress(bin_dat)
-    print("got here #8")
-    decomp_data = zlib.decompress(zcomp_data)
-    print("got here #9")
-    loaded_array = load_np_array(decomp_data)
-    print("got here #10")
-    draw_pyplot(loaded_array)
-    print("got here #11")
+    for img_num in range(20):
+        print("got here #1")
+        experiments = get_experiments(
+            #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
+            "/tmp/run_dui2_nodes/run1/imported.expt"
+        )
+        print("got here #2")
+        my_sweep = experiments.imagesets()[0]
+        print("got here #3")
+        raw_dat = my_sweep.get_raw_data(img_num)
+        print("got here #4")
+        data_xy_flex = raw_dat[0].as_double()
+        print("got here #5")
+        np_arr = data_xy_flex.as_numpy_array()
+        print("got here #6")
+        bin_dat = save_np_array(np_arr)
+        print("got here #7")
+        zcomp_data = zlib.compress(bin_dat)
+        print("got here #8")
+        decomp_data = zlib.decompress(zcomp_data)
+        print("got here #9")
+        loaded_array = load_np_array(decomp_data)
+        print("got here #10")
+        draw_pyplot(loaded_array)
+        print("got here #11")
 
 
 
