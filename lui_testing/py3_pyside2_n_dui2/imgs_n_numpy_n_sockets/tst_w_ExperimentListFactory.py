@@ -24,7 +24,8 @@ if __name__ == "__main__":
         print("\n on_sweep_img_num =", on_sweep_img_num)
         print("got here #1")
         experiments = get_experiments(
-            "/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
+            #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
+            "/tmp/run_dui2_nodes/run1/imported.expt"
         )
         print("got here #2")
         my_sweep = experiments.imagesets()[0]
