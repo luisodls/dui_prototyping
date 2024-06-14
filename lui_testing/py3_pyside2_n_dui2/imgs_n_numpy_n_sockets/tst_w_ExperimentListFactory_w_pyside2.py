@@ -7,7 +7,6 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2.QtCore import *
 
-'''
 def get_experiments(experiment_path):
     print("importing from:" + experiment_path)
     for repeat in range(10):
@@ -25,19 +24,6 @@ def get_experiments(experiment_path):
     return new_experiments
 
 
-if __name__ == "__main__":
-    print("\n on_sweep_img_num =", 5)
-    experiments = get_experiments(
-        "/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
-        #"/tmp/run_dui2_nodes/run1/imported.expt"
-    )
-    my_sweep = experiments.imagesets()[0]
-    raw_dat = my_sweep.get_raw_data(5)
-    data_xy_flex = raw_dat[0].as_double()
-    np_arr = data_xy_flex.as_numpy_array()
-
-#####################################################################
-'''
 class MyWidget(QWidget):
     def __init__(self):
         super(MyWidget, self).__init__()
@@ -60,7 +46,17 @@ class MyWidget(QWidget):
         self.show()
 
     def press_butt(self):
-        print("press_butt")
+        print("\n on_sweep_img_num =", 5)
+        experiments = get_experiments(
+            #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
+            "/tmp/run_dui2_nodes/run1/imported.expt"
+        )
+        my_sweep = experiments.imagesets()[0]
+        raw_dat = my_sweep.get_raw_data(5)
+        data_xy_flex = raw_dat[0].as_double()
+        np_arr = data_xy_flex.as_numpy_array()
+        print("Done")
+
 
 
 if __name__ == "__main__":
