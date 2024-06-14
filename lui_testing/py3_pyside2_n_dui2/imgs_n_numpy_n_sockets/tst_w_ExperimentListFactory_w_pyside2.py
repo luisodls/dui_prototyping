@@ -2,6 +2,12 @@ from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
 import time
 
+import sys
+from PySide2.QtWidgets import *
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+
+'''
 def get_experiments(experiment_path):
     print("importing from:" + experiment_path)
     for repeat in range(10):
@@ -29,3 +35,27 @@ if __name__ == "__main__":
     raw_dat = my_sweep.get_raw_data(5)
     data_xy_flex = raw_dat[0].as_double()
     np_arr = data_xy_flex.as_numpy_array()
+
+#####################################################################
+'''
+class MyWidget(QWidget):
+    def __init__(self):
+        super(MyWidget, self).__init__()
+        self.button = QPushButton("Click me")
+        self.button.clicked.connect(self.press_butt)
+
+        self_v_layout = QVBoxLayout(self)
+        self_v_layout.addWidget(self.button)
+        self_v_layout.addWidget(QLabel("click  \u2191 "))
+        self.setLayout(self_v_layout)
+        self.show()
+
+    def press_butt(self):
+        print("press_butt")
+
+
+if __name__ == "__main__":
+    myApp = QApplication(sys.argv)
+    myWindow = MyWidget()
+    myApp.exec_()
+    sys.exit(0)
