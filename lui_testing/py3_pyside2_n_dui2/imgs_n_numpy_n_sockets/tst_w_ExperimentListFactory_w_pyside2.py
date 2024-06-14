@@ -32,16 +32,16 @@ class MyWidget(QWidget):
 
         self_v_layout = QVBoxLayout(self)
         self_v_layout.addWidget(self.button)
-
-        #h, w, _ = img.shape
-        #image = QImage(img.data, w, h, 3 * w, QImage.Format_RGB888)
-
+        '''
         imageLabel = QLabel()
         image = QImage("../../PyQt4_toys/tux_n_chrome.png")
         imageLabel.setPixmap( QPixmap.fromImage(image))
-
-
         self_v_layout.addWidget(imageLabel)
+        '''
+
+        self.img_label = QLabel("\n tmp dummy \n")
+        self_v_layout.addWidget(self.img_label)
+
         self.setLayout(self_v_layout)
         self.show()
 
@@ -55,8 +55,10 @@ class MyWidget(QWidget):
         raw_dat = my_sweep.get_raw_data(5)
         data_xy_flex = raw_dat[0].as_double()
         np_arr = data_xy_flex.as_numpy_array()
-        print("Done")
 
+        txt_slice = str(np_arr[50:90,40:80])
+        #print("txt_slice =", txt_slice)
+        self.img_label.setText(txt_slice)
 
 
 if __name__ == "__main__":
