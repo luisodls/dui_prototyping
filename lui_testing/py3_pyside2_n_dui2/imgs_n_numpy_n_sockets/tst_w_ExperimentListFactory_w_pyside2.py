@@ -47,6 +47,8 @@ class MyWidget(QWidget):
         self_v_layout = QVBoxLayout(self)
         self_v_layout.addWidget(self.button)
 
+        #h, w, _ = img.shape
+        #image = QImage(img.data, w, h, 3 * w, QImage.Format_RGB888)
 
         imageLabel = QLabel()
         image = QImage("../../PyQt4_toys/tux_n_chrome.png")
