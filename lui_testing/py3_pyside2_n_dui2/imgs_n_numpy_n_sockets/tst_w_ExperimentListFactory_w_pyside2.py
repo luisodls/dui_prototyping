@@ -46,7 +46,14 @@ class MyWidget(QWidget):
 
         self_v_layout = QVBoxLayout(self)
         self_v_layout.addWidget(self.button)
-        self_v_layout.addWidget(QLabel("click  \u2191 "))
+
+
+        imageLabel = QLabel()
+        image = QImage("../../PyQt4_toys/tux_n_chrome.png")
+        imageLabel.setPixmap( QPixmap.fromImage(image))
+
+
+        self_v_layout.addWidget(imageLabel)
         self.setLayout(self_v_layout)
         self.show()
 
