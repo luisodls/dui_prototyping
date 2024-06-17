@@ -42,17 +42,21 @@ class MyWidget(QWidget):
         self.img_label = QLabel("\n tmp dummy \n")
         self_v_layout.addWidget(self.img_label)
 
+        self.img_num = 1
+
         self.setLayout(self_v_layout)
         self.show()
 
     def press_butt(self):
-        print("\n on_sweep_img_num =", 5)
+        self.img_num += 1
+        print("\n on_sweep_img_num =", self.img_num)
         experiments = get_experiments(
             #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
-            "/tmp/run_dui2_nodes/run1/imported.expt"
+            #"/tmp/run_dui2_nodes/run1/imported.expt"
+            "/scratch/30day_tmp/nx_tst/run_dui2_nodes/run4/refined.expt"
         )
         my_sweep = experiments.imagesets()[0]
-        raw_dat = my_sweep.get_raw_data(5)
+        raw_dat = my_sweep.get_raw_data(self.img_num)
         data_xy_flex = raw_dat[0].as_double()
         np_arr = data_xy_flex.as_numpy_array()
 
