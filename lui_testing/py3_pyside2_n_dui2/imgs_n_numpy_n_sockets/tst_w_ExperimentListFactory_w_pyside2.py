@@ -1,5 +1,6 @@
 from dials.array_family import flex
 from dxtbx.model.experiment_list import ExperimentListFactory
+from dxtbx.flumpy import to_numpy
 import time
 
 import sys
@@ -58,11 +59,15 @@ class MyWidget(QWidget):
         my_sweep = experiments.imagesets()[0]
         raw_dat = my_sweep.get_raw_data(self.img_num)
         data_xy_flex = raw_dat[0].as_double()
-        np_arr = data_xy_flex.as_numpy_array()
+        np_arr1 = data_xy_flex.as_numpy_array()
+        np_arr2 = to_numpy(data_xy_flex)
 
-        txt_slice = str(np_arr[50:90,40:80])
-        #print("txt_slice =", txt_slice)
-        self.img_label.setText(txt_slice)
+        txt_slice1 = str(np_arr1[50:90,40:80])
+        txt_slice2 = str(np_arr2[50:90,40:80])
+
+        txt_slice_tot = txt_slice1 + "\n\n\n\n" + txt_slice2
+
+        self.img_label.setText(txt_slice_tot)
 
 
 if __name__ == "__main__":
