@@ -49,25 +49,35 @@ class MyWidget(QWidget):
         self.show()
 
     def press_butt(self):
-        self.img_num += 1
-        print("\n on_sweep_img_num =", self.img_num)
-        experiments = get_experiments(
-            #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
-            #"/tmp/run_dui2_nodes/run1/imported.expt"
-            "/scratch/30day_tmp/nx_tst/run_dui2_nodes/run4/refined.expt"
-        )
-        my_sweep = experiments.imagesets()[0]
-        raw_dat = my_sweep.get_raw_data(self.img_num)
-        data_xy_flex = raw_dat[0].as_double()
-        np_arr1 = data_xy_flex.as_numpy_array()
-        np_arr2 = to_numpy(data_xy_flex)
 
-        txt_slice1 = str(np_arr1[50:90,40:80])
-        txt_slice2 = str(np_arr2[50:90,40:80])
+        timer = QTimer(self)
+        timer.timeout.connect(self.refresh_img)
+        timer.start(500)
 
-        txt_slice_tot = txt_slice1 + "\n\n\n\n" + txt_slice2
+    def refresh_img(self):
+        for iterations in range(5):
+            self.img_num += 1
+            print("\n on_sweep_img_num =", self.img_num)
+            experiments = get_experiments(
+                #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
+                #"/tmp/run_dui2_nodes/run1/imported.expt"
+                #"/scratch/30day_tmp/nx_tst/run_dui2_nodes/run4/refined.expt"
+                "/tmp/tst_ccp4_dials/run_dui2_nodes/run1/imported.expt"
+            )
+            my_sweep = experiments.imagesets()[0]
+            raw_dat = my_sweep.get_raw_data(self.img_num)
+            data_xy_flex = raw_dat[0].as_double()
+            np_arr1 = data_xy_flex.as_numpy_array()
+            np_arr2 = to_numpy(data_xy_flex)
 
-        self.img_label.setText(txt_slice_tot)
+            txt_slice1 = str(np_arr1[50:90,40:80])
+            txt_slice2 = str(np_arr2[50:90,40:80])
+
+            txt_slice_tot = txt_slice1 + "\n\n\n\n" + txt_slice2
+
+            self.img_label.setText(txt_slice_tot)
+
+        print("Done")
 
 
 if __name__ == "__main__":
