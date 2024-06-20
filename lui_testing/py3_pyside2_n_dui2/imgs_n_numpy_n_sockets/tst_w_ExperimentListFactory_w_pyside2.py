@@ -52,9 +52,12 @@ class MyWidget(QWidget):
 
         timer = QTimer(self)
         timer.timeout.connect(self.refresh_img)
-        timer.start(500)
+        timer.start(50)
 
     def refresh_img(self):
+
+        print("\n\n Starting to get img slices \n")
+
         for iterations in range(5):
             self.img_num += 1
             print("\n on_sweep_img_num =", self.img_num)
@@ -62,7 +65,10 @@ class MyWidget(QWidget):
                 #"/scratch/30day_tmp/run_dui2_nodes/run1/imported.expt"
                 #"/tmp/run_dui2_nodes/run1/imported.expt"
                 #"/scratch/30day_tmp/nx_tst/run_dui2_nodes/run4/refined.expt"
-                "/tmp/tst_ccp4_dials/run_dui2_nodes/run1/imported.expt"
+                #"/tmp/tst_ccp4_dials/run_dui2_nodes/run1/imported.expt"
+
+                "/tmp/run_dui2_nodes/run4/refined.expt"
+
             )
             my_sweep = experiments.imagesets()[0]
             raw_dat = my_sweep.get_raw_data(self.img_num)
