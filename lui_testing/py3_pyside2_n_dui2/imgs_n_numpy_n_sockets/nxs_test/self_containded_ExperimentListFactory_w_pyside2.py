@@ -75,9 +75,9 @@ class MyWidget(QWidget):
 
         self.lst_thread = []
 
-        timer = QTimer(self)
-        timer.timeout.connect(self.refresh_img)
-        timer.start(200)
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.refresh_img)
+        self.timer.start(200)
 
     def refresh_img(self):
         self.img_num += 1
@@ -91,8 +91,9 @@ class MyWidget(QWidget):
 
     def update_text(self, txt_slice_tot):
         self.img_label.setText(txt_slice_tot)
-
-        print("Done")
+        if txt_slice_tot == " Done ":
+            print("Done")
+            self.timer.stop()
 
 
 def dials_import_from_path():
