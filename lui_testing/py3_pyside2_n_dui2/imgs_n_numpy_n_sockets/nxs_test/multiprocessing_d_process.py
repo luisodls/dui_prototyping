@@ -8,6 +8,9 @@ def f(name):
     print('hello', name)
 
 if __name__ == '__main__':
-    p = Process(target=f, args=('Luiso',))
-    p.start()
-    p.join()
+
+    for repetn in range(5):
+        name = "clone # " + str(repetn)
+        p = Process(target=f, args=(name,))
+        p.start()
+        p.join()
