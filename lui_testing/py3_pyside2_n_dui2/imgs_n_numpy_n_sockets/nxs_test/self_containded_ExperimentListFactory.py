@@ -1,29 +1,26 @@
-#from dials.array_family import flex
-
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.flumpy import to_numpy
-import time
 
 from multiprocessing import Process
-import os, sys, subprocess
+import os, sys, subprocess, time
 
-def LoadImages(path_in = None, img_num = None):
+def LoadImages(img_num = None):
     print("\n on_sweep_img_num =", img_num)
-    experiments = get_experiments(path_in)
+    experiments = get_experiments("imported.expt")
     my_sweep = experiments.imagesets()[0]
     try:
         raw_dat = my_sweep.get_raw_data(img_num)
 
     except RuntimeError:
         print("finished as expected after running out of images")
-        return " Done "
+        return
 
     data_xy_flex = raw_dat[0].as_double()
     np_arr2 = to_numpy(data_xy_flex)
 
     txt_slice2 = str(np_arr2[50:90,40:80])
     txt_slice_tot = txt_slice2
-    return txt_slice_tot
+    print(txt_slice_tot)
 
 
 def get_experiments(experiment_path):
@@ -64,30 +61,10 @@ def dials_import_from_path():
 if __name__ == "__main__":
     do_the_test = dials_import_from_path()
     if do_the_test:
-        img_num = 5
-        new_thread = LoadImages(
-            path_in = "imported.expt",
-            img_num = img_num
-        )
+        for img_num in range(150):
+            name = "clone # " + str(img_num)
+            p = Process(target=LoadImages, args=(img_num,))
+            p.start()
+            p.join()
+            time.sleep(0.05)
 
-        print(new_thread)
-        if new_thread == " Done ":
-            print("Done")
-
-
-to_use_later = '''
-#########################################################################################
-def f(name):
-    print('module name:', __name__)
-    print('parent process:', os.getppid())
-    print('process id:', os.getpid())
-    print('hello', name)
-
-if __name__ == '__main__':
-
-    for repetn in range(5):
-        name = "clone # " + str(repetn)
-        p = Process(target=f, args=(name,))
-        p.start()
-        p.join()
-'''
