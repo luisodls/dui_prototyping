@@ -5,7 +5,7 @@ from multiprocessing import Process
 import os, sys, subprocess, time
 
 def LoadImages(img_num = None):
-    print("\n on_sweep_img_num =", img_num)
+    print("\n on_sweep_img_num =", img_num, "start")
     experiments = get_experiments("imported.expt")
     my_sweep = experiments.imagesets()[0]
     try:
@@ -21,6 +21,8 @@ def LoadImages(img_num = None):
     txt_slice2 = str(np_arr2[50:90,40:80])
     txt_slice_tot = txt_slice2
     print(txt_slice_tot)
+    time.sleep(0.5)
+    print("\n on_sweep_img_num =", img_num, "end")
 
 
 def get_experiments(experiment_path):
@@ -61,10 +63,13 @@ def dials_import_from_path():
 if __name__ == "__main__":
     do_the_test = dials_import_from_path()
     if do_the_test:
+
+        lst_p = []
         for img_num in range(150):
             name = "clone # " + str(img_num)
             p = Process(target=LoadImages, args=(img_num,))
+            lst_p.append(p)
             p.start()
-            p.join()
+            #p.join()
             time.sleep(0.05)
 
