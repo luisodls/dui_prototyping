@@ -14,11 +14,14 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         url_path = self.path
         dict_cmd = parse_qs(urlparse(url_path).query)
         print("dict_cmd =", dict_cmd)
-        cmd_str = dict_cmd['command'][0]
+        num_of_imgs = int(dict_cmd['num_of_imgs'][0])
 
-        str_2_send = 'cmd_in =' + cmd_str + ' \n'
+        str_2_send = 'num_of_imgs =' + str(num_of_imgs)
         print(str_2_send)
-        self.wfile.write(bytes(str_2_send, 'utf-8'))
+
+        for repets in range(num_of_imgs):
+            str_n_X = 'img num ' + str(repets) + ' \n'
+            self.wfile.write(bytes(str_n_X, 'utf-8'))
 
         print("sending /*EOF*/")
         self.wfile.write(bytes('/*EOF*/', 'utf-8'))

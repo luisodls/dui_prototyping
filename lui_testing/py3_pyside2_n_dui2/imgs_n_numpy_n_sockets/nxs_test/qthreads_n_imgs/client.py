@@ -29,35 +29,23 @@ class Client(QtWidgets.QDialog):
     def __init__(self, parent=None):
         super(Client, self).__init__(parent)
 
-        self.incoming_text = QtWidgets.QTextEdit()
-        self.incoming_text.setFont(QtGui.QFont("Monospace"))
-
-        self.dataLineEdit = QtWidgets.QLineEdit()
-        self.dataLineEdit.setPlaceholderText("Type command")
-        self.dataLineEdit.setFont(QtGui.QFont("Monospace"))
-
         send2serverButton = QtWidgets.QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
-
+        self.num_of_imgs = 9
         mainLayout = QtWidgets.QVBoxLayout()
-        mainLayout.addWidget(self.incoming_text)
-        mainLayout.addWidget(QtWidgets.QLabel(" \n Type here"))
-        mainLayout.addWidget(self.dataLineEdit)
+        mainLayout.addWidget(QtWidgets.QLabel(" \n ready  to ask for " + str(self.num_of_imgs) + " image slices"))
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
     def add_line(self, new_line):
-        self.incoming_text.moveCursor(QtGui.QTextCursor.End)
-        self.incoming_text.insertPlainText(new_line)
+        print("new_line =", new_line)
 
     def run_ended(self):
         print("run_ended")
 
     def request_launch(self):
-
-        cmd_str = str.encode(self.dataLineEdit.text())
-        cmd = {'command': [cmd_str]}
+        cmd = {'num_of_imgs': self.num_of_imgs}
         req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
 
         self.thrd = Run_n_Output(req_get)
