@@ -24,6 +24,7 @@ def get_experiments(experiment_path):
 
     return new_experiments
 
+
 def image_loading(img_num):
     experiments = get_experiments("imported.expt")
     my_sweep = experiments.imagesets()[0]
@@ -37,16 +38,11 @@ def image_loading(img_num):
 def np_arr_2_byte_stream(np_arr_in):
     d1 = np_arr_in.shape[0]
     d2 = np_arr_in.shape[1]
-
-    print("type(np_arr_in[0,0]) = " + str(type(np_arr_in[0,0])))
-
     img_arr = np.zeros(d1 * d2 + 2, dtype = float)
     img_arr[0] = float(d1)
     img_arr[1] = float(d2)
     img_arr[2:] = np_arr_in.ravel()
     byte_info = img_arr.tobytes(order='C')
-
-
     return byte_info
 
 
@@ -68,16 +64,10 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         print("len(slice_bin) =", siz_dat)
         self.send_response(200)
 
-        #self.send_header("Content-type", "text/html")
         self.send_header('Content-type', 'application/zlib')
         self.send_header('Content-Length', siz_dat)
         self.end_headers()
-
-
         self.wfile.write(slice_bin)
-
-        print("no need to send /*EOF*/")
-        #self.wfile.write(bytes('/*EOF*/', 'utf-8'))
 
 
 if __name__ == "__main__":

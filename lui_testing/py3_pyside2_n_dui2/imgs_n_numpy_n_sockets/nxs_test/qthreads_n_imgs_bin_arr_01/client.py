@@ -3,27 +3,22 @@ import sys, time
 import requests
 import numpy as np
 
-
 class Run_n_Output(QtCore.QThread):
-    line_out = QtCore.Signal(str)
+    array_out = QtCore.Signal(str)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
 
     def run(self):
-
-
         cont_leng = self.request.headers.get('content-length', 0)
-
         print('content-length =', cont_leng)
-
         cont_data = self.request.content
         np_slice = from_bin_2_np_arr(cont_data)
-        self.line_out.emit(str(np_slice))
+        self.array_out.emit(str(np_slice))
+
 
 def from_bin_2_np_arr(byte_json):
     try:
-        print("type(byte_json) =", type(byte_json))
         print("len(byte_json) = ", len(byte_json))
         d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
         d1 = int(d1d2_n_arr1d[0])
@@ -34,14 +29,11 @@ def from_bin_2_np_arr(byte_json):
         print("TypeError(from_bin_2_np_arr)")
         np_array_out = None
 
-        tmp_off = '''
     except ValueError:
         print("ValueError(from_bin_2_np_arr)")
         np_array_out = None
-        '''
 
     return np_array_out
-
 
 
 class Client(QtWidgets.QDialog):
@@ -59,18 +51,19 @@ class Client(QtWidgets.QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
-    def add_line(self, new_line):
-        print("new_line =", new_line)
+    def add_array(self, new_array):
+        print("new array =\n", new_array)
 
     def run_ended(self):
         print("run_ended")
 
     def request_launch(self):
         cmd = {'img_num': self.img_num}
-        req_get = requests.get('http://localhost:8080/', stream = True, params = cmd)
-
+        req_get = requests.get(
+            'http://localhost:8080/', stream = True, params = cmd
+        )
         self.thrd = Run_n_Output(req_get)
-        self.thrd.line_out.connect(self.add_line)
+        self.thrd.array_out.connect(self.add_array)
         self.thrd.finished.connect(self.run_ended)
         self.thrd.start()
 
