@@ -1,12 +1,11 @@
 import http.server
 import socketserver
 from urllib.parse import urlparse, parse_qs
-import time, subprocess
+import time, subprocess, zlib
 import numpy as np
 
 from dxtbx.model.experiment_list import ExperimentListFactory
 from dxtbx.flumpy import to_numpy
-
 
 def get_experiments(experiment_path):
     print("importing from:" + experiment_path)
@@ -31,7 +30,7 @@ def image_loading(img_num):
     raw_dat = my_sweep.get_raw_data(img_num)
     data_xy_flex = raw_dat[0].as_double()
     np_arr = to_numpy(data_xy_flex)
-    slice_out = np_arr[50:90,40:80]
+    slice_out = np_arr[50:190,40:180]
     return slice_out
 
 
@@ -47,9 +46,7 @@ def np_arr_2_byte_stream(np_arr_in):
 
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
-
     def do_GET(self):
-
         url_path = self.path
         dict_cmd = parse_qs(urlparse(url_path).query)
         print("dict_cmd =", dict_cmd)
@@ -60,14 +57,15 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         img_slice = image_loading(img_num)
         slice_bin = np_arr_2_byte_stream(img_slice)
-        siz_dat = len(slice_bin)
-        print("len(slice_bin) =", siz_dat)
-        self.send_response(200)
 
+        byt_data = zlib.compress(slice_bin)
+        siz_dat = str(len(byt_data))
+        print("siz_dat =", siz_dat)
+        self.send_response(200)
         self.send_header('Content-type', 'application/zlib')
         self.send_header('Content-Length', siz_dat)
         self.end_headers()
-        self.wfile.write(slice_bin)
+        self.wfile.write(byt_data)
 
 
 if __name__ == "__main__":

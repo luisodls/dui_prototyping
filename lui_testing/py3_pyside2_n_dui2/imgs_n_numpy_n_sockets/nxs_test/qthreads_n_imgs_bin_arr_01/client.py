@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-import sys, time
+import sys, time, zlib
 import requests
 import numpy as np
 
@@ -10,11 +10,37 @@ class Run_n_Output(QtCore.QThread):
         self.request = request
 
     def run(self):
+        old_unstable = '''
         cont_leng = self.request.headers.get('content-length', 0)
         print('content-length =', cont_leng)
-        cont_data = self.request.content
-        np_slice = from_bin_2_np_arr(cont_data)
+        zipped_np_slice = from_bin_2_np_arr(self.request.content)
+        np_slice = zlib.decompress(zipped_np_slice)
         self.array_out.emit(str(np_slice))
+        '''
+
+        req_head = self.request.headers.get('content-length', 0)
+        total_size = int(req_head) + 1
+        print("total_size =" + str(total_size))
+        block_size = int(total_size / 6 * 1024)
+        max_size = 16384
+        if block_size > max_size:
+            block_size = max_size
+
+        print("block_size =" + str(block_size))
+
+        downloaded_size = 0
+        compresed = bytes()
+        for data in self.request.iter_content(block_size):
+            compresed += data
+            downloaded_size += block_size
+            progress = int(100.0 * (downloaded_size / total_size))
+            print("progress =", progress)
+
+        unzip_data = zlib.decompress(compresed)
+        print("get_request_real_time ... downloaded")
+        end_data = from_bin_2_np_arr(unzip_data)
+        self.array_out.emit(str(end_data))
+
 
 
 def from_bin_2_np_arr(byte_json):
@@ -25,9 +51,11 @@ def from_bin_2_np_arr(byte_json):
         d2 = int(d1d2_n_arr1d[1])
         np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
 
+        tmp_off = '''
     except TypeError:
         print("TypeError(from_bin_2_np_arr)")
         np_array_out = None
+        '''
 
     except ValueError:
         print("ValueError(from_bin_2_np_arr)")
