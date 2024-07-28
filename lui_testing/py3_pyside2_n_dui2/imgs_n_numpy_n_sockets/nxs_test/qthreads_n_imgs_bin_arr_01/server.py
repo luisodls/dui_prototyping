@@ -30,7 +30,7 @@ def image_loading(img_num):
     raw_dat = my_sweep.get_raw_data(img_num)
     data_xy_flex = raw_dat[0].as_double()
     np_arr = to_numpy(data_xy_flex)
-    slice_out = np_arr[50:190,40:180]
+    slice_out = np_arr[50:590,40:680]
     return slice_out
 
 

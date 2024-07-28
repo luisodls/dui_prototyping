@@ -10,14 +10,6 @@ class Run_n_Output(QtCore.QThread):
         self.request = request
 
     def run(self):
-        old_unstable = '''
-        cont_leng = self.request.headers.get('content-length', 0)
-        print('content-length =', cont_leng)
-        zipped_np_slice = from_bin_2_np_arr(self.request.content)
-        np_slice = zlib.decompress(zipped_np_slice)
-        self.array_out.emit(str(np_slice))
-        '''
-
         req_head = self.request.headers.get('content-length', 0)
         total_size = int(req_head) + 1
         print("total_size =" + str(total_size))
@@ -44,22 +36,24 @@ class Run_n_Output(QtCore.QThread):
 
 
 def from_bin_2_np_arr(byte_json):
+    code_removed_for_testing = '''
     try:
-        print("len(byte_json) = ", len(byte_json))
-        d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
-        d1 = int(d1d2_n_arr1d[0])
-        d2 = int(d1d2_n_arr1d[1])
-        np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
+    '''
+    print("len(byte_json) = ", len(byte_json))
+    d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
+    d1 = int(d1d2_n_arr1d[0])
+    d2 = int(d1d2_n_arr1d[1])
+    np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
 
-        tmp_off = '''
+    code_removed_for_testing = '''
     except TypeError:
         print("TypeError(from_bin_2_np_arr)")
         np_array_out = None
-        '''
 
     except ValueError:
         print("ValueError(from_bin_2_np_arr)")
         np_array_out = None
+    '''
 
     return np_array_out
 
