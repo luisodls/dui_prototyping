@@ -60,7 +60,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
 
         byt_data = zlib.compress(slice_bin)
         siz_dat = str(len(byt_data))
-        print("siz_dat =", siz_dat)
+        print("\n siz_dat =", siz_dat)
         self.send_response(200)
         self.send_header('Content-type', 'application/zlib')
         self.send_header('Content-Length', siz_dat)

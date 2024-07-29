@@ -4,25 +4,11 @@ import requests
 import numpy as np
 
 def from_bin_2_np_arr(byte_json):
-    code_removed_for_testing = '''
-    try:
-    '''
     print("len(byte_json) = ", len(byte_json))
     d1d2_n_arr1d = np.frombuffer(byte_json, dtype = float)
     d1 = int(d1d2_n_arr1d[0])
     d2 = int(d1d2_n_arr1d[1])
     np_array_out = d1d2_n_arr1d[2:].reshape(d1, d2)
-
-    code_removed_for_testing = '''
-    except TypeError:
-        print("TypeError(from_bin_2_np_arr)")
-        np_array_out = None
-
-    except ValueError:
-        print("ValueError(from_bin_2_np_arr)")
-        np_array_out = None
-    '''
-
     return np_array_out
 
 
@@ -63,11 +49,7 @@ class Client(QtWidgets.QDialog):
 
         send2serverButton = QtWidgets.QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
-        #self.img_num = 5
         mainLayout = QtWidgets.QVBoxLayout()
-        '''mainLayout.addWidget(QtWidgets.QLabel(
-            " \n ready  to ask for  image number " + str(self.img_num) + "\n"
-        ))'''
         mainLayout.addWidget(QtWidgets.QLabel("\n\n click button \n\n"))
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
@@ -80,10 +62,8 @@ class Client(QtWidgets.QDialog):
         print("run_ended")
 
     def request_launch(self):
-
-        for repeats in range(10):
+        for repeats in range(50):
             sycle_img_num = repeats + 1
-
             cmd = {'img_num': sycle_img_num}
             req_get = requests.get(
                 'http://localhost:8080/', stream = True, params = cmd
