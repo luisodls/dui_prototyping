@@ -1,5 +1,5 @@
 from PySide2 import QtCore, QtWidgets, QtGui, QtNetwork
-import sys, time, zlib
+import sys, time, zlib, time
 import requests
 import numpy as np
 
@@ -14,6 +14,7 @@ def from_bin_2_np_arr(byte_json):
 
 class Run_n_Output(QtCore.QThread):
     array_out = QtCore.Signal(str)
+    progress_out = QtCore.Signal(int)
     def __init__(self, request):
         super(Run_n_Output, self).__init__()
         self.request = request
@@ -35,7 +36,7 @@ class Run_n_Output(QtCore.QThread):
             compresed += data
             downloaded_size += block_size
             progress = int(100.0 * (downloaded_size / total_size))
-            print("progress =", progress)
+            self.progress_out.emit(progress)
 
         unzip_data = zlib.decompress(compresed)
         print("get_request_real_time ... downloaded")
@@ -49,29 +50,42 @@ class Client(QtWidgets.QDialog):
 
         send2serverButton = QtWidgets.QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
+        self.img_label = QtWidgets.QLabel("\n\n click button \n\n")
+        self.prog_label = QtWidgets.QLabel("\n progress = ? \n")
         mainLayout = QtWidgets.QVBoxLayout()
-        mainLayout.addWidget(QtWidgets.QLabel("\n\n click button \n\n"))
+        mainLayout.addWidget(self.img_label)
+        mainLayout.addWidget(self.prog_label)
         mainLayout.addWidget(send2serverButton)
         self.setLayout(mainLayout)
         self.setWindowTitle("DUI front end test with HTTP")
 
+    def new_progress(self, progress):
+        self.prog_label.setText("\n progress = " + str(progress) + " \n")
+
     def add_array(self, new_array):
-        print("new array =\n", new_array)
+        self.img_label.setText(new_array)
 
     def run_ended(self):
+        self.prog_label.setText("\n progress = ? \n")
         print("run_ended")
 
     def request_launch(self):
-        for repeats in range(50):
-            sycle_img_num = repeats + 1
-            cmd = {'img_num': sycle_img_num}
-            req_get = requests.get(
-                'http://localhost:8080/', stream = True, params = cmd
-            )
-            self.thrd = Run_n_Output(req_get)
-            self.thrd.array_out.connect(self.add_array)
-            self.thrd.finished.connect(self.run_ended)
-            self.thrd.start()
+        self.sycle_img_num = 1
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.refresh_img_loop)
+        timer.start(200)
+
+    def refresh_img_loop(self):
+        self.sycle_img_num += 1
+        cmd = {'img_num': self.sycle_img_num}
+        req_get = requests.get(
+            'http://localhost:8080/', stream = True, params = cmd
+        )
+        self.thrd = Run_n_Output(req_get)
+        self.thrd.array_out.connect(self.add_array)
+        self.thrd.finished.connect(self.run_ended)
+        self.thrd.progress_out.connect(self.new_progress)
+        self.thrd.start()
 
 
 if __name__ == '__main__':
