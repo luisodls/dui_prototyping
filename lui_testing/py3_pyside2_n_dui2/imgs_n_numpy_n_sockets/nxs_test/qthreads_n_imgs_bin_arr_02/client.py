@@ -73,10 +73,11 @@ class Client(QtWidgets.QDialog):
         self.sycle_img_num = 1
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.refresh_img_loop)
-        timer.start(200)
+        timer.start(100)
 
     def refresh_img_loop(self):
         self.sycle_img_num += 1
+        print("updating image # ", self.sycle_img_num)
         cmd = {'img_num': self.sycle_img_num}
         req_get = requests.get(
             'http://localhost:8080/', stream = True, params = cmd
