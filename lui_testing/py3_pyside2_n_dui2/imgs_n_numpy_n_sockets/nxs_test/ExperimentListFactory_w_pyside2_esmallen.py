@@ -55,8 +55,9 @@ def get_experiments(experiment_path):
 
 
 class MyWidget(QWidget):
-    def __init__(self):
+    def __init__(self, expt_path):
         super(MyWidget, self).__init__()
+        self.expt_path = expt_path
         self.button = QPushButton("Click me")
         self.button.clicked.connect(self.press_butt)
 
@@ -82,7 +83,7 @@ class MyWidget(QWidget):
     def refresh_img(self):
         self.img_num += 1
         new_thread = LoadImages(
-            path_in = "imported.expt",
+            path_in = self.expt_path,
             img_num = self.img_num
         )
         new_thread.image_loaded.connect(self.update_text)
@@ -98,26 +99,22 @@ class MyWidget(QWidget):
 
 def dials_import_from_path():
     try:
-        path_2_import = sys.argv[1]
+        path_2_use = sys.argv[1]
 
     except IndexError:
         print(" *** ERROR *** \n")
-        print(" Must enter path to import, example: \n")
-        print(" python self_containded_ExperimentListFactory_w_pyside2.py" +
-              " /path/to/my/file/xx_master.h5")
-
+        print(" Must enter path with expt to use, example: \n")
+        print(" python ExperimentListFactory_w_pyside2_esmallen.py imported.expt")
         return False
 
-    print("\n Running: \n dials.import " + path_2_import )
-    subprocess.run(["dials.import", sys.argv[1]], shell=False)
-    print("Done \n")
-    return True
+    return path_2_use
 
 
 if __name__ == "__main__":
-    do_the_test = dials_import_from_path()
-    if do_the_test:
+    expt_path = dials_import_from_path()
+    if expt_path:
+        print("expt_path =", expt_path)
         myApp = QApplication(sys.argv)
-        myWindow = MyWidget()
+        myWindow = MyWidget(expt_path)
         myApp.exec_()
         sys.exit(0)
