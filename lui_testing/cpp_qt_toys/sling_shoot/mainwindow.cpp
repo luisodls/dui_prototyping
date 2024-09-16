@@ -49,9 +49,11 @@ MainWindow::MainWindow(QWidget *parent)
         my_scene, &a_scene::vectorChanged,
         this, &MainWindow::update_texts
     );
+
+
     QObject::connect(
         my_scene, &a_scene::time2fire,
-        this, &MainWindow::on_RunButton_clicked
+        this, &MainWindow::launch_now
     );
     QTimer *timer = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::UpdateDrawing);
@@ -92,7 +94,7 @@ void MainWindow::update_texts(double proy_x, double proy_y)
     ui->EditEntryX->setText(str_x);
     ui->EditEntryY->setText(str_y);
 }
-void MainWindow::on_RunButton_clicked()
+void MainWindow::launch_now()
 {
     std::cout << "Time to shoot with vector:  " << inX << ", " << inY << std::endl;
     my_scene->addLine(0, 0, int(inX), int(inY));

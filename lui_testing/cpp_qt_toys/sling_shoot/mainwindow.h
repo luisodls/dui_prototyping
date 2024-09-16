@@ -30,7 +30,7 @@ public:
     void UpdateDrawing();
 
 public slots:
-    void on_RunButton_clicked();
+    void launch_now();
     void on_EditEntryX_textChanged(const QString &arg1);
     void on_EditEntryY_textChanged(const QString &arg1);
 
