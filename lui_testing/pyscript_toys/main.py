@@ -5,8 +5,8 @@ from matplotlib import pyplot as plt
 siz0, siz1 = 15, 16
 big_arr = np.zeros((siz0, siz1), dtype=np.double)
 
-big_arr[4:9, 7:13] = 4
-big_arr[7:13, 4:9] += 5
+big_arr[3:9, 7:13] = 4
+big_arr[7:13, 3:9] += 5
 
 print("np_arr =\n", big_arr)
 
