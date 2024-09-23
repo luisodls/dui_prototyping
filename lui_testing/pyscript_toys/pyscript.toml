@@ -1,0 +1,2 @@
+name = "first_test"
+packages = ["numpy", "matplotlib"]
