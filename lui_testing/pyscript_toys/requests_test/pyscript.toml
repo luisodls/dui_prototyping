@@ -1,0 +1,5 @@
+name = "first_test"
+packages = ["numpy", "matplotlib"]
+
+[files]
+"./tmp_lib.py" = ""
