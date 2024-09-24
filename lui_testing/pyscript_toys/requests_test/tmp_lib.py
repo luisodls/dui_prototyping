@@ -1,9 +1,22 @@
 
 
-def get(url = None, stream = False, params = None):
-    print("url =", url)
-    print("stream =", stream)
-    print("params =", params)
+def get(
+    url = None, params = None, allow_redirects = True,
+    auth = None, cert = None, cookies = None, headers = None,
+    proxies = None, stream = False, timeout = None, verify = True,
+):
+    print("url =             ", url              )
+    print("params =          ", params           )
+    print("allow_redirects = ", allow_redirects  )
+    print("auth =            ", auth             )
+    print("cert =            ", cert             )
+    print("cookies =         ", cookies          )
+    print("headers =         ", headers          )
+    print("proxies =         ", proxies          )
+    print("stream =          ", stream           )
+    print("timeout =         ", timeout          )
+    print("verify =          ", verify           )
+
 
 
 '''
