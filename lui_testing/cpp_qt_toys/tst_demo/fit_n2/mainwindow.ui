@@ -16,14 +16,14 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="pushButton_ini">
       <property name="text">
        <string>PushButton</string>
       </property>
      </widget>
     </item>
     <item row="3" column="0">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="pushButton_run">
       <property name="text">
        <string>PushButton</string>
       </property>
@@ -47,7 +47,7 @@
      </widget>
     </item>
     <item row="2" column="0">
-     <widget class="QLineEdit" name="lineEdit"/>
+     <widget class="QLineEdit" name="GraphPath"/>
     </item>
    </layout>
   </widget>
