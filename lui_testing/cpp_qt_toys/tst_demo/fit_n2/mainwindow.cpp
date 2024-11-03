@@ -1,8 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <iostream>
-
-//#include <QApplication>
 #include <QFileDialog>
 #include <QString>
 
@@ -30,6 +28,6 @@ void MainWindow::on_pushButton_ini_clicked()
 
 void MainWindow::on_pushButton_run_clicked()
 {
-    std::cout << "Hello from pushButton_run \n";
+    std::cout << "Hello from pushButton_run " << std::endl;
 }
 
