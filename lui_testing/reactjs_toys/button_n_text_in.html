@@ -20,43 +20,36 @@
   import { createRoot } from 'react-dom/client';
   import { useState } from 'react';
 
-  function ButtonCounter() {
-    const [count, setCount] = useState(0);
-
+  function MyButton({nameHere}) {
     function handleClick() {
-      setCount(count + 1);
+      alert(nameHere);
     }
 
     return (
       <button onClick={handleClick}>
-        Clicked {count} times
-      </button>
-    );
-  }
-
-  function ButtonWithText() {
-    const [count, setCount] = useState(0);
-
-    function handleClick() {
-      setCount(count + 1);
-    }
-
-    return (
-      <button onClick={handleClick}>
-        Typed something in text
+        Click me
       </button>
     );
   }
 
   let App = function App() {
+
+    const [firstName, setFirstName] = useState('');
+
+
     return (
       <div>
         <h1> Button and text connected </h1>
-        <ButtonCounter />
         <label>
-          Type here: <input name="myInput" />
+
+          First name:
+          <input
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+          />
+
         </label>
-        <ButtonWithText />
+        <MyButton nameHere ={firstName} />
       </div>
     );
   }
