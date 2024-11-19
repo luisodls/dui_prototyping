@@ -31,25 +31,19 @@
       </button>
     );
   }
-
   let App = function App() {
-
-    const [firstName, setFirstName] = useState('');
-
-
+    const [usrName, setName] = useState('');
     return (
       <div>
         <h1> Button and text connected </h1>
         <label>
-
-          First name:
+          Give name here:
           <input
-            value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            value={usrName}
+            onChange={e => setName(e.target.value)}
           />
-
         </label>
-        <MyButton nameHere ={firstName} />
+        <MyButton nameHere ={usrName} />
       </div>
     );
   }
