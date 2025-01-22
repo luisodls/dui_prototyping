@@ -1,10 +1,12 @@
-import sys
+import sys, os
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from PySide2 import QtUiTools
+
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
 
 class Form(QObject):
     def __init__(self, parent = None):

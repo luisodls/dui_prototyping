@@ -13,11 +13,13 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.wfile.write(bytes(dumps(response), "utf8"))
 
   def do_GET(self):
+      print("do_GET")
       self.send_response(200)
       self.end_headers()
       self.send_ok_dict()
 
   def do_POST(self):
+      print("do_POST")
       self.send_response(200)
       self.send_header("Content-Type", "application/json")
       self.end_headers()
