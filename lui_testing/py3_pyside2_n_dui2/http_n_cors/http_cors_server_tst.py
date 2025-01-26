@@ -64,12 +64,11 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_ok_dict()
 
 
-
-print("Starting server")
-
-ip_adr = "127.0.0.1"
-port_num = 45678
-httpd = HTTPServer((ip_adr, port_num), RequestHandler)
-full_url = "http://" + ip_adr + ":" + str(port_num)
-print("Hosting server on:", full_url )
-httpd.serve_forever()
+if __name__ == "__main__":
+    print("Starting server")
+    ip_adr = "127.0.0.1"
+    port_num = 45678
+    httpd = HTTPServer((ip_adr, port_num), RequestHandler)
+    full_url = "http://" + ip_adr + ":" + str(port_num)
+    print("Hosting server on:", full_url )
+    httpd.serve_forever()
