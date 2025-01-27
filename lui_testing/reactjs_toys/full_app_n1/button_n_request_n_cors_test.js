@@ -6,17 +6,32 @@ import { createRoot } from 'react-dom/client';
 import { useState } from 'react';
 
 function MyButton({msgHere}) {
-  function handleClick() {
+  async function handleClick()  {
 
     console.log(msgHere);
-    const response = fetch('http://127.0.0.1:45678', { method: "POST", body: msgHere });
-    //const response = fetch('http://127.0.0.1:45678', { method: "PUT", body: msgHere });
-    alert(msgHere);
+    //const response = fetch('http://127.0.0.1:45678', { method: "POST", body: msgHere });
 
-    console.log(Object.keys(response));
-    console.dir(response);
-    //const json = response.json();
-    //alert(json);
+
+
+    const responseEl = document.getElementById("response");
+    const response = await fetch('http://127.0.0.1:45678', {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: msgHere,
+    });
+    const data = await response.json();
+    responseEl.textContent = JSON.stringify(data, null, 2);
+
+
+    //const response = fetch('http://127.0.0.1:45678', { method: "PUT", body: msgHere });
+
+
+    //alert(msgHere);
+    alert(responseEl);
+    console.log(responseEl);
+
+      //console.log(Object.keys(response));
+    //console.dir(response);
 
 
   }

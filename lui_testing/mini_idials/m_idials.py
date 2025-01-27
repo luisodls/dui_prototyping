@@ -36,7 +36,7 @@ class UniStep(object):
         self.command = cmd_lst
         if( cmd_lst[0] == "fail" ):
             #testing virtual failed step
-            print "\n intentionally FAILED for testing \n"
+            print("\n intentionally FAILED for testing \n")
             self.success = False
 
         else:
@@ -46,17 +46,17 @@ class UniStep(object):
                                                  ref_to_class = ref_to_class)
 
                 if( self.success == True ):
-                    #print "#generate_report(self)"
+                    #print("#generate_report(self)")
                     self.report_out = generate_report(self)
 
             else:
-                print "NOT dials command"
+                print("NOT dials command")
                 self.success = False
 
     def build_command(self, cmd_lst):
 
         self.cmd_lst_to_run = build_command_lst(self, cmd_lst)
-        print "\n cmd_lst_to_run =", self.cmd_lst_to_run, "\n"
+        print("\n cmd_lst_to_run =", self.cmd_lst_to_run, "\n")
 
     def get_next_step(self):
         return get_next_step(self)
@@ -87,13 +87,13 @@ class Runner(object):
 
         elif( cmd_lst[0] == "mksib" ):
             self.goto_prev()
-            print "forking"
+            print("forking")
             self.create_step(self.step_list[self.current])
 
         else:
             if( self.step_list[self.current].success == True ):
                 self.goto_prev()
-                print "forking"
+                print("forking")
                 self.create_step(self.step_list[self.current])
 
             self.step_list[self.current](cmd_lst, ref_to_class)
@@ -101,7 +101,7 @@ class Runner(object):
                 self.create_step(self.step_list[self.current])
 
             else:
-                print "failed step"
+                print("failed step")
 
     def create_step(self, prev_step):
         new_step = UniStep(prev_step = prev_step)
@@ -110,14 +110,14 @@ class Runner(object):
         try:
             if( prev_step.next_step_list == None ):
                 prev_step.next_step_list = [new_step]
-                print "converting None in [new_step]"
+                print("converting None in [new_step]")
 
             else:
                 prev_step.next_step_list.append(new_step)
-                print "appending step"
+                print("appending step")
 
         except:
-            print "failed to append to previous step"
+            print("failed to append to previous step")
 
         self.step_list.append(new_step)
         self.goto(self.bigger_lin)
@@ -127,7 +127,7 @@ class Runner(object):
             self.goto(self.step_list[self.current].prev_step.lin_num)
 
         except:
-            print "can NOT fork <None> node "
+            print("can NOT fork <None> node ")
 
     def goto(self, new_lin):
         self.current = new_lin
@@ -183,7 +183,7 @@ class Runner(object):
 
         except:
             path_to_pickle = None
-            print "no pickle file available"
+            print("no pickle file available")
 
         return path_to_pickle
 
@@ -191,7 +191,7 @@ class Runner(object):
         return self.step_list[self.current].get_next_step()
 
     def slist(self):
-        print "printing in steps list mode: \n"
+        print("printing in steps list mode: \n")
         print_list(self.step_list, self.current)
 
 if( __name__ == "__main__"):
@@ -210,19 +210,19 @@ if( __name__ == "__main__"):
     while( command.strip() != 'exit' and command.strip() != 'quit' ):
         try:
             inp_str = "lin [" + str(uni_controler.current) + "] >>> "
-            command = str(raw_input(inp_str))
+            command = str(input(inp_str))
             if( command == "" ):
-                print "converting empty line in self.slist()"
+                print("converting empty line in self.slist()")
                 command = "slist"
 
         except:
-            print " ... interrupting"
+            print(" ... interrupting")
             sys.exit(0)
 
         uni_controler.run(command, None, mk_nxt = False)
         tree_output(uni_controler)
         nxt_str = uni_controler.get_next_from_here()
-        print "\n next to run:\n ", nxt_str
+        print("\n next to run:\n ", nxt_str)
 
         with open('bkp.pickle', 'wb') as bkp_out:
             pickle.dump(uni_controler, bkp_out)

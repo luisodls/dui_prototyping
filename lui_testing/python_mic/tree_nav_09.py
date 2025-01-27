@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 def prin_lst(lst, curr):
-    print "__________________________listing:"
+    print("__________________________listing:")
     for uni in lst:
         stp_str = str(uni.lin_num) + " comm: " + str(uni.command)
 
@@ -24,7 +24,7 @@ def prin_lst(lst, curr):
         if( curr == uni.lin_num ):
             stp_str += "                           <<< here I am <<<"
 
-        print stp_str
+        print(stp_str)
 
 def show_tree(step = None, curr = None, indent = 1):
     if( step.success == True ):
@@ -48,13 +48,13 @@ def show_tree(step = None, curr = None, indent = 1):
     if( step.lin_num == curr ):
         stp_prn += "            <<< here "
 
-    print stp_prn
+    print(stp_prn)
     try:
         for line in step.next_step_list:
             show_tree(step = line, curr = curr, indent = indent + 1)
 
     except:
-        #print "last indent =", indent
+        #print("last indent =", indent)
         pass
 
 
@@ -69,12 +69,12 @@ class uni_step(object):
     def __call__(self, cmd_lst):
         if( cmd_lst[0] == "fail" ):
             #testing virtual failed step
-            print "\n FAILED \n"
+            print("\n FAILED \n")
             self.command = cmd_lst
             self.success = False
 
         else:
-            print "____________________________________\n << running >>", cmd_lst
+            print("____________________________________\n << running >>", cmd_lst)
             self.command = cmd_lst
             self.success = True
 
@@ -106,10 +106,10 @@ class runner(object):
                     self.create_step(self.step_list[self.current])
 
                 else:
-                    print "failed step"
+                    print("failed step")
 
             else:
-                print "cannot run from failed step"
+                print("cannot run from failed step")
 
     def create_step(self, prev_step):
         new_step = uni_step(prev_step)
@@ -123,25 +123,25 @@ class runner(object):
                 self.step_list[self.current].next_step_list.append(new_step)
 
         except:
-            print "failed to append to previous step"
+            print("failed to append to previous step")
 
 
         self.step_list.append(new_step)
         self.goto(self.bigger_lin)
 
     def goto_prev(self):
-        print "forking"
+        print("forking")
         try:
             self.goto(self.step_list[self.current].prev_step.lin_num)
 
         except:
-            print "can NOT fork <None> node "
+            print("can NOT fork <None> node ")
 
     def goto(self, new_lin):
         self.current = new_lin
 
     def slist(self):
-        print "printing in steps list mode: \n"
+        print("printing in steps list mode: \n")
         prin_lst(self.step_list, self.current)
 
 if( __name__ == "__main__"):
@@ -153,14 +153,14 @@ if( __name__ == "__main__"):
         #prin_lst(uni_controler.step_list, uni_controler.current)
 
         # showing showing tree
-        print "________ showing steps tree:"
+        print("________ showing steps tree:")
         show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
 
         try:
-            command = str(raw_input(">>> "))
+            command = str(input(">>> "))
 
         except:
-            print "tweak key pressed ... quitting"
+            print("tweak key pressed ... quitting")
             sys.exit(0)
 
         uni_controler.run(command)

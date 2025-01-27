@@ -155,31 +155,31 @@ def generate_report(uni_step_obj):
             exp_inp = uni_step_obj.json_file_out
             rep_cmd = ["dials.report", exp_inp, refl_inp, deps_outp, html_outp]
 
-        print "rep_cmd =", rep_cmd
+        print("rep_cmd =", rep_cmd)
 
         try:
             gen_rep_proc = subprocess.Popen(rep_cmd)
             gen_rep_proc.wait()
             rep_out = uni_step_obj.work_dir + "/" + htm_fil
-            print "generated report at: ", rep_out
+            print("generated report at: ", rep_out)
 
         except:
             rep_out = None
-            print "Someting went wrong in report level 2"
+            print("Someting went wrong in report level 2")
 
     else:
-        print "NO report needed for this step"
+        print("NO report needed for this step")
         rep_out = None
 
     return rep_out
 
 class DialsCommand(object):
     def __init__(self):
-        print "creating new DialsCommand (obj)"
+        print("creating new DialsCommand (obj)")
 
     def __call__(self, lst_cmd_to_run = None, ref_to_class = None):
         try:
-            print "\n << running >>", lst_cmd_to_run
+            print("\n << running >>", lst_cmd_to_run)
             my_process = subprocess.Popen(lst_cmd_to_run,
                                           stdout = subprocess.PIPE,
                                           stderr = subprocess.STDOUT,
@@ -191,7 +191,7 @@ class DialsCommand(object):
                     ref_to_class.emit_print_signal(single_line)
 
                 except:
-                    print single_line
+                    print(single_line)
 
             my_process.wait()
             my_process.stdout.close()
@@ -203,13 +203,13 @@ class DialsCommand(object):
 
         except:
             local_success = False
-            print "\n FAIL call"
+            print("\n FAIL call")
 
         return local_success
 
 
 def print_list(lst, curr):
-    print "__________________________listing:"
+    print("__________________________listing:")
     for uni in lst:
         stp_str = str(uni.lin_num) + " comm: " + str(uni.command)
 
@@ -230,7 +230,7 @@ def print_list(lst, curr):
         if( curr == uni.lin_num ):
             stp_str += "                           <<< here I am <<<"
 
-        print stp_str
+        print(stp_str)
 
 class TreeShow(object):
     def __init__(self):
@@ -239,16 +239,16 @@ class TreeShow(object):
 
     def __call__(self, my_runner):
         print
-        print "status "
-        print " |  lin num "
-        print " |   |  command "
-        print " |   |   | "
-        print "------------------"
+        print("status ")
+        print(" |  lin num ")
+        print(" |   |  command ")
+        print(" |   |   | ")
+        print("------------------")
         self.max_indent = 0
         self.str_lst = []
         self.add_tree(step = my_runner.step_list[0], indent = 0)
         self.tree_print(my_runner.current)
-        print "---------------------" + self.max_indent * self.ind_lin
+        print("---------------------" + self.max_indent * self.ind_lin)
 
 
     def add_tree(self, step = None, indent = None):
@@ -303,5 +303,5 @@ class TreeShow(object):
                 self.tree_dat[pos][0] += str_here + "   <<< here "
 
         for prn_str in self.tree_dat:
-            print prn_str[0]
+            print(prn_str[0])
 

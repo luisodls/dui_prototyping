@@ -1,6 +1,8 @@
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from json import dumps
+#from json import dumps
+
+import json
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -20,7 +22,8 @@ class RequestHandler(BaseHTTPRequestHandler):
       '''used by both, GET or POST,'''
       response = {}
       response["status"] = "OK"
-      self.wfile.write(bytes(dumps(response), "utf8"))
+      self.wfile.write(json.dumps(response).encode('utf-8'))
+
 
   def do_GET(self):
       print("do_GET")
@@ -62,6 +65,10 @@ class RequestHandler(BaseHTTPRequestHandler):
       data = self.rfile.read(dataLength)
       print("data =", data)
       self.send_ok_dict()
+
+      #response = {"message": "Data received successfully!", "received_data": post_data}
+      #self.wfile.write(json.dumps(response).encode('utf-8'))
+
 
 
 if __name__ == "__main__":
