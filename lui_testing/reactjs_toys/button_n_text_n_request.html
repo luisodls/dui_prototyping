@@ -55,7 +55,7 @@
     function handleClick() {
 
       console.log(msgHere);
-      const response = fetch('http://127.0.0.1:45678', { method: "POST", body: msgHere });
+      const response = await fetch('http://127.0.0.1:45678', { method: "POST", body: msgHere });
       //const response = fetch('http://127.0.0.1:45678', { method: "PUT", body: msgHere });
       alert(msgHere);
 

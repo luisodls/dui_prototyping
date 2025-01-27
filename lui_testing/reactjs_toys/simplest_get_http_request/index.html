@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Python Server Example</title>
+</head>
+<body>
+  <h1>Fetch Data from Python Server</h1>
+  <button id="fetch-btn">Fetch GET</button>
+  <pre id="response"></pre>
+
+  <script>
+    const fetchBtn = document.getElementById("fetch-btn");
+    const responseEl = document.getElementById("response");
+
+    // Perform a GET request
+    fetchBtn.addEventListener("click", async () => {
+      const response = await fetch("http://localhost:8000");
+      const data = await response.json();
+      responseEl.textContent = JSON.stringify(data, null, 2);
+    });
+
+  </script>
+</body>
+</html>
