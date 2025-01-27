@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POST to Python Server</title>
+</head>
+<body>
+  <h1>Send POST Request</h1>
+  <button id="send-btn">Send POST</button>
+  <pre id="response"></pre>
+
+  <script>
+    const sendBtn = document.getElementById("send-btn");
+    const responseEl = document.getElementById("response");
+
+    sendBtn.addEventListener("click", async () => {
+      const response = await fetch("http://localhost:8000", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: "Test User", message: "Hello, Python!" }),
+      });
+      const data = await response.json();
+      responseEl.textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>

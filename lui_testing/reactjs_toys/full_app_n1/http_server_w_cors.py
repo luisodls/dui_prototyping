@@ -11,6 +11,11 @@ class RequestHandler(BaseHTTPRequestHandler):
       self.send_header("Access-Control-Allow-Methods", "GET,PUT,POST,OPTIONS")
       self.send_header("Access-Control-Allow-Headers", "x-api-key,Content-Type")
 
+  def do_OPTIONS(self):
+      self.send_response(200)
+      self._send_cors_headers()
+      self.end_headers()
+
   def send_ok_dict(self):
       '''used by both, GET or POST,'''
       response = {}
