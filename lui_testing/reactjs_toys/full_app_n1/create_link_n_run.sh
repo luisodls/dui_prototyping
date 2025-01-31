@@ -7,6 +7,12 @@ echo "removing possible old tst-app directory"
 rm -rf tst-app
 
 echo "creating template app with create-next-app@latest"
+echo ""
+echo "remember to say << yes >> only to the next question "
+echo ""
+echo "  Would you like your code inside a \'src\' directory?"
+echo ""
+
 npx create-next-app@latest tst-app
 
 echo "changing directory to tst-app/src/pages/"

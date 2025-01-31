@@ -23,7 +23,7 @@ class Form(QObject):
 
     def clicked(self):
         print("clicked")
-        self.html_view.load(QUrl("http://localhost:3000"))
+        self.html_view.load(QUrl("http://google.com"))
 
         '''self.html_view.load(
             QUrl.fromLocalFile(
