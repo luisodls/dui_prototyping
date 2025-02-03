@@ -3,6 +3,7 @@
 import sys
 def prin_lst(lst, curr):
     print("__________________________listing:")
+    lst_stp = []
     for uni in lst:
         stp_str = str(uni.lin_num) + " comm: " + str(uni.command)
 
@@ -24,7 +25,10 @@ def prin_lst(lst, curr):
         if( curr == uni.lin_num ):
             stp_str += "                           <<< here I am <<<"
 
-        print(stp_str)
+        lst_stp.append(stp_str)
+
+    print(lst_stp)
+    return lst_stp
 
 def show_tree(step = None, curr = None, indent = 1):
     if( step.success == True ):
@@ -150,7 +154,7 @@ if( __name__ == "__main__"):
     command = ""
     while command.strip() != 'exit':
         # printing new list of steps
-        #prin_lst(uni_controler.step_list, uni_controler.current)
+        prin_lst(uni_controler.step_list, uni_controler.current)
 
         # showing showing tree
         print("________ showing steps tree:")

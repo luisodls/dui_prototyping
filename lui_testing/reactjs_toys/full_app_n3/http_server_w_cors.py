@@ -37,7 +37,13 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("url_path =", url_path)
         print("url_dict =", url_dict)
 
-        self.send_ok_dict(url_dict["msgHere"][0])
+        #self.send_ok_dict(url_dict["msgHere"][0])
+
+        lst_out = prin_lst(uni_controler.step_list, uni_controler.current)
+
+        self.send_ok_dict(lst_out)
+        #self.send_ok_dict(url_dict["msgHere"][0])
+
 
     def do_PUT(self):
         print("do_PUT")
