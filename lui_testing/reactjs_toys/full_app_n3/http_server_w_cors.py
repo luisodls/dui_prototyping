@@ -2,6 +2,8 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
+from old_tree_nav import runner, prin_lst, show_tree
+
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
 
@@ -66,11 +68,43 @@ class RequestHandler(BaseHTTPRequestHandler):
         msg = url_dict['message']
         print("msg =", msg)
 
+        uni_controler.run(msg)
+        prin_lst(uni_controler.step_list, uni_controler.current)
+        print("-----------------------------------------------")
+        show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
+
         self.send_ok_dict(msg)
 
 
 if __name__ == "__main__":
     print("Starting server")
+
+    uni_controler = runner()
+
+    '''
+    uni_controler = runner()
+
+    command = ""
+    while command.strip() != 'exit':
+        # printing new list of steps
+        #prin_lst(uni_controler.step_list, uni_controler.current)
+
+        # showing showing tree
+        print("________ showing steps tree:")
+        show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
+
+        try:
+            command = str(input(">>> "))
+
+        except:
+            print("tweak key pressed ... quitting")
+            sys.exit(0)
+
+        uni_controler.run(command)
+
+    '''
+
+
     ip_adr = "127.0.0.1"
     port_num = 45678
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
