@@ -12,12 +12,12 @@ function MyButton({msgHere}) {
       const res = await fetch("http://127.0.0.1:45678", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: "React User", message: msgHere }),
+        body: JSON.stringify({ message: msgHere }),
       });
       const data = await res.json();
       setResponse(data);
-      console.log("res 1");
-      alert(JSON.stringify(data, null, 2));
+      console.log("data =", data);
+      alert(JSON.stringify(data));
     } catch (error) {
       console.error("Error:", error);
       setResponse({ error: "Failed to connect to the server." });
