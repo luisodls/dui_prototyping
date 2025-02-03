@@ -35,8 +35,8 @@ function MyGetButton({msgHere}) {
   const [response, setResponse] = useState(null);
   const handleClick = async () => {
     try {
-      const query = new URLSearchParams({ msgHere }).toString();
-      const res = await fetch(`http://127.0.0.1:45678?${query}`, {
+      const path_in = new URLSearchParams({ msgHere }).toString();
+      const res = await fetch(`http://127.0.0.1:45678?${path_in}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
