@@ -35,17 +35,18 @@ function MyGetButton({msgHere}) {
   const [response, setResponse] = useState(null);
   const handleClick = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:45678", {
-        method: "POST",
+      const query = new URLSearchParams({ msgHere }).toString();
+      const res = await fetch(`http://127.0.0.1:45678?${query}`, {
+        method: "GET",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: msgHere }),
       });
+
       const data = await res.json();
       setResponse(data);
       console.log("data =", data);
       alert(JSON.stringify(data));
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error <<", error, ">>");
       setResponse({ error: "Failed to connect to the server." });
       console.log("res ERROR");
     }

@@ -19,7 +19,7 @@ class RequestHandler(BaseHTTPRequestHandler):
     def send_ok_dict(self, str_out = "Ok"):
         '''used by both, GET or POST,'''
         response = {}
-        response["status"] = str_out
+        response["Answer"] = str_out
         self.wfile.write(json.dumps(response).encode('utf-8'))
 
 
@@ -35,7 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("url_path =", url_path)
         print("url_dict =", url_dict)
 
-        self.send_ok_dict()
+        self.send_ok_dict(url_dict["msgHere"][0])
 
     def do_PUT(self):
         print("do_PUT")
