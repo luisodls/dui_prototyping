@@ -7,6 +7,11 @@ echo "removing possible old tst-app directory"
 rm -rf tst-app
 
 echo "creating template app with create-next-app@latest"
+echo "_________________________________________________"
+echo ""
+echo "if npm asks ... agree to << create-next-app@XX.X.X >> "
+echo ""
+echo "then"
 echo ""
 echo "remember to say << yes >> only to the next question "
 echo ""
