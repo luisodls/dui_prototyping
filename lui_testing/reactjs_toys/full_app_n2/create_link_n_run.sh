@@ -20,7 +20,7 @@ cd tst-app/src/pages/
 
 echo "replacing index.js with link to my code"
 mv index.js original_index.js
-ln $INI_DIR/button_n_stream_request.js index.js
+ln $INI_DIR/button_4_get_n_post_request.js index.js
 cd ../../
 
 echo "running my code"
