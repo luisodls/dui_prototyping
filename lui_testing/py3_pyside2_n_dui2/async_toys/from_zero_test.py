@@ -1,14 +1,19 @@
+
 import asyncio
-from time import sleep
+
 async def cout_nums(rep):
     for iner_rep in range(rep):
         await asyncio.sleep(0.2)
         print("rep =", rep, "iner_rep =", iner_rep)
 
-def main():
-    for rep in range(5):
-        asyncio.run(cout_nums(rep))
+async def main():
+    await asyncio.gather(
+        cout_nums(0),
+        cout_nums(1),
+        cout_nums(2),
+        cout_nums(3),
+        cout_nums(4)
+    )
 
 if __name__ == "__main__":
-    main()
-
+    asyncio.run(main())
