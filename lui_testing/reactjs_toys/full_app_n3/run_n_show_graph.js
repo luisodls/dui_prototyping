@@ -43,8 +43,9 @@ function MyGetButton({msgHere}) {
 
       const data = await res.json();
       setResponse(data);
-      console.log("data >>", data.Answer);
-      alert(JSON.stringify(data));
+      var my_lst = data.Answer;
+      console.log("my_lst =", my_lst);
+      alert(JSON.stringify(my_lst));
     } catch (error) {
       console.error("Error <<", error, ">>");
       setResponse({ error: "Failed to connect to the server." });
