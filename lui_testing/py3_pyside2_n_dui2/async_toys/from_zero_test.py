@@ -1,12 +1,14 @@
 import asyncio
+from time import sleep
+async def cout_nums(rep):
+    for iner_rep in range(rep):
+        await asyncio.sleep(0.2)
+        print("rep =", rep, "iner_rep =", iner_rep)
 
-async def say_hello():
-    print("Hello...")
-    await asyncio.sleep(2)  # Simulates a delay (non-blocking)
-    print("World!")
+def main():
+    for rep in range(5):
+        asyncio.run(cout_nums(rep))
 
-async def main():
-    await say_hello()  # Calling the async function
-
-asyncio.run(main())
+if __name__ == "__main__":
+    main()
 
