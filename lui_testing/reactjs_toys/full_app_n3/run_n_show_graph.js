@@ -43,7 +43,7 @@ function MyGetButton({msgHere}) {
 
       const data = await res.json();
       setResponse(data);
-      console.log("data =", data);
+      console.log("data >>", data.Answer);
       alert(JSON.stringify(data));
     } catch (error) {
       console.error("Error <<", error, ">>");
