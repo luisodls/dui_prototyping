@@ -1,4 +1,3 @@
-
 import asyncio
 
 async def cout_nums(rep):
@@ -7,13 +6,11 @@ async def cout_nums(rep):
         print("rep =", rep, "iner_rep =", iner_rep)
 
 async def main():
-    await asyncio.gather(
-        cout_nums(0),
-        cout_nums(1),
-        cout_nums(2),
-        cout_nums(3),
-        cout_nums(4)
-    )
+    lst = []
+    for num in range(10):
+        lst.append(cout_nums(num))
+
+    await asyncio.gather(*lst)
 
 if __name__ == "__main__":
     asyncio.run(main())
