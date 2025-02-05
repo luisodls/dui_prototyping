@@ -30,6 +30,44 @@ def prin_lst(lst, curr):
     print(lst_stp)
     return lst_stp
 
+def build_lst(lst, curr):
+    print(" - - - - - building list:")
+    lst_stp = []
+    for uni in lst:
+        #step_dict = str(uni.lin_num) + " comm: " + str(uni.command)
+        step_dict = {
+            "lin_num":uni.lin_num,
+            "command":str(uni.command)
+        }
+
+        try:
+            step_dict["prev_step"] = int(uni.prev_step.lin_num)
+
+        except:
+            step_dict["prev_step"] = None
+
+        nxt_lst = []
+        try:
+            for nxt_uni in uni.next_step_list:
+                nxt_lst.append(int(nxt_uni.lin_num))
+
+        except:
+            pass
+
+        step_dict["nxt"] = nxt_lst
+
+        '''
+        if( curr == uni.lin_num ):
+            step_dict += "                           <<< here I am <<<"
+        '''
+
+        lst_stp.append(step_dict)
+
+    print(lst_stp)
+    return lst_stp
+
+
+
 def show_tree(step = None, curr = None, indent = 1):
     if( step.success == True ):
         stp_prn = " T "

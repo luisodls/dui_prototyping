@@ -2,7 +2,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from old_tree_nav import runner, prin_lst, show_tree
+from old_tree_nav import runner, prin_lst, show_tree, build_lst
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -39,7 +39,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         #self.send_ok_dict(url_dict["msgHere"][0])
 
-        lst_out = prin_lst(uni_controler.step_list, uni_controler.current)
+        lst_out = build_lst(uni_controler.step_list, uni_controler.current)
 
         self.send_ok_dict(lst_out)
         #self.send_ok_dict(url_dict["msgHere"][0])
@@ -86,30 +86,6 @@ if __name__ == "__main__":
     print("Starting server")
 
     uni_controler = runner()
-
-    '''
-    uni_controler = runner()
-
-    command = ""
-    while command.strip() != 'exit':
-        # printing new list of steps
-        #prin_lst(uni_controler.step_list, uni_controler.current)
-
-        # showing showing tree
-        print("________ showing steps tree:")
-        show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
-
-        try:
-            command = str(input(">>> "))
-
-        except:
-            print("tweak key pressed ... quitting")
-            sys.exit(0)
-
-        uni_controler.run(command)
-
-    '''
-
 
     ip_adr = "127.0.0.1"
     port_num = 45678
