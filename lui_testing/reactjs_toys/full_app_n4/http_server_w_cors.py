@@ -68,13 +68,15 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("url_dict =", url_dict)
         msg = url_dict['message']
         print("msg =", msg)
+        if msg != "":
+            uni_controler.run(msg)
+            prin_lst(uni_controler.step_list, uni_controler.current)
+            print("-----------------------------------------------")
+            show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
+            self.send_ok_dict(msg)
 
-        uni_controler.run(msg)
-        prin_lst(uni_controler.step_list, uni_controler.current)
-        print("-----------------------------------------------")
-        show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
-
-        self.send_ok_dict(msg)
+        else:
+            self.send_ok_dict()
 
 
 if __name__ == "__main__":

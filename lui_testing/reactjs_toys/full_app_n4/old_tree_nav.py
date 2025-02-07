@@ -129,6 +129,8 @@ class runner(object):
 
     def run(self, command):
 
+        print("command =", command)
+
         cmd_lst = command.split()
         if( cmd_lst[0] == "goto" ):
             self.goto(int(cmd_lst[1]))
