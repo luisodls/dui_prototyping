@@ -25,7 +25,7 @@ function show_tree(pos_num, my_lst, indent = 1){
         stp_prn = stp_prn + "None"
     }
     tree_log.push(stp_prn);
-    console.log(stp_prn)
+    console.log(stp_prn);
     try{
         for (let new_pos of step.nxt) {
             show_tree(new_pos, my_lst, indent + 1);
