@@ -121,8 +121,7 @@ class uni_step(object):
             self.success = True
 
 class runner(object):
-    sh_com_lst = ['ls', 'echo', 'cat']
-    ctrl_com_lst = ["goto", "fail", "slist","reset"]
+    ctrl_com_lst = ["goto", "fail", "slist"]
     def __init__(self):
         self.step_list = [uni_step(None)]
         self.bigger_lin = 0
@@ -137,21 +136,30 @@ class runner(object):
         elif( cmd_lst[0] == "slist" ):
             self.slist()
 
+        elif( cmd_lst[0].isdigit() ):
+            print("Should go to line", int(cmd_lst[0]))
+            self.goto(int(cmd_lst[0]))
+            if( len(cmd_lst) > 1 ):
+                self.exec_step(cmd_lst[1:])
+
         else:
-            if( self.step_list[self.current].success != False ):
-                if( self.step_list[self.current].success == True ):
-                    self.goto_prev()
-                    self.create_step(self.step_list[self.current])
+            self.exec_step(cmd_lst)
 
-                self.step_list[self.current](cmd_lst)
-                if( self.step_list[self.current].success == True ):
-                    self.create_step(self.step_list[self.current])
+    def exec_step(self, cmd_lst):
+        if( self.step_list[self.current].success != False ):
+            if( self.step_list[self.current].success == True ):
+                self.goto_prev()
+                self.create_step(self.step_list[self.current])
 
-                else:
-                    print("failed step")
+            self.step_list[self.current](cmd_lst)
+            if( self.step_list[self.current].success == True ):
+                self.create_step(self.step_list[self.current])
 
             else:
-                print("cannot run from failed step")
+                print("failed step")
+
+        else:
+            print("cannot run from failed step")
 
     def create_step(self, prev_step):
         new_step = uni_step(prev_step)

@@ -33,16 +33,11 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         url_path = self.path
         url_dict = parse_qs(urlparse(url_path).query)
-
         print("url_path =", url_path)
         print("url_dict =", url_dict)
-
-        #self.send_ok_dict(url_dict["msgHere"][0])
-
         lst_out = build_lst(uni_controler.step_list, uni_controler.current)
 
         self.send_ok_dict(lst_out)
-        #self.send_ok_dict(url_dict["msgHere"][0])
 
 
     def do_PUT(self):
