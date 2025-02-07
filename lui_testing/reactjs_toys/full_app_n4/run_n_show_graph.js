@@ -7,40 +7,6 @@ import { useState } from 'react';
 
 var tree_log = ["-- Do a GET to see the tree --"];
 
-function MyGetButton({ msgHere }) {
-  const [response, setResponse] = useState(null);
-  const handleClick = async () => {
-    try {
-      const path_in = new URLSearchParams({ msgHere }).toString();
-      const res = await fetch(`http://127.0.0.1:45678?${path_in}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      const data = await res.json();
-      setResponse(data);
-      const my_lst = data.Answer;
-      console.log("Received Data:", my_lst);
-      tree_log = [" St lin# ", "__________________________"];
-      show_tree(0, my_lst, 1);
-    } catch (error) {
-      console.error("Fetch failed:", error.message);
-      setResponse({ error: "Failed to connect to the server." });
-    }
-  };
-  return (
-    <div>
-      <button onClick={handleClick}>
-        Do GET
-      </button>
-      {tree_log && (
-        <pre style={{ background: "#f4f4f4", padding: "10px", borderRadius: "5px" }}>
-          {JSON.stringify(tree_log, null, 2)}
-        </pre>
-      )}
-    </div>
-  );
-}
-
 function show_tree(pos_num, my_lst, indent = 1){
     let step = my_lst[pos_num]
     let stp_prn = "";
@@ -69,6 +35,41 @@ function show_tree(pos_num, my_lst, indent = 1){
     }
 }
 
+function MyGetButton({ msgHere }) {
+  const [response, setResponse] = useState(null);
+  const handleClick = async () => {
+    try {
+      const path_in = new URLSearchParams({ msgHere }).toString();
+      const res = await fetch(`http://127.0.0.1:45678?${path_in}`, {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      const data = await res.json();
+      setResponse(data);
+      const my_lst = data.Answer;
+      console.log("Received Data:", my_lst);
+      tree_log = [" St lin# ", "__________________________"];
+      show_tree(0, my_lst, 1);
+      alert(JSON.stringify(tree_log, null, 2));
+    } catch (error) {
+      console.error("Fetch failed:", error.message);
+      setResponse({ error: "Failed to connect to the server." });
+    }
+  };
+  return (
+    <div>
+      <button onClick={handleClick}>
+        Do GET
+      </button>
+      {tree_log && (
+        <pre style={{ background: "#f4f4f4", padding: "10px", borderRadius: "5px" }}>
+          {JSON.stringify(tree_log, null, 2)}
+        </pre>
+      )}
+    </div>
+  );
+}
+
 function MyPostButton({msgHere}) {
   const [response, setResponse] = useState(null);
   const handleClick = async () => {
@@ -81,7 +82,6 @@ function MyPostButton({msgHere}) {
       const data = await res.json();
       setResponse(data);
       console.log("✅ Response received:", data);
-      alert(JSON.stringify(data, null, 2)); // Prettier alert formatting
     } catch (error) {
       console.error("❌ Error:", error.message || error);
       setResponse({ error: error.message || "Failed to connect to the server." });
