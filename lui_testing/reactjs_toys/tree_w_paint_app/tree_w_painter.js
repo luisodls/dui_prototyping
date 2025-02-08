@@ -35,12 +35,19 @@ function build_tree_recr(pos_num, my_lst, indent = 1){
 
 function draw_tree(canvasRef) {
   alert(JSON.stringify(tree_log, null, 2));
+
+  console.log("len(tree_log) = ", tree_log.length)
+
   const canvas = canvasRef.current;
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
+
+  let x2 = tree_log.length * 5
+  let y2 = tree_log.length * 5
+
   ctx.beginPath();
   ctx.moveTo(10, 10); // Start point (x, y)
-  ctx.lineTo(50, 50); // End point (x, y)
+  ctx.lineTo(x2, y2); // End point (x, y)
   ctx.strokeStyle = "black"; // Line color
   ctx.lineWidth = 2; // Line thickness
   ctx.stroke();
