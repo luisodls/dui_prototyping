@@ -34,6 +34,7 @@ function show_tree(pos_num, my_lst, indent = 1){
 }
 
 function handleLine(canvasRef) {
+  alert(JSON.stringify(tree_log, null, 2));
   const canvas = canvasRef.current;
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
@@ -61,11 +62,7 @@ function MyGetButton({ msgHere, tmpRef}) {
       console.log("Received Data:", my_lst);
       tree_log = [" St lin# ", "__________________________"];
       show_tree(0, my_lst, 1);
-      alert(JSON.stringify(tree_log, null, 2));
-
       handleLine(tmpRef);
-
-
     } catch (error) {
       console.error("Fetch failed:", error.message);
       setResponse({ error: "Failed to connect to the server." });
@@ -138,11 +135,6 @@ export default function Home() {
           onChange={e => setName(e.target.value)}
         />
       </label>
-      <button onClick={
-        () => handleLine(canvasRef)
-      } className="p-2 bg-blue-300 rounded">
-        Click here
-      </button>
       <MyPostButton msgHere ={MyCmd} />
       <MyGetButton msgHere ={MyCmd} tmpRef ={canvasRef} />
     </div>
