@@ -42,13 +42,13 @@ function MyPostButton({msgHere}) {
 
 export default function Home() {
   const canvasRef = useRef(null);
-  const [usrName, setName] = useState('');
+  const [MyCmd, setName] = useState('');
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "white";
-    ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill background white
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
 
   return (
@@ -56,16 +56,16 @@ export default function Home() {
       <h1>Button w canvas</h1>
       <canvas
         ref={canvasRef}
-        width={500}
-        height={400}
+        width={300}
+        height={200}
         className="border border-gray-400"
       ></canvas>
-      <button onClick={() => handleLine(canvasRef)} className="p-2 bg-blue-300 rounded">
+      <button onClick={
+        () => handleLine(canvasRef)
+      } className="p-2 bg-blue-300 rounded">
         Click here
       </button>
-
-      <MyPostButton msgHere ={usrName} />
-
+      <MyPostButton msgHere ={MyCmd} />
     </div>
   );
 }
