@@ -25,7 +25,7 @@ cd tst-app/src/pages/
 
 echo "replacing index.js with link to my code"
 mv index.js original_index.js
-ln $INI_DIR/painter.js index.js
+ln $INI_DIR/painter_1_line_sep_func.js index.js
 cd ../../
 
 echo "running my code"

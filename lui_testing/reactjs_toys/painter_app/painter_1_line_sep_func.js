@@ -13,6 +13,7 @@ function handleLine(canvasRef) {
   ctx.strokeStyle = "black"; // Line color
   ctx.lineWidth = 2; // Line thickness
   ctx.stroke();
+  console.log("1 line drawn")
 }
 
 export default function Home() {
