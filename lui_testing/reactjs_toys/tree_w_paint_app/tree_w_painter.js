@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 var tree_log = ["-- Do a GET to see the tree --"];
 
-function show_tree(pos_num, my_lst, indent = 1){
+function build_tree_recr(pos_num, my_lst, indent = 1){
   let step = my_lst[pos_num]
   let stp_prn = "";
   if( step.success === true ){
@@ -26,14 +26,14 @@ function show_tree(pos_num, my_lst, indent = 1){
   console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
-          show_tree(new_pos, my_lst, indent + 1);
+          build_tree_recr(new_pos, my_lst, indent + 1);
       }
   } catch (error) {
       console.log("last indent =", indent);
   }
 }
 
-function handleLine(canvasRef) {
+function draw_tree(canvasRef) {
   alert(JSON.stringify(tree_log, null, 2));
   const canvas = canvasRef.current;
   if (!canvas) return; // Ensure canvas exists
@@ -61,8 +61,8 @@ function MyGetButton({ msgHere, tmpRef}) {
       const my_lst = data.Answer;
       console.log("Received Data:", my_lst);
       tree_log = [" St lin# ", "__________________________"];
-      show_tree(0, my_lst, 1);
-      handleLine(tmpRef);
+      build_tree_recr(0, my_lst, 1);
+      draw_tree(tmpRef);
     } catch (error) {
       console.error("Fetch failed:", error.message);
       setResponse({ error: "Failed to connect to the server." });
@@ -129,7 +129,7 @@ export default function Home() {
         className="border border-gray-400"
       ></canvas>
       <label>
-        Give command here:
+        Dui cmd:
         <input
           value={MyCmd}
           onChange={e => setName(e.target.value)}
