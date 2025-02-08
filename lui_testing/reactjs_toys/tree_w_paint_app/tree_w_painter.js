@@ -34,7 +34,7 @@ function build_tree_recr(pos_num, my_lst, indent = 1){
 }
 
 function draw_tree(canvasRef) {
-  alert(JSON.stringify(tree_log, null, 2));
+  //alert(JSON.stringify(tree_log, null, 2));
 
   console.log("len(tree_log) = ", tree_log.length)
 
@@ -45,13 +45,14 @@ function draw_tree(canvasRef) {
   let x2 = tree_log.length * 5
   let y2 = tree_log.length * 5
 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
-  ctx.moveTo(10, 10); // Start point (x, y)
-  ctx.lineTo(x2, y2); // End point (x, y)
-  ctx.strokeStyle = "black"; // Line color
-  ctx.lineWidth = 2; // Line thickness
+  ctx.moveTo(10, 10);
+  ctx.lineTo(x2, 100);
+  ctx.strokeStyle = "black";
+  ctx.lineWidth = 2;
   ctx.stroke();
-  console.log("time to request GET")
+  console.log("drawing done")
 }
 
 function MyGetButton({ msgHere, tmpRef}) {
@@ -128,8 +129,8 @@ export default function Home() {
       <h1>Button w canvas</h1>
       <canvas
         ref={canvasRef}
-        width={200}
-        height={100}
+        width={300}
+        height={200}
         className="border border-gray-400"
       ></canvas>
       <label>
