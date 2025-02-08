@@ -60,6 +60,16 @@ export default function Home() {
         height={200}
         className="border border-gray-400"
       ></canvas>
+
+      <label>
+        Give name here:
+        <input
+          value={MyCmd}
+          onChange={e => setName(e.target.value)}
+        />
+      </label>
+
+
       <button onClick={
         () => handleLine(canvasRef)
       } className="p-2 bg-blue-300 rounded">
