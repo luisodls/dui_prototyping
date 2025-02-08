@@ -72,7 +72,10 @@ class RequestHandler(BaseHTTPRequestHandler):
             uni_controler.run(msg)
             prin_lst(uni_controler.step_list, uni_controler.current)
             print("-----------------------------------------------")
-            show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
+            show_tree(
+                step = uni_controler.step_list[0],
+                curr = uni_controler.current, indent = 1
+            )
             self.send_ok_dict(msg)
 
         else:

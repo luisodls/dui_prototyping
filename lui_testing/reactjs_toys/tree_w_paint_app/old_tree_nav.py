@@ -22,7 +22,7 @@ def prin_lst(lst, curr):
         except:
             stp_str += "empty"
 
-        if( curr == uni.lin_num ):
+        if curr == uni.lin_num:
             stp_str += "                           <<< here I am <<<"
 
         lst_stp.append(stp_str)
@@ -69,10 +69,10 @@ def build_lst(lst, curr):
 
 
 def show_tree(step = None, curr = None, indent = 1):
-    if( step.success == True ):
+    if step.success == True:
         stp_prn = " T "
 
-    elif( step.success == False ):
+    elif step.success == False:
         stp_prn = " F "
 
     else:
@@ -87,7 +87,7 @@ def show_tree(step = None, curr = None, indent = 1):
     except:
         stp_prn += "None"
 
-    if( step.lin_num == curr ):
+    if step.lin_num == curr:
         stp_prn += "            <<< here "
 
     print(stp_prn)
@@ -109,14 +109,14 @@ class uni_step(object):
         self.success = None
 
     def __call__(self, cmd_lst):
-        if( cmd_lst[0] == "fail" ):
+        if cmd_lst[0] == "fail":
             #testing virtual failed step
             print("\n FAILED \n")
             self.command = cmd_lst
             self.success = False
 
         else:
-            print("____________________________________\n << running >>", cmd_lst)
+            print("__________________________________\n << running >>", cmd_lst)
             self.command = cmd_lst
             self.success = True
 
@@ -132,29 +132,29 @@ class runner(object):
         print("command =", command)
 
         cmd_lst = command.split()
-        if( cmd_lst[0] == "goto" ):
+        if cmd_lst[0] == "goto":
             self.goto(int(cmd_lst[1]))
 
-        elif( cmd_lst[0] == "slist" ):
+        elif cmd_lst[0] == "slist":
             self.slist()
 
-        elif( cmd_lst[0].isdigit() ):
+        elif cmd_lst[0].isdigit():
             print("Should go to line", int(cmd_lst[0]))
             self.goto(int(cmd_lst[0]))
-            if( len(cmd_lst) > 1 ):
+            if len(cmd_lst) > 1:
                 self.exec_step(cmd_lst[1:])
 
         else:
             self.exec_step(cmd_lst)
 
     def exec_step(self, cmd_lst):
-        if( self.step_list[self.current].success != False ):
-            if( self.step_list[self.current].success == True ):
+        if self.step_list[self.current].success != False:
+            if self.step_list[self.current].success == True:
                 self.goto_prev()
                 self.create_step(self.step_list[self.current])
 
             self.step_list[self.current](cmd_lst)
-            if( self.step_list[self.current].success == True ):
+            if self.step_list[self.current].success == True:
                 self.create_step(self.step_list[self.current])
 
             else:
@@ -168,7 +168,7 @@ class runner(object):
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
         try:
-            if( self.step_list[self.current].next_step_list == None ):
+            if self.step_list[self.current].next_step_list == None:
                 self.step_list[self.current].next_step_list = [new_step]
 
             else:
@@ -206,7 +206,10 @@ if( __name__ == "__main__"):
 
         # showing showing tree
         print("________ showing steps tree:")
-        show_tree(step = uni_controler.step_list[0], curr = uni_controler.current, indent = 1)
+        show_tree(
+            step = uni_controler.step_list[0],
+            curr = uni_controler.current, indent = 1
+        )
 
         try:
             command = str(input(">>> "))

@@ -15,7 +15,7 @@ echo "then"
 echo ""
 echo "remember to say << yes >> only to the next question "
 echo ""
-echo "  Would you like your code inside a \'src\' directory?"
+echo "  Would you like your code inside a '/src' directory?"
 echo ""
 
 npx create-next-app@latest tst-app

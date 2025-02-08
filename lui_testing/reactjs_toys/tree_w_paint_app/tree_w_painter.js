@@ -39,8 +39,8 @@ function draw_tree(canvasRef) {
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
   ctx.beginPath();
-  ctx.moveTo(50, 50); // Start point (x, y)
-  ctx.lineTo(200, 200); // End point (x, y)
+  ctx.moveTo(10, 10); // Start point (x, y)
+  ctx.lineTo(50, 50); // End point (x, y)
   ctx.strokeStyle = "black"; // Line color
   ctx.lineWidth = 2; // Line thickness
   ctx.stroke();
@@ -82,8 +82,6 @@ function MyGetButton({ msgHere, tmpRef}) {
   );
 }
 
-
-
 function MyPostButton({msgHere}) {
   const [response, setResponse] = useState(null);
   const handleClick = async () => {
@@ -118,14 +116,13 @@ export default function Home() {
     ctx.fillStyle = "white";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
   }, []);
-
   return (
     <div>
       <h1>Button w canvas</h1>
       <canvas
         ref={canvasRef}
-        width={300}
-        height={200}
+        width={200}
+        height={100}
         className="border border-gray-400"
       ></canvas>
       <label>
