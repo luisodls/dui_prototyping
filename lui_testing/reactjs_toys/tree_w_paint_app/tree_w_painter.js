@@ -46,7 +46,7 @@ function handleLine(canvasRef) {
   console.log("time to request GET")
 }
 
-function MyGetButton({ msgHere }) {
+function MyGetButton({ msgHere, tmpRef}) {
   const [response, setResponse] = useState(null);
   const handleClick = async () => {
     try {
@@ -62,6 +62,10 @@ function MyGetButton({ msgHere }) {
       tree_log = [" St lin# ", "__________________________"];
       show_tree(0, my_lst, 1);
       alert(JSON.stringify(tree_log, null, 2));
+
+      handleLine(tmpRef);
+
+
     } catch (error) {
       console.error("Fetch failed:", error.message);
       setResponse({ error: "Failed to connect to the server." });
@@ -140,7 +144,7 @@ export default function Home() {
         Click here
       </button>
       <MyPostButton msgHere ={MyCmd} />
-      <MyGetButton msgHere ={MyCmd} />
+      <MyGetButton msgHere ={MyCmd} tmpRef ={canvasRef} />
     </div>
   );
 }
