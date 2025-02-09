@@ -57,25 +57,28 @@ function draw_tree(canvasRef) {
   const x_scale = 25;
   const y_scale = 20;
 
-   for (let i = 0; i < tree_data_map.length; i++) {
-      // Alternate colors: Even index -> White, Odd index -> Gray
-      ctx.fillStyle = i % 2 === 0 ? "white" : "lightgray";
-      ctx.fillRect(0, i * y_scale, 500, y_scale);
+  for (let i = 0; i < tree_data_map.length; i++) {
+    ctx.fillStyle = i % 2 === 0 ? "white" : "lightgray";
+    ctx.fillRect(0, i * y_scale, 500, y_scale);
 
-      // Draw row number
-      ctx.fillStyle = "black";
-      ctx.font = "12px Arial";
-      ctx.fillText(` ${tree_data_map[i].lin_num}`, 10, (i + 1) * y_scale - 6);
-    }
+    ctx.fillStyle = "black";
+    ctx.font = "12px Mono";
+    ctx.fillText(` ${tree_data_map[i].lin_num}`, 10, (i + 1) * y_scale - 6);
 
+    ctx.fillText(
+      tree_data_map[i].command,
+      (tree_data_map[i].indent * 2.5 + 0.5) * x_scale + x_scale * 0.75,
+      (i + 1) * y_scale - 6
+    );
+  }
 
   for (let ste_pos of tree_data_map) {
-    let x_ini_vezier = ste_pos.indent * 2 * x_scale;
-    let y_ini_vezier = (ste_pos.my_row - 1) * y_scale;
-    let x_end_vezier = (ste_pos.indent * 2 + 0.5) * x_scale;
-    let y_end_vezier = (ste_pos.my_row - 0.5) * y_scale;
+    let x_ini_vezier = ste_pos.indent * 2.5 * x_scale;
+    let y_ini_vezier = ste_pos.my_row * y_scale;
+    let x_end_vezier = (ste_pos.indent * 2.5 + 0.5) * x_scale;
+    let y_end_vezier = (ste_pos.my_row + 0.5) * y_scale;
     drawLine(
-      x_ini_vezier, ste_pos.parent_row * y_scale,
+      x_ini_vezier, (ste_pos.parent_row + 1) * y_scale,
       x_ini_vezier, y_ini_vezier,    ctx, "blue", 2
     );
     ctx.moveTo(x_ini_vezier, y_ini_vezier);  // Move to the start point
@@ -86,15 +89,10 @@ function draw_tree(canvasRef) {
     ctx.lineWidth = 2;
     ctx.stroke();
 
-    /*drawLine(
-      x_ini_vezier, y_ini_vezier,
-      x_end_vezier, y_end_vezier,    ctx, "blue", 2
-    );*/
     drawLine(
       x_end_vezier, y_end_vezier,
-      x_end_vezier + x_scale, y_end_vezier,    ctx, "blue", 2
+      x_end_vezier + x_scale * 0.5, y_end_vezier,    ctx, "blue", 2
     );
-
   }
   console.log("drawing done")
 }

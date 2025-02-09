@@ -37,7 +37,7 @@ def build_lst(lst, curr):
         #step_dict = str(uni.lin_num) + " comm: " + str(uni.command)
         step_dict = {
             "lin_num":uni.lin_num,
-            "command":str(uni.command)
+            "command":str(uni.command[0])
         }
 
         try:
@@ -105,7 +105,7 @@ class uni_step(object):
         self.lin_num = 0
         self.next_step_list = None
         self.prev_step = prev_step
-        self.command = None
+        self.command = [None]
         self.success = None
 
     def __call__(self, cmd_lst):
