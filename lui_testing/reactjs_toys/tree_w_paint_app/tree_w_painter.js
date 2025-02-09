@@ -55,20 +55,20 @@ function draw_tree(canvasRef) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const x_scale = 25;
-  const y_scale = 20;
+  const y_scale = 30;
 
   for (let i = 0; i < tree_data_map.length; i++) {
     ctx.fillStyle = i % 2 === 0 ? "white" : "lightgray";
-    ctx.fillRect(0, i * y_scale, 500, y_scale);
+    ctx.fillRect(0, i * y_scale, 900, y_scale);
 
     ctx.fillStyle = "black";
-    ctx.font = "12px Mono";
-    ctx.fillText(` ${tree_data_map[i].lin_num}`, 10, (i + 1) * y_scale - 6);
+    ctx.font = "16px Mono";
+    ctx.fillText(` ${tree_data_map[i].lin_num}`, 10, (i + 1) * y_scale - 10);
 
     ctx.fillText(
       tree_data_map[i].command,
       (tree_data_map[i].indent * 2.5 + 0.5) * x_scale + x_scale * 0.75,
-      (i + 1) * y_scale - 6
+      (i + 1) * y_scale - 10
     );
   }
 
@@ -172,8 +172,8 @@ export default function Home() {
       <h1>Button w canvas</h1>
       <canvas
         ref={canvasRef}
-        width={500}
-        height={400}
+        width={900}
+        height={500}
         className="border border-gray-400"
       ></canvas>
       <label>
