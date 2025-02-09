@@ -153,8 +153,8 @@ export default function Home() {
       <h1>Button w canvas</h1>
       <canvas
         ref={canvasRef}
-        width={300}
-        height={200}
+        width={500}
+        height={400}
         className="border border-gray-400"
       ></canvas>
       <label>
