@@ -6,7 +6,7 @@ import { useState } from 'react';
 var tree_data_str = ["-- Do a GET to see the tree --"];
 var tree_data_map = ["---------------"];
 
-function build_tree_recr(pos_num, my_lst, indent = 1, parent_lin_num = 0){
+function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
   let step = my_lst[pos_num]
   let stp_suss = "";
   if( step.success === true ){
@@ -17,20 +17,20 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_lin_num = 0){
       stp_suss = " N ";
   }
   let str_lin_num = String(step.lin_num);
-  let stp_prn = stp_suss + "  " + str_lin_num + "      ".repeat(indent) + " └──";
+  let stp_prn = stp_suss + "  " + str_lin_num + "     ".repeat(indent) + " └──";
   let stp_cmd = String(step.command);
   stp_prn = stp_prn + stp_cmd;
-  let stp_dict = {
-    command: stp_cmd, lin_num: step.lin_num,
-    success: stp_suss, indent:indent, parent_lin_num:parent_lin_num
+  let step_map = {
+    command: stp_cmd, lin_num: step.lin_num, success: stp_suss,
+    indent:indent, my_row:tree_data_map.length, parent_row:parent_row
   };
 
   tree_data_str.push(stp_prn);
-  tree_data_map.push(stp_dict);
+  tree_data_map.push(step_map);
   console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
-          build_tree_recr(new_pos, my_lst, indent + 1, step.lin_num);
+          build_tree_recr(new_pos, my_lst, indent + 1, tree_data_map.length);
       }
   } catch (error) {
       console.log("last indent =", indent);
@@ -41,38 +41,21 @@ function draw_tree(canvasRef) {
   //alert(JSON.stringify(tree_data_str, null, 2));
   alert(JSON.stringify(tree_data_map));
   console.log("tree_data_map =", tree_data_map);
-  /*for (let new_step of tree_data_map) {
-    console.log("step.command =", new_step.get("command"));
-  };*/
-
-  console.log("len(tree_data_str) = ", tree_data_str.length)
 
   const canvas = canvasRef.current;
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
 
-  let x2 = tree_data_str.length * 5
-  let y2 = tree_data_str.length * 5
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
-  /*
-  ctx.moveTo(10, 10);
-  ctx.lineTo(x2, 100);
-  ctx.strokeStyle = "black";
-  ctx.lineWidth = 2;
-  ctx.stroke();
-  */
 
   for (let ste_pos of tree_data_map) {
-    ctx.moveTo(ste_pos.indent * 5, ste_pos.parent_lin_num * 5);
-    ctx.lineTo(ste_pos.indent * 5, ste_pos.lin_num * 5);
+    ctx.moveTo(ste_pos.indent * 5, ste_pos.parent_row * 5);
+    ctx.lineTo(ste_pos.indent * 5, ste_pos.my_row * 5);
     ctx.strokeStyle = "black";
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 3;
     ctx.stroke();
   }
-
-
 
   console.log("drawing done")
 }
@@ -92,7 +75,7 @@ function MyGetButton({ msgHere, tmpRef}) {
       console.log("Received Data:", my_lst);
       tree_data_str = [" St lin# ", "__________________________"];
       tree_data_map = ["---------------"];
-      build_tree_recr(0, my_lst, 1, null);
+      build_tree_recr(0, my_lst, 1, 0);
       draw_tree(tmpRef);
     } catch (error) {
       console.error("Fetch failed:", error.message);
