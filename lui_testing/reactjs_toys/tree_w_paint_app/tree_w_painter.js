@@ -7,7 +7,7 @@ var tree_data_str = ["-- Do a GET to see the tree --"];
 var tree_data_map = ["---------------"];
 
 function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
-  let step = my_lst[pos_num]
+  const step = my_lst[pos_num]
   let stp_suss = "";
   if( step.success === true ){
       stp_suss = " T ";
@@ -16,18 +16,16 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
   }else{
       stp_suss = " N ";
   }
-  let str_lin_num = String(step.lin_num);
+  const str_lin_num = String(step.lin_num);
   let stp_prn = stp_suss + "  " + str_lin_num + "     ".repeat(indent) + " └──";
-  let stp_cmd = String(step.command);
+  const stp_cmd = String(step.command);
   stp_prn = stp_prn + stp_cmd;
-  let step_map = {
+  const step_map = {
     command: stp_cmd, lin_num: step.lin_num, success: stp_suss,
     indent:indent, my_row:tree_data_map.length, parent_row:parent_row
   };
-
   tree_data_str.push(stp_prn);
   tree_data_map.push(step_map);
-  console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
           build_tree_recr(new_pos, my_lst, indent + 1, step_map.my_row);
@@ -38,8 +36,8 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
 }
 
 function draw_tree(canvasRef) {
-  //alert(JSON.stringify(tree_data_str, null, 2));
-  alert(JSON.stringify(tree_data_map));
+  alert(JSON.stringify(tree_data_str, null, 2));
+  //alert(JSON.stringify(tree_data_map));
   console.log("tree_data_map =", tree_data_map);
 
   const canvas = canvasRef.current;
@@ -73,7 +71,7 @@ function MyGetButton({ msgHere, tmpRef}) {
       const my_lst = data.Answer;
       console.log("Received Data:", my_lst);
       tree_data_str = [" St lin# ", "__________________________"];
-      tree_data_map = ["---------------"];
+      tree_data_map = [];
       build_tree_recr(0, my_lst, 1, 0);
       draw_tree(tmpRef);
     } catch (error) {
