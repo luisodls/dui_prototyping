@@ -6,7 +6,7 @@ import { useState } from 'react';
 var tree_data_str = ["-- Do a GET to see the tree --"];
 var tree_data_map = ["---------------"];
 
-function build_tree_recr(pos_num, my_lst, indent = 1){
+function build_tree_recr(pos_num, my_lst, indent = 1, parent_lin_num = 0){
   let step = my_lst[pos_num]
   let stp_suss = "";
   if( step.success === true ){
@@ -22,7 +22,7 @@ function build_tree_recr(pos_num, my_lst, indent = 1){
   stp_prn = stp_prn + stp_cmd;
   let stp_dict = {
     command: stp_cmd, lin_num: step.lin_num,
-    success: stp_suss, indent:indent
+    success: stp_suss, indent:indent, parent_lin_num:parent_lin_num
   };
 
   tree_data_str.push(stp_prn);
@@ -30,7 +30,7 @@ function build_tree_recr(pos_num, my_lst, indent = 1){
   console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
-          build_tree_recr(new_pos, my_lst, indent + 1);
+          build_tree_recr(new_pos, my_lst, indent + 1, step.lin_num);
       }
   } catch (error) {
       console.log("last indent =", indent);
@@ -56,11 +56,24 @@ function draw_tree(canvasRef) {
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
+  /*
   ctx.moveTo(10, 10);
   ctx.lineTo(x2, 100);
   ctx.strokeStyle = "black";
   ctx.lineWidth = 2;
   ctx.stroke();
+  */
+
+  for (let ste_pos of tree_data_map) {
+    ctx.moveTo(ste_pos.indent * 5, ste_pos.parent_lin_num * 5);
+    ctx.lineTo(ste_pos.indent * 5, ste_pos.lin_num * 5);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+
+
   console.log("drawing done")
 }
 
@@ -79,7 +92,7 @@ function MyGetButton({ msgHere, tmpRef}) {
       console.log("Received Data:", my_lst);
       tree_data_str = [" St lin# ", "__________________________"];
       tree_data_map = ["---------------"];
-      build_tree_recr(0, my_lst, 1);
+      build_tree_recr(0, my_lst, 1, null);
       draw_tree(tmpRef);
     } catch (error) {
       console.error("Fetch failed:", error.message);
