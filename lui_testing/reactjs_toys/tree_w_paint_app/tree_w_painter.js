@@ -63,12 +63,20 @@ function draw_tree(canvasRef) {
     let y_end_vezier = ste_pos.my_row * y_scale;
     drawLine(
       x_ini_vezier, (ste_pos.parent_row + 0.5) * y_scale,
-      x_ini_vezier, y_ini_vezier,    ctx, "black", 2
+      x_ini_vezier, y_ini_vezier,    ctx, "blue", 2
     );
-    drawLine(
+    ctx.moveTo(x_ini_vezier, y_ini_vezier);  // Move to the start point
+    ctx.quadraticCurveTo(
+      x_ini_vezier, y_end_vezier, x_end_vezier, y_end_vezier
+    );
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    /*drawLine(
       x_ini_vezier, y_ini_vezier,
       x_end_vezier, y_end_vezier,    ctx, "blue", 2
-    );
+    );*/
     drawLine(
       x_end_vezier, y_end_vezier,
       x_end_vezier + x_scale, y_end_vezier,    ctx, "blue", 2
