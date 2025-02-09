@@ -30,7 +30,7 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
   console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
-          build_tree_recr(new_pos, my_lst, indent + 1, tree_data_map.length);
+          build_tree_recr(new_pos, my_lst, indent + 1, step_map.my_row);
       }
   } catch (error) {
       console.log("last indent =", indent);
@@ -56,7 +56,6 @@ function draw_tree(canvasRef) {
     ctx.lineWidth = 3;
     ctx.stroke();
   }
-
   console.log("drawing done")
 }
 
