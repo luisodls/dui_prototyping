@@ -81,7 +81,7 @@ function draw_tree(canvasRef) {
       x_ini_vezier, (ste_pos.parent_row + 1) * y_scale,
       x_ini_vezier, y_ini_vezier,    ctx, "blue", 2
     );
-    ctx.moveTo(x_ini_vezier, y_ini_vezier);  // Move to the start point
+    ctx.moveTo(x_ini_vezier, y_ini_vezier);
     ctx.quadraticCurveTo(
       x_ini_vezier, y_end_vezier, x_end_vezier, y_end_vezier
     );
@@ -92,6 +92,11 @@ function draw_tree(canvasRef) {
     drawLine(
       x_end_vezier, y_end_vezier,
       x_end_vezier + x_scale * 0.5, y_end_vezier,    ctx, "blue", 2
+    );
+
+    ctx.strokeRect(
+      x_end_vezier + x_scale * 0.5, y_end_vezier - y_scale * 0.4,
+      110, y_scale * 0.8
     );
   }
   console.log("drawing done")
