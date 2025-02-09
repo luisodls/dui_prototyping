@@ -3,26 +3,30 @@ import Image from "next/image";
 import { useRef, useEffect } from "react";
 import { useState } from 'react';
 
-var tree_log = ["-- Do a GET to see the tree --"];
+var tree_data_str = ["-- Do a GET to see the tree --"];
+var tree_data_map = ["---------------"];
 
 function build_tree_recr(pos_num, my_lst, indent = 1){
   let step = my_lst[pos_num]
-  let stp_prn = "";
+  let stp_suss = "";
   if( step.success === true ){
-      stp_prn = " T ";
+      stp_suss = " T ";
   }else if( step.success === false ){
-      stp_prn = " F ";
+      stp_suss = " F ";
   }else{
-      stp_prn = " N ";
+      stp_suss = " N ";
   }
   let str_lin_num = String(step.lin_num);
-  stp_prn = stp_prn + "  " + str_lin_num + "      ".repeat(indent) + " └──";
-  try{
-      stp_prn = stp_prn + String(step.command)
-  } catch (error) {
-      stp_prn = stp_prn + "None"
-  }
-  tree_log.push(stp_prn);
+  let stp_prn = stp_suss + "  " + str_lin_num + "      ".repeat(indent) + " └──";
+  let stp_cmd = String(step.command);
+  stp_prn = stp_prn + stp_cmd;
+  let stp_dict = {
+    command: stp_cmd, lin_num: step.lin_num,
+    success: stp_suss, indent:indent
+  };
+
+  tree_data_str.push(stp_prn);
+  tree_data_map.push(stp_dict);
   console.log(stp_prn);
   try{
       for (let new_pos of step.nxt) {
@@ -34,16 +38,21 @@ function build_tree_recr(pos_num, my_lst, indent = 1){
 }
 
 function draw_tree(canvasRef) {
-  //alert(JSON.stringify(tree_log, null, 2));
+  //alert(JSON.stringify(tree_data_str, null, 2));
+  alert(JSON.stringify(tree_data_map));
+  console.log("tree_data_map =", tree_data_map);
+  /*for (let new_step of tree_data_map) {
+    console.log("step.command =", new_step.get("command"));
+  };*/
 
-  console.log("len(tree_log) = ", tree_log.length)
+  console.log("len(tree_data_str) = ", tree_data_str.length)
 
   const canvas = canvasRef.current;
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
 
-  let x2 = tree_log.length * 5
-  let y2 = tree_log.length * 5
+  let x2 = tree_data_str.length * 5
+  let y2 = tree_data_str.length * 5
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.beginPath();
@@ -68,7 +77,8 @@ function MyGetButton({ msgHere, tmpRef}) {
       setResponse(data);
       const my_lst = data.Answer;
       console.log("Received Data:", my_lst);
-      tree_log = [" St lin# ", "__________________________"];
+      tree_data_str = [" St lin# ", "__________________________"];
+      tree_data_map = ["---------------"];
       build_tree_recr(0, my_lst, 1);
       draw_tree(tmpRef);
     } catch (error) {
@@ -81,9 +91,9 @@ function MyGetButton({ msgHere, tmpRef}) {
       <button onClick={handleClick}>
         Do GET
       </button>
-      {tree_log && (
+      {tree_data_str && (
         <pre style={{ background: "#f4f4f4", padding: "10px", borderRadius: "5px" }}>
-          {JSON.stringify(tree_log, null, 2)}
+          {JSON.stringify(tree_data_str, null, 2)}
         </pre>
       )}
     </div>
