@@ -35,8 +35,17 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
   }
 }
 
+function drawLine(x1, y1, x2, y2, ctx, color = "black", width = 2) {
+  ctx.beginPath();
+  ctx.moveTo(x1, y1);
+  ctx.lineTo(x2, y2);
+  ctx.strokeStyle = color;
+  ctx.lineWidth = width;
+  ctx.stroke();
+}
+
 function draw_tree(canvasRef) {
-  alert(JSON.stringify(tree_data_str, null, 2));
+  //alert(JSON.stringify(tree_data_str, null, 2));
   //alert(JSON.stringify(tree_data_map));
   console.log("tree_data_map =", tree_data_map);
 
@@ -45,14 +54,26 @@ function draw_tree(canvasRef) {
   const ctx = canvas.getContext("2d");
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.beginPath();
-
+  const x_scale = 25;
+  const y_scale = 20;
   for (let ste_pos of tree_data_map) {
-    ctx.moveTo(ste_pos.indent * 5, ste_pos.parent_row * 5);
-    ctx.lineTo(ste_pos.indent * 5, ste_pos.my_row * 5);
-    ctx.strokeStyle = "black";
-    ctx.lineWidth = 3;
-    ctx.stroke();
+    let x_ini_vezier = ste_pos.indent * 2 * x_scale;
+    let y_ini_vezier = (ste_pos.my_row - 0.5) * y_scale;
+    let x_end_vezier = (ste_pos.indent * 2 + 0.5) * x_scale;
+    let y_end_vezier = ste_pos.my_row * y_scale;
+    drawLine(
+      x_ini_vezier, (ste_pos.parent_row + 0.5) * y_scale,
+      x_ini_vezier, y_ini_vezier,    ctx, "black", 2
+    );
+    drawLine(
+      x_ini_vezier, y_ini_vezier,
+      x_end_vezier, y_end_vezier,    ctx, "blue", 2
+    );
+    drawLine(
+      x_end_vezier, y_end_vezier,
+      x_end_vezier + x_scale, y_end_vezier,    ctx, "blue", 2
+    );
+
   }
   console.log("drawing done")
 }
