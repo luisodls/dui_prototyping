@@ -4,14 +4,14 @@
 import asyncio
 import time
 
-async def count():
-    print("One")
+async def count(num_in):
+    print("num_in =", num_in, ", start")
     await asyncio.sleep(1)
-    #time.sleep(1)  Luiso's testing hack
-    print("Two")
+    #time.sleep(1) # Luiso's testing hack
+    print("num_in =", num_in, ", end")
 
 async def main():
-    await asyncio.gather(count(), count(), count())
+    await asyncio.gather(count(1), count(2), count(3))
 
 if __name__ == "__main__":
     s = time.perf_counter()
