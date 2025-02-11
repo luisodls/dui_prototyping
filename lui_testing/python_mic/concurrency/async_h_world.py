@@ -10,11 +10,14 @@ async def count(num_in):
     #time.sleep(1) # Luiso's testing hack
     print("num_in =", num_in, ", end")
 
-async def main():
+async def run_all():
     await asyncio.gather(count(1), count(2), count(3))
 
-if __name__ == "__main__":
+def main():
     s = time.perf_counter()
-    asyncio.run(main())
+    asyncio.run(run_all())
     elapsed = time.perf_counter() - s
     print(f"{__file__} executed in {elapsed:0.2f} seconds.")
+
+if __name__ == "__main__":
+    main()
