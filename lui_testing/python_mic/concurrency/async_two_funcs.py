@@ -11,13 +11,19 @@ async def count(num_in):
     print("num_in =", num_in, ", end")
 
 async def run_all():
-    await asyncio.gather(count(1), count(2), count(3))
+    await asyncio.gather(count(1), count(2))
+    await asyncio.gather(count(3), count(4))
+
+def run_cycle(n):
+    for i in range(3):
+        asyncio.run(count(i))
 
 def main():
     s = time.perf_counter()
     asyncio.run(run_all())
+    #run_cycle(3)
     elapsed = time.perf_counter() - s
-    print(f"{__file__} executed in {elapsed:0.2f} seconds.")
+    print(f"executed in {elapsed:0.2f} seconds.")
 
 if __name__ == "__main__":
     main()
