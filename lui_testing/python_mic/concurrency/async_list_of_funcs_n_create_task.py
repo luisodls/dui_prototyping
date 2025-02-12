@@ -1,25 +1,25 @@
 import asyncio
+import time
 
 async def say_hi(num_i):
         print("Hi there #1, inner_num =", num_i)
-        await asyncio.sleep(0.333)
+        await asyncio.sleep(1)
         print("Hi there #2, inner_num =", num_i)
 
 async def something_2_run(num):
     print("before calling say_hi(num) ...")
-
-    #func_lst = [say_hi(i) for i in range(num)] # same but more pythonic
-    #await asyncio.gather(*func_lst)            # same but more pythonic
-
-    func_lst = []
+    lst_co_rout = []
     for i in range(num):
-        func_lst.append(say_hi(i))
+        new_co_rout = asyncio.create_task(say_hi(i))
+        lst_co_rout.append(new_co_rout)
 
-    await asyncio.gather(*func_lst)
     print("... after calling say_hi(num)")
 
+    for co_rout in lst_co_rout:
+        await co_rout
+
 def main():
-    asyncio.run(something_2_run(4))
+    asyncio.run(something_2_run(5))
 
 
 if __name__ == "__main__":
