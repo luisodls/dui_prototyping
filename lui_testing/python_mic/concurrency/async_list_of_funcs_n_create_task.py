@@ -2,9 +2,9 @@ import asyncio
 import time
 
 async def say_hi(num_i):
-        print("Hi there #1, inner_num =", num_i)
-        await asyncio.sleep(1)
-        print("Hi there #2, inner_num =", num_i)
+    print("Hi there #1, inner_num =", num_i)
+    await asyncio.sleep(1)
+    print("Hi there #2, inner_num =", num_i)
 
 async def something_2_run(num):
     print("before calling say_hi(num) ...")
