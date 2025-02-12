@@ -22,7 +22,6 @@ def main():
             lst_exec.append(new_exec)
 
         print("############ ... test here 1")
-
         for pos, new_exec in enumerate(lst_exec):
             result = new_exec.result()
             print(f"result({pos}) = {result}")
