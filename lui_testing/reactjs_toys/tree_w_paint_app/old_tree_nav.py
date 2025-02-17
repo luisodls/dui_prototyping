@@ -101,10 +101,10 @@ def show_tree(step = None, curr = None, indent = 1):
 class uni_step(object):
     def __init__(self, prev_step):
         self.lin_num = 0
-        self.next_step_list = None
+        self.next_step_list = []
         self.prev_step = prev_step
         self.command = [None]
-        self.success = None
+        self.success = True
 
     def __call__(self, cmd_lst):
         if cmd_lst[0] == "fail":
@@ -145,6 +145,7 @@ class runner(object):
             self.exec_step(cmd_lst)
 
     def exec_step(self, cmd_lst):
+        old_way = '''
         if self.step_list[self.current].success != False:
             if self.step_list[self.current].success == True:
                 self.goto_prev()
@@ -156,6 +157,13 @@ class runner(object):
 
             else:
                 print("failed step")
+        '''
+
+        print("self.current =", self.current)
+        if self.step_list[self.current].success == True:
+            self.create_step(self.step_list[self.current])
+            self.step_list[self.current](cmd_lst)
+
 
         else:
             print("cannot run from failed step")
@@ -164,6 +172,7 @@ class runner(object):
         new_step = uni_step(prev_step)
         self.bigger_lin += 1
         new_step.lin_num = self.bigger_lin
+        old_way = '''
         try:
             if self.step_list[self.current].next_step_list == None:
                 self.step_list[self.current].next_step_list = [new_step]
@@ -173,9 +182,10 @@ class runner(object):
 
         except:
             print("failed to append to previous step")
-
+        '''
+        self.step_list[self.current].next_step_list.append(new_step)
         self.step_list.append(new_step)
-        self.goto(self.bigger_lin)
+        self.goto(new_step.lin_num)
 
     def goto_prev(self):
         print("forking")
