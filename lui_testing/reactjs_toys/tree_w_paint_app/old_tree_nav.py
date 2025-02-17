@@ -1,5 +1,3 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import sys
 def prin_lst(lst, curr):
     print("__________________________listing:")
@@ -29,6 +27,7 @@ def prin_lst(lst, curr):
 
     print(lst_stp)
     return lst_stp
+
 
 def build_lst(lst, curr):
     print(" - - - - - building list:")
@@ -65,7 +64,6 @@ def build_lst(lst, curr):
 
     print(lst_stp)
     return lst_stp
-
 
 
 def show_tree(step = None, curr = None, indent = 1):
@@ -120,6 +118,7 @@ class uni_step(object):
             self.command = cmd_lst
             self.success = True
 
+
 class runner(object):
     ctrl_com_lst = ["goto", "fail", "slist"]
     def __init__(self):
@@ -128,9 +127,7 @@ class runner(object):
         self.current = self.bigger_lin
 
     def run(self, command):
-
         print("command =", command)
-
         cmd_lst = command.split()
         if cmd_lst[0] == "goto":
             self.goto(int(cmd_lst[1]))
@@ -177,7 +174,6 @@ class runner(object):
         except:
             print("failed to append to previous step")
 
-
         self.step_list.append(new_step)
         self.goto(self.bigger_lin)
 
@@ -198,13 +194,12 @@ class runner(object):
 
 if( __name__ == "__main__"):
     uni_controler = runner()
-
     command = ""
     while command.strip() != 'exit':
         # printing new list of steps
         prin_lst(uni_controler.step_list, uni_controler.current)
 
-        # showing showing tree
+        # showing tree
         print("________ showing steps tree:")
         show_tree(
             step = uni_controler.step_list[0],

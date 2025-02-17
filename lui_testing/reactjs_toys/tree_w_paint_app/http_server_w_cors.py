@@ -19,7 +19,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def send_ok_dict(self, str_out = "Ok"):
-        '''used by both, GET or POST,'''
         response = {}
         response["Answer"] = str_out
         self.wfile.write(json.dumps(response).encode('utf-8'))
