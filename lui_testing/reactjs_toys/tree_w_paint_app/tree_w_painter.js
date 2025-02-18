@@ -67,35 +67,37 @@ function draw_tree(canvasRef) {
 
     ctx.fillText(
       tree_data_map[i].command,
-      (tree_data_map[i].indent * 2.5 + 0.5) * x_scale + x_scale * 0.75,
+      (tree_data_map[i].indent * 2.5 - 0.5) * x_scale + x_scale * 0.75,
       (i + 1) * y_scale - 10
     );
   }
 
   for (let ste_pos of tree_data_map) {
-    let x_ini_vezier = ste_pos.indent * 2.5 * x_scale;
+    let x_ini_vezier = (ste_pos.indent * 2.5 - 1.5) * x_scale;
+    let x_end_vezier = (ste_pos.indent * 2.5 - 0.5) * x_scale;
     let y_ini_vezier = ste_pos.my_row * y_scale;
-    let x_end_vezier = (ste_pos.indent * 2.5 + 0.5) * x_scale;
     let y_end_vezier = (ste_pos.my_row + 0.5) * y_scale;
     if(ste_pos.lin_num > 0){
       drawLine(
         x_ini_vezier, (ste_pos.parent_row + 1) * y_scale,
         x_ini_vezier, y_ini_vezier,    ctx, "blue", 2
       );
-    }
-    ctx.beginPath();
-    ctx.moveTo(x_ini_vezier, y_ini_vezier);
-    ctx.quadraticCurveTo(
-      x_ini_vezier, y_end_vezier, x_end_vezier, y_end_vezier
-    );
-    ctx.strokeStyle = "blue";
-    ctx.lineWidth = 2;
-    ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(x_ini_vezier, y_ini_vezier);
+      ctx.quadraticCurveTo(
+        x_ini_vezier, y_end_vezier, x_end_vezier, y_end_vezier
+      );
+      ctx.strokeStyle = "blue";
+      ctx.lineWidth = 2;
+      ctx.stroke();
 
-    drawLine(
-      x_end_vezier, y_end_vezier,
-      x_end_vezier + x_scale * 0.5, y_end_vezier,    ctx, "blue", 2
-    );
+      drawLine(
+        x_end_vezier, y_end_vezier,
+        x_end_vezier + x_scale * 0.5, y_end_vezier,    ctx, "blue", 2
+      );
+
+
+    }
 
     ctx.strokeRect(
       x_end_vezier + x_scale * 0.5, y_end_vezier - y_scale * 0.4,
@@ -177,7 +179,7 @@ export default function Home() {
   }, []);
   return (
     <div>
-      <h1>Button w canvas</h1>
+      <h2>Dui Style tree</h2>
       <canvas
         ref={canvasRef}
         width={900}
