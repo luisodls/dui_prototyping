@@ -33,7 +33,6 @@ def build_lst(lst, curr):
     print(" - - - - - building list:")
     lst_stp = []
     for uni in lst:
-        #step_dict = str(uni.lin_num) + " comm: " + str(uni.command)
         step_dict = {
             "lin_num":uni.lin_num,
             "command":str(uni.command[0])
@@ -55,10 +54,11 @@ def build_lst(lst, curr):
 
         step_dict["nxt"] = nxt_lst
 
-        '''
         if( curr == uni.lin_num ):
-            step_dict += "                           <<< here I am <<<"
-        '''
+            step_dict["here"] = True
+
+        else:
+            step_dict["here"] = False
 
         lst_stp.append(step_dict)
 
@@ -150,7 +150,6 @@ class runner(object):
             self.create_step(self.step_list[self.current])
             self.step_list[self.current](cmd_lst)
 
-
         else:
             print("cannot run from failed step")
 
@@ -178,7 +177,8 @@ class runner(object):
         print("printing in steps list mode: \n")
         prin_lst(self.step_list, self.current)
 
-if( __name__ == "__main__"):
+
+if __name__ == "__main__":
     uni_controler = runner()
     command = ""
     while command.strip() != 'exit':

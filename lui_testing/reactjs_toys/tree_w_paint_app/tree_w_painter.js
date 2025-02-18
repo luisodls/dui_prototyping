@@ -22,7 +22,8 @@ function build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0){
   stp_prn = stp_prn + stp_cmd;
   const step_map = {
     command: stp_cmd, lin_num: step.lin_num, success: stp_suss,
-    indent:indent, my_row:tree_data_map.length, parent_row:parent_row
+    indent:indent, here:step.here, my_row:tree_data_map.length,
+    parent_row:parent_row
   };
   tree_data_str.push(stp_prn);
   tree_data_map.push(step_map);
@@ -63,7 +64,11 @@ function draw_tree(canvasRef) {
 
     ctx.fillStyle = "black";
     ctx.font = "16px Mono";
-    ctx.fillText(` ${tree_data_map[i].lin_num}`, 10, (i + 1) * y_scale - 10);
+    if(tree_data_map[i].here){
+      ctx.fillText(">>>", 5, (i + 1) * y_scale - 10);
+    }
+
+    ctx.fillText(` ${tree_data_map[i].lin_num}`, 40, (i + 1) * y_scale - 10);
 
     ctx.fillText(
       tree_data_map[i].command,
