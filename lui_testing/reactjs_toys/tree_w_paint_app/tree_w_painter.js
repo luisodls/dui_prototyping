@@ -68,7 +68,7 @@ function draw_tree(canvasRef) {
       ctx.fillText(">>>", 5, (i + 1) * y_scale - 10);
     }
 
-    ctx.fillText(` ${tree_data_map[i].lin_num}`, 40, (i + 1) * y_scale - 10);
+    ctx.fillText(` ${tree_data_map[i].lin_num}`, 35, (i + 1) * y_scale - 10);
 
     ctx.fillText(
       tree_data_map[i].command,
