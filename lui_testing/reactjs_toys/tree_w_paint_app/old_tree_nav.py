@@ -171,7 +171,8 @@ class runner(object):
             print("can NOT fork <None> node ")
 
     def goto(self, new_lin):
-        self.current = new_lin
+        if new_lin <= self.bigger_lin:
+            self.current = new_lin
 
     def slist(self):
         print("printing in steps list mode: \n")
