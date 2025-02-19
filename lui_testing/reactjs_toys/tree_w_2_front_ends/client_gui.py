@@ -12,8 +12,7 @@ class Form(QObject):
 
         self.num = 0
 
-        #Next line is NOT doing what I wanted, to return data with connect
-        self.data_test = self.window.Button1.clicked.connect(self.clicked)
+        self.window.Button1.clicked.connect(self.clicked)
 
         self.window.PrintDataButton.clicked.connect(self.imprime)
         self.window.show()
@@ -22,10 +21,9 @@ class Form(QObject):
         print("clicked")
         self.num += 1
         print("self.num =", self.num)
-        return int(self.num)
 
     def imprime(self):
-        print("self.data_test =", self.data_test)
+        print("imprime")
 
 
 if __name__ == '__main__':
