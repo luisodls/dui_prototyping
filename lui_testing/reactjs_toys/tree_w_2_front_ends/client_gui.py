@@ -10,20 +10,15 @@ class Form(QObject):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("simple.ui")
 
-        self.num = 0
-
-        self.window.Button1.clicked.connect(self.clicked)
-
-        self.window.PrintDataButton.clicked.connect(self.imprime)
+        self.window.Button4Get.clicked.connect(self.clicked_4_get)
+        self.window.Button4Post.clicked.connect(self.clicked_4_post)
         self.window.show()
 
-    def clicked(self):
-        print("clicked")
-        self.num += 1
-        print("self.num =", self.num)
+    def clicked_4_get(self):
+        print("clicked_4_get")
 
-    def imprime(self):
-        print("imprime")
+    def clicked_4_post(self):
+        print("clicked_4_post")
 
 
 if __name__ == '__main__':

@@ -16,16 +16,16 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
     <item row="0" column="0">
-     <widget class="QPushButton" name="Button1">
+     <widget class="QPushButton" name="Button4Get">
       <property name="text">
-       <string>Push Me</string>
+       <string>Do Get</string>
       </property>
      </widget>
     </item>
     <item row="1" column="0">
-     <widget class="QPushButton" name="PrintDataButton">
+     <widget class="QPushButton" name="Button4Post">
       <property name="text">
-       <string>Print Data</string>
+       <string>Do Post</string>
       </property>
      </widget>
     </item>
