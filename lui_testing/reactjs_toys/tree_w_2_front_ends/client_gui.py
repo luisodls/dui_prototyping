@@ -19,7 +19,7 @@ class Form(QObject):
 
     def clicked_4_get(self):
         print("clicked_4_get")
-        full_cmd = {"cmd_lst":self.req_qr}
+        full_cmd = {"message":self.req_qr}
         req_get = requests.get(
             "http://127.0.0.1:45678", params = full_cmd
         )
@@ -29,6 +29,13 @@ class Form(QObject):
 
     def clicked_4_post(self):
         print("time to do a http(Post) request with:", self.req_qr)
+
+        full_cmd = {"message":self.req_qr}
+        req_post = requests.post(
+            "http://127.0.0.1:45678", data = json.dumps(full_cmd)
+        )
+        lst_out = req_post.content
+        print("lst_out =", json.loads(lst_out))
 
     def new_req_txt(self, new_txt):
         self.req_qr = str(new_txt)
