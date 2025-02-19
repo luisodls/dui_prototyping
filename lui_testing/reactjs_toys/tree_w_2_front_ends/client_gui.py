@@ -1,4 +1,4 @@
-import sys
+import sys, requests, json
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -19,6 +19,13 @@ class Form(QObject):
 
     def clicked_4_get(self):
         print("clicked_4_get")
+        full_cmd = {"cmd_lst":self.req_qr}
+        req_get = requests.get(
+            "http://127.0.0.1:45678", params = full_cmd
+        )
+        lst_out = req_get.content
+        print("lst_out =", json.loads(lst_out))
+
 
     def clicked_4_post(self):
         print("time to do a http(Post) request with:", self.req_qr)
