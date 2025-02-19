@@ -12,14 +12,19 @@ class Form(QObject):
 
         self.window.Button4Get.clicked.connect(self.clicked_4_get)
         self.window.Button4Post.clicked.connect(self.clicked_4_post)
+        self.window.EditPostRequestLine.textChanged.connect(self.new_req_txt)
+        self.req_qr = ""
+
         self.window.show()
 
     def clicked_4_get(self):
         print("clicked_4_get")
 
     def clicked_4_post(self):
-        print("clicked_4_post")
+        print("time to do a http(Post) request with:", self.req_qr)
 
+    def new_req_txt(self, new_txt):
+        self.req_qr = str(new_txt)
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
