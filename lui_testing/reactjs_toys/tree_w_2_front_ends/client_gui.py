@@ -22,12 +22,25 @@ class TreeDirScene(QGraphicsScene):
         self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
 
     def draw_4_me(self, lst_out):
-        print("lst_out(draw_4_me) =", json.loads(lst_out))
-        self.addRect(
-            10, 10,
-            10, 10,
-            self.gray_pen, self.first_gray_brush
-        )
+        #print("lst_out(draw_4_me) =", json.loads(lst_out))
+        tot_hey = len(lst_out['Answer'])
+        print("tot_hey =", tot_hey)
+
+        self.clear()
+
+        for row_num in range(0, tot_hey + 1, 2):
+            print("row_num =", row_num)
+            y_ini = row_num * self.f_height
+            #y_end = (row_num + 1) * self.f_height
+            self.addRect(
+                -5, y_ini,
+                380, self.f_height,
+                self.gray_pen, self.first_gray_brush
+            )
+
+        data2remove = '''
+lst_out(draw_4_me) = {'Answer': [{'lin_num': 0, 'command': 'None', 'prev_step': None, 'nxt': [1, 8], 'here': False}, {'lin_num': 1, 'command': 'a', 'prev_step': 0, 'nxt': [2, 6, 7], 'here': False}, {'lin_num': 2, 'command': 'a', 'prev_step': 1, 'nxt': [3, 4, 5], 'here': False}, {'lin_num': 3, 'command': 'a', 'prev_step': 2, 'nxt': [10], 'here': False}, {'lin_num': 4, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 5, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 6, 'command': 'c', 'prev_step': 1, 'nxt': [9], 'here': False}, {'lin_num': 7, 'command': 'c', 'prev_step': 1, 'nxt': [], 'here': False}, {'lin_num': 8, 'command': 'xxx', 'prev_step': 0, 'nxt': [], 'here': False}, {'lin_num': 9, 'command': 'y', 'prev_step': 6, 'nxt': [], 'here': False}, {'lin_num': 10, 'command': 'z', 'prev_step': 3, 'nxt': [], 'here': True}]}
+        '''
         self.update()
 
 
@@ -51,7 +64,7 @@ class Form(QObject):
             "http://127.0.0.1:45678", params = full_cmd
         )
         lst_out = req_get.content
-        self.tree_scene.draw_4_me(lst_out)
+        self.tree_scene.draw_4_me(json.loads(lst_out))
 
     def clicked_4_post(self):
         print("time to do a http(Post) request with:", self.req_qr)
