@@ -20,7 +20,9 @@ class TreeDirScene(QGraphicsScene):
             Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
         self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
-
+        self.arrow_blue_pen = QPen(
+                Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            )
     def draw_4_me(self, lst_out):
         #print("lst_out(draw_4_me) =", json.loads(lst_out))
         tot_hey = len(lst_out['Answer'])
@@ -30,13 +32,15 @@ class TreeDirScene(QGraphicsScene):
 
         for row_num in range(0, tot_hey + 1, 2):
             print("row_num =", row_num)
+            x_ini = -5
             y_ini = row_num * self.f_height
-            #y_end = (row_num + 1) * self.f_height
+            y_end = (row_num + 1) * self.f_height
             self.addRect(
-                -5, y_ini,
+                x_ini, y_ini,
                 380, self.f_height,
                 self.gray_pen, self.first_gray_brush
             )
+            self.addLine(x_ini, y_ini, x_ini + 50, y_end, self.arrow_blue_pen)
 
         data2remove = '''
 lst_out(draw_4_me) = {'Answer': [{'lin_num': 0, 'command': 'None', 'prev_step': None, 'nxt': [1, 8], 'here': False}, {'lin_num': 1, 'command': 'a', 'prev_step': 0, 'nxt': [2, 6, 7], 'here': False}, {'lin_num': 2, 'command': 'a', 'prev_step': 1, 'nxt': [3, 4, 5], 'here': False}, {'lin_num': 3, 'command': 'a', 'prev_step': 2, 'nxt': [10], 'here': False}, {'lin_num': 4, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 5, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 6, 'command': 'c', 'prev_step': 1, 'nxt': [9], 'here': False}, {'lin_num': 7, 'command': 'c', 'prev_step': 1, 'nxt': [], 'here': False}, {'lin_num': 8, 'command': 'xxx', 'prev_step': 0, 'nxt': [], 'here': False}, {'lin_num': 9, 'command': 'y', 'prev_step': 6, 'nxt': [], 'here': False}, {'lin_num': 10, 'command': 'z', 'prev_step': 3, 'nxt': [], 'here': True}]}
