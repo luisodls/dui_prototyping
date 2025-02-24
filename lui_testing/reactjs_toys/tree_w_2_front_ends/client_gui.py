@@ -4,44 +4,6 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
-tree_data_str = []
-tree_data_map = []
-
-def build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0):
-    step = my_lst[pos_num]
-    stp_suss = ""
-    tmp_off = '''
-    if step["success"] == True:
-        stp_suss = " T "
-
-    elif step["success"] == False:
-        stp_suss = " F "
-
-    else:
-        stp_suss = " N "
-    '''
-
-    str_lin_num = str(step["lin_num"])
-    stp_prn = stp_suss + "  " + str_lin_num + "     " * indent + " └──"
-    stp_cmd = str(step["command"])
-    stp_prn = stp_prn + stp_cmd
-
-    step_map = {
-      "command": stp_cmd, "lin_num": step["lin_num"], "success": stp_suss,
-      "indent":indent, "here":step["here"], "my_row":len(tree_data_map),
-      "parent_row":parent_row
-    }
-    tree_data_str.append(stp_prn)
-    tree_data_map.append(step_map)
-
-    try:
-        for new_pos in step["nxt"]:
-            build_tree_recr(new_pos, my_lst, indent + 1, step_map["my_row"])
-
-    except:
-        print("last indent =", indent)
-
-
 class TreeDirScene(QGraphicsScene):
     tmp_off = '''
     node_clicked_w_left = Signal(int)
@@ -61,6 +23,43 @@ class TreeDirScene(QGraphicsScene):
         self.arrow_blue_pen = QPen(
                 Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
+
+    def build_tree_recr(self, pos_num, my_lst, indent = 1, parent_row = 0):
+        step = my_lst[pos_num]
+        stp_suss = ""
+        tmp_off = '''
+        if step["success"] == True:
+            stp_suss = " T "
+
+        elif step["success"] == False:
+            stp_suss = " F "
+
+        else:
+            stp_suss = " N "
+        '''
+
+        str_lin_num = str(step["lin_num"])
+        stp_prn = stp_suss + "  " + str_lin_num + "     " * indent + " └──"
+        stp_cmd = str(step["command"])
+        stp_prn = stp_prn + stp_cmd
+
+        step_map = {
+            "command": stp_cmd, "lin_num": step["lin_num"],
+            "success": stp_suss, "indent":indent, "here":step["here"], "my_row":len(self.tree_data_map), "parent_row":parent_row
+        }
+
+        self.tree_data_str.append(stp_prn)
+        self.tree_data_map.append(step_map)
+
+        try:
+            print("step =", step)
+            for new_pos in step["nxt"]:
+                self.build_tree_recr(new_pos, my_lst, indent + 1, step_map["my_row"])
+
+        except:
+            print("last indent =", indent)
+
+
     def draw_4_me(self, lst_out):
         #print("lst_out(draw_4_me) =", json.loads(lst_out))
         my_lst = lst_out['Answer']
@@ -83,8 +82,11 @@ class TreeDirScene(QGraphicsScene):
 
         self.update()
 
-        build_tree_recr(0, my_lst, 1, 0);
-        for single_line in tree_data_str:
+        self.tree_data_str = []
+        self.tree_data_map = []
+
+        self.build_tree_recr(0, my_lst, 1, 0);
+        for single_line in self.tree_data_str:
             print(single_line)
 
 
