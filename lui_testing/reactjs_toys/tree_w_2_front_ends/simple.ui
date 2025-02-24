@@ -18,21 +18,7 @@
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <item>
-       <widget class="QScrollArea" name="scrollArea">
-        <property name="widgetResizable">
-         <bool>true</bool>
-        </property>
-        <widget class="QWidget" name="scrollAreaWidgetContents">
-         <property name="geometry">
-          <rect>
-           <x>0</x>
-           <y>0</y>
-           <width>378</width>
-           <height>298</height>
-          </rect>
-         </property>
-        </widget>
-       </widget>
+       <widget class="QGraphicsView" name="TreeGraphicsView"/>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
