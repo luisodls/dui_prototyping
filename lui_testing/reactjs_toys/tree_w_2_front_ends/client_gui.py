@@ -4,6 +4,44 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
+tree_data_str = []
+tree_data_map = []
+
+def build_tree_recr(pos_num, my_lst, indent = 1, parent_row = 0):
+    step = my_lst[pos_num]
+    stp_suss = ""
+    tmp_off = '''
+    if step["success"] == True:
+        stp_suss = " T "
+
+    elif step["success"] == False:
+        stp_suss = " F "
+
+    else:
+        stp_suss = " N "
+    '''
+
+    str_lin_num = str(step["lin_num"])
+    stp_prn = stp_suss + "  " + str_lin_num + "     " * indent + " └──"
+    stp_cmd = str(step["command"])
+    stp_prn = stp_prn + stp_cmd
+
+    step_map = {
+      "command": stp_cmd, "lin_num": step["lin_num"], "success": stp_suss,
+      "indent":indent, "here":step["here"], "my_row":len(tree_data_map),
+      "parent_row":parent_row
+    }
+    tree_data_str.append(stp_prn)
+    tree_data_map.append(step_map)
+
+    try:
+        for new_pos in step["nxt"]:
+            build_tree_recr(new_pos, my_lst, indent + 1, step_map["my_row"])
+
+    except:
+        print("last indent =", indent)
+
+
 class TreeDirScene(QGraphicsScene):
     tmp_off = '''
     node_clicked_w_left = Signal(int)
@@ -25,7 +63,8 @@ class TreeDirScene(QGraphicsScene):
             )
     def draw_4_me(self, lst_out):
         #print("lst_out(draw_4_me) =", json.loads(lst_out))
-        tot_hey = len(lst_out['Answer'])
+        my_lst = lst_out['Answer']
+        tot_hey = len(my_lst)
         print("tot_hey =", tot_hey)
 
         self.clear()
@@ -42,10 +81,11 @@ class TreeDirScene(QGraphicsScene):
             )
             self.addLine(x_ini, y_ini, x_ini + 50, y_end, self.arrow_blue_pen)
 
-        data2remove = '''
-lst_out(draw_4_me) = {'Answer': [{'lin_num': 0, 'command': 'None', 'prev_step': None, 'nxt': [1, 8], 'here': False}, {'lin_num': 1, 'command': 'a', 'prev_step': 0, 'nxt': [2, 6, 7], 'here': False}, {'lin_num': 2, 'command': 'a', 'prev_step': 1, 'nxt': [3, 4, 5], 'here': False}, {'lin_num': 3, 'command': 'a', 'prev_step': 2, 'nxt': [10], 'here': False}, {'lin_num': 4, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 5, 'command': 'b', 'prev_step': 2, 'nxt': [], 'here': False}, {'lin_num': 6, 'command': 'c', 'prev_step': 1, 'nxt': [9], 'here': False}, {'lin_num': 7, 'command': 'c', 'prev_step': 1, 'nxt': [], 'here': False}, {'lin_num': 8, 'command': 'xxx', 'prev_step': 0, 'nxt': [], 'here': False}, {'lin_num': 9, 'command': 'y', 'prev_step': 6, 'nxt': [], 'here': False}, {'lin_num': 10, 'command': 'z', 'prev_step': 3, 'nxt': [], 'here': True}]}
-        '''
         self.update()
+
+        build_tree_recr(0, my_lst, 1, 0);
+        for single_line in tree_data_str:
+            print(single_line)
 
 
 class Form(QObject):
