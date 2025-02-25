@@ -19,10 +19,17 @@ class TreeDirScene(QGraphicsScene):
         self.gray_pen = QPen(
             Qt.gray, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
-        self.first_gray_brush = QBrush(Qt.gray, Qt.SolidPattern)
+
+        self.first_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
+        self.another_gray_brush = QBrush(Qt.white, Qt.SolidPattern)
         self.arrow_blue_pen = QPen(
                 Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
+        self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
+        self.rectang_pen = QPen(
+            Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+        )
+
 
     def build_tree_recr(self, pos_num, my_lst, indent = 1, parent_row = 0):
         step = my_lst[pos_num]
@@ -37,6 +44,8 @@ class TreeDirScene(QGraphicsScene):
         else:
             stp_suss = " N "
         '''
+        if indent > self.max_indent:
+            self.max_indent = int(indent)
 
         str_lin_num = str(step["lin_num"])
         stp_prn = stp_suss + "  " + str_lin_num + "     " * indent + " └──"
@@ -66,26 +75,38 @@ class TreeDirScene(QGraphicsScene):
         tot_hey = len(my_lst)
         print("tot_hey =", tot_hey)
 
+
+        self.tree_data_str = []
+        self.tree_data_map = []
+        self.max_indent = 0
+        self.build_tree_recr(0, my_lst, 1, 0);
+        print("self.max_indent =", self.max_indent)
+
+
         self.clear()
+        x_ini = -5
+        box_wit = self.max_indent * 40
+        self.addRect(
+            x_ini - 10, -10,
+            box_wit + 20, self.f_height * (tot_hey  + 1),
+            self.gray_pen, self.first_gray_brush
+        )
+
 
         for row_num in range(0, tot_hey + 1, 2):
             print("row_num =", row_num)
-            x_ini = -5
             y_ini = row_num * self.f_height
             y_end = (row_num + 1) * self.f_height
             self.addRect(
                 x_ini, y_ini,
-                380, self.f_height,
-                self.gray_pen, self.first_gray_brush
+                box_wit, self.f_height,
+                self.rectang_pen, self.another_gray_brush
             )
             self.addLine(x_ini, y_ini, x_ini + 50, y_end, self.arrow_blue_pen)
 
         self.update()
 
-        self.tree_data_str = []
-        self.tree_data_map = []
 
-        self.build_tree_recr(0, my_lst, 1, 0);
         for single_line in self.tree_data_str:
             print(single_line)
 
