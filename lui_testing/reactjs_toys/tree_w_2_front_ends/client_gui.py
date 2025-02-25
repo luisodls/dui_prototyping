@@ -168,9 +168,19 @@ class TreeDirScene(QGraphicsScene):
             y_ini_vezier = ste_pos["my_row"] * y_scale
             y_end_vezier = (ste_pos["my_row"] + 0.5) * y_scale
 
-            self.addLine(
-                x_ini_vezier, y_ini_vezier, x_end_vezier, y_end_vezier, self.arrow_blue_pen
+            draw_quadratic_bezier_3_points(
+                self,
+                p1x = x_ini_vezier, p1y = y_ini_vezier,
+                p2x = x_ini_vezier, p2y = y_end_vezier,
+                p3x = x_end_vezier, p3y = y_end_vezier,
+                lin_pen = self.arrow_blue_pen,
+                row_size = self.f_height / 2, col_size = x_scale
             )
+            '''self.addLine(
+                x_ini_vezier, y_ini_vezier,
+                x_end_vezier, y_end_vezier,
+                self.arrow_blue_pen
+            )'''
 
         self.update()
 
