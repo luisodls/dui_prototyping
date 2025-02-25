@@ -4,6 +4,67 @@ from PySide2.QtWidgets import *
 from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
+def draw_quadratic_bezier_3_points(
+        scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
+        lin_pen, row_size, col_size
+):
+
+    if p1x == p2x:
+        vert_lin_y = p3y - row_size
+        vert_lin_x = p1x
+        scene_obj.addLine(vert_lin_x, p1y, vert_lin_x, vert_lin_y, lin_pen)
+        horz_lin_x = p1x + col_size
+        scene_obj.addLine(p3x, p3y, horz_lin_x, p3y, lin_pen)
+
+        curv_p1x = vert_lin_x
+        curv_p1y = vert_lin_y
+        curv_p2x = p2x
+        curv_p2y = p2y
+        curv_p3x = horz_lin_x
+        curv_p3y = p3y
+
+    else:
+        vert_lin_x = p3x
+        vert_lin_y = p1y + row_size
+        scene_obj.addLine(p2x, vert_lin_y, vert_lin_x, p3y, lin_pen)
+        horz_lin_x = p3x - col_size
+        scene_obj.addLine(p1x, p1y, horz_lin_x, p1y, lin_pen)
+
+        curv_p1x = vert_lin_x
+        curv_p1y = vert_lin_y
+        curv_p2x = p2x
+        curv_p2y = p2y
+        curv_p3x = horz_lin_x
+        curv_p3y = p1y
+
+    n_points = 15
+
+    dx12 = (curv_p2x - curv_p1x) / n_points
+    dx23 = (curv_p3x - curv_p2x) / n_points
+
+    dy12 = (curv_p2y - curv_p1y) / n_points
+    dy23 = (curv_p3y - curv_p2y) / n_points
+
+    for pos in range(n_points + 1):
+        x1 = curv_p1x + dx12 * float(pos)
+        y1 = curv_p1y + dy12 * float(pos)
+        x2 = curv_p2x + dx23 * float(pos)
+        y2 = curv_p2y + dy23 * float(pos)
+
+        dx1 = (x2 - x1) / n_points
+        dy1 = (y2 - y1) / n_points
+
+        gx1 = x1 + dx1 * float(pos)
+        gy1 = y1 + dy1 * float(pos)
+
+        if pos > 0:
+            scene_obj.addLine(x, y, gx1, gy1, lin_pen)
+
+        x = gx1
+        y = gy1
+
+
+
 class TreeDirScene(QGraphicsScene):
     tmp_off = '''
     node_clicked_w_left = Signal(int)
@@ -27,7 +88,7 @@ class TreeDirScene(QGraphicsScene):
             )
         self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
         self.rectang_pen = QPen(
-            Qt.white, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+            Qt.white, 0, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
         )
 
 
@@ -70,11 +131,9 @@ class TreeDirScene(QGraphicsScene):
 
 
     def draw_4_me(self, lst_out):
-        #print("lst_out(draw_4_me) =", json.loads(lst_out))
         my_lst = lst_out['Answer']
         tot_hey = len(my_lst)
         print("tot_hey =", tot_hey)
-
 
         self.tree_data_str = []
         self.tree_data_map = []
@@ -82,16 +141,14 @@ class TreeDirScene(QGraphicsScene):
         self.build_tree_recr(0, my_lst, 1, 0);
         print("self.max_indent =", self.max_indent)
 
-
         self.clear()
         x_ini = -5
         box_wit = self.max_indent * 40
         self.addRect(
             x_ini - 10, -10,
-            box_wit + 20, self.f_height * (tot_hey  + 1),
+            box_wit + 20, self.f_height * (tot_hey  + 2),
             self.gray_pen, self.first_gray_brush
         )
-
 
         for row_num in range(0, tot_hey + 1, 2):
             print("row_num =", row_num)
@@ -102,10 +159,20 @@ class TreeDirScene(QGraphicsScene):
                 box_wit, self.f_height,
                 self.rectang_pen, self.another_gray_brush
             )
-            self.addLine(x_ini, y_ini, x_ini + 50, y_end, self.arrow_blue_pen)
+
+        x_scale = 15
+        y_scale = self.f_height
+        for ste_pos in self.tree_data_map:
+            x_ini_vezier = (ste_pos["indent"] * 2.5 - 1.5) * x_scale
+            x_end_vezier = (ste_pos["indent"] * 2.5 - 0.5) * x_scale
+            y_ini_vezier = ste_pos["my_row"] * y_scale
+            y_end_vezier = (ste_pos["my_row"] + 0.5) * y_scale
+
+            self.addLine(
+                x_ini_vezier, y_ini_vezier, x_end_vezier, y_end_vezier, self.arrow_blue_pen
+            )
 
         self.update()
-
 
         for single_line in self.tree_data_str:
             print(single_line)
