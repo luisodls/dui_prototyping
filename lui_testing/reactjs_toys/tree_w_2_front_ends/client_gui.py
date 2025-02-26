@@ -5,37 +5,14 @@ from PySide2.QtGui import *
 from PySide2 import QtUiTools
 
 def draw_quadratic_bezier_3_points(
-        scene_obj, p1x, p1y, p2x, p2y, p3x, p3y,
-        lin_pen, row_size, col_size
+        scene_obj, p1x, p1y, p2x, p2y, p3x, p3y, lin_pen
 ):
-
-    if p1x == p2x:
-        vert_lin_y = p3y - row_size
-        vert_lin_x = p1x
-        scene_obj.addLine(vert_lin_x, p1y, vert_lin_x, vert_lin_y, lin_pen)
-        horz_lin_x = p1x + col_size
-        scene_obj.addLine(p3x, p3y, horz_lin_x, p3y, lin_pen)
-
-        curv_p1x = vert_lin_x
-        curv_p1y = vert_lin_y
-        curv_p2x = p2x
-        curv_p2y = p2y
-        curv_p3x = horz_lin_x
-        curv_p3y = p3y
-
-    else:
-        vert_lin_x = p3x
-        vert_lin_y = p1y + row_size
-        scene_obj.addLine(p2x, vert_lin_y, vert_lin_x, p3y, lin_pen)
-        horz_lin_x = p3x - col_size
-        scene_obj.addLine(p1x, p1y, horz_lin_x, p1y, lin_pen)
-
-        curv_p1x = vert_lin_x
-        curv_p1y = vert_lin_y
-        curv_p2x = p2x
-        curv_p2y = p2y
-        curv_p3x = horz_lin_x
-        curv_p3y = p1y
+    curv_p1x = p1x
+    curv_p1y = p1y
+    curv_p2x = p2x
+    curv_p2y = p2y
+    curv_p3x = p3x
+    curv_p3y = p3y
 
     n_points = 15
 
@@ -163,19 +140,19 @@ class TreeDirScene(QGraphicsScene):
         x_scale = 15
         y_scale = self.f_height
         for ste_pos in self.tree_data_map:
-            x_ini_vezier = (ste_pos["indent"] * 2.5 - 1.5) * x_scale
-            x_end_vezier = (ste_pos["indent"] * 2.5 - 0.5) * x_scale
-            y_ini_vezier = ste_pos["my_row"] * y_scale
-            y_end_vezier = (ste_pos["my_row"] + 0.5) * y_scale
+            x_ini_vezier = (ste_pos["indent"] * 2.5 - 1) * x_scale
+            x_end_vezier = (ste_pos["indent"] * 2.5 + 1) * x_scale
+            y_ini_vezier = (ste_pos["my_row"] + 0.5) * y_scale
+            y_end_vezier = (ste_pos["my_row"] + 1.5) * y_scale
 
             draw_quadratic_bezier_3_points(
                 self,
                 p1x = x_ini_vezier, p1y = y_ini_vezier,
                 p2x = x_ini_vezier, p2y = y_end_vezier,
                 p3x = x_end_vezier, p3y = y_end_vezier,
-                lin_pen = self.arrow_blue_pen,
-                row_size = self.f_height / 2, col_size = x_scale
+                lin_pen = self.arrow_blue_pen
             )
+
             '''self.addLine(
                 x_ini_vezier, y_ini_vezier,
                 x_end_vezier, y_end_vezier,
