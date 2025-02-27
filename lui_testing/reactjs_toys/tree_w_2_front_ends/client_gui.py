@@ -14,7 +14,7 @@ def draw_quadratic_bezier_3_points(
     curv_p3x = p3x
     curv_p3y = p3y
 
-    n_points = 15
+    n_points = 10
 
     dx12 = (curv_p2x - curv_p1x) / n_points
     dx23 = (curv_p3x - curv_p2x) / n_points
@@ -151,6 +151,12 @@ class TreeDirScene(QGraphicsScene):
                 p2x = x_ini_vezier, p2y = y_end_vezier,
                 p3x = x_end_vezier, p3y = y_end_vezier,
                 lin_pen = self.arrow_blue_pen
+            )
+
+            self.addLine(
+                x_ini_vezier, y_ini_vezier,
+                x_ini_vezier, (ste_pos["parent_row"] + 1.5) * y_scale,
+                self.arrow_blue_pen
             )
 
             '''self.addLine(
