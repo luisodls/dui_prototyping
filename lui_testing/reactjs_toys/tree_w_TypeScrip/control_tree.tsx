@@ -88,16 +88,21 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
 
     ctx.fillText(` ${tree_data_map[i].lin_num}`, 35, (i + 1) * y_scale - 10);
 
+
+    let x_text_corner = (tree_data_map[i].indent * 2.5 + 0.3) * x_scale;
+    //let y_text_corner = (ste_pos["my_row"] + 1.6) * y_scale
+
+
     ctx.fillText(
       tree_data_map[i].command,
-      (tree_data_map[i].indent * 2.5 - 0.5) * x_scale + x_scale * 0.75,
+      x_text_corner,
       (i + 1) * y_scale - 10
     );
   }
 
   for (let ste_pos of tree_data_map) {
     let x_ini_vezier = (ste_pos.indent * 2.5 - 1.5) * x_scale;
-    let x_end_vezier = (ste_pos.indent * 2.5 - 0.5) * x_scale;
+    let x_end_vezier = (ste_pos.indent * 2.5) * x_scale;
     let y_ini_vezier = ste_pos.my_row * y_scale;
     let y_end_vezier = (ste_pos.my_row + 0.5) * y_scale;
     if (ste_pos.lin_num > 0) {
@@ -113,15 +118,10 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
       ctx.strokeStyle = "blue";
       ctx.lineWidth = 2;
       ctx.stroke();
-
-      drawLine(
-        x_end_vezier, y_end_vezier,
-        x_end_vezier + x_scale * 0.5, y_end_vezier, ctx, "blue", 2
-      );
     }
 
     ctx.strokeRect(
-      x_end_vezier + x_scale * 0.5, y_end_vezier - y_scale * 0.4,
+      x_end_vezier, y_end_vezier - y_scale * 0.4,
       110, y_scale * 0.8
     );
   }
