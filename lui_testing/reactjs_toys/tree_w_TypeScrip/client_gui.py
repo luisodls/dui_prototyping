@@ -144,7 +144,7 @@ class TreeDirScene(QGraphicsScene):
 
         x_scale = 15
         y_scale = self.row_height
-        for ste_pos in self.tree_data_map:
+        for ste_pos in self.tree_data_map[1:]:
             x_ini_vezier = (ste_pos["indent"] * 2.5 - 1) * x_scale
             x_end_vezier = (ste_pos["indent"] * 2.5 + 1) * x_scale
             y_ini_vezier = (ste_pos["my_row"] + 0.5) * y_scale
@@ -170,6 +170,11 @@ class TreeDirScene(QGraphicsScene):
                 self.arrow_blue_pen
             )'''
 
+        for ste_pos in self.tree_data_map:
+            x_ini_vezier = (ste_pos["indent"] * 2.5 - 1) * x_scale
+            x_end_vezier = (ste_pos["indent"] * 2.5 + 1) * x_scale
+            y_ini_vezier = (ste_pos["my_row"] + 0.5) * y_scale
+            y_end_vezier = (ste_pos["my_row"] + 1.5) * y_scale
             cmd_text = self.addSimpleText(str(ste_pos["command"]))
             cmd_text.setPos(x_end_vezier, y_end_vezier - self.row_height / 2)
             cmd_text.setBrush(self.font_brush)
