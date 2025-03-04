@@ -147,7 +147,7 @@ class TreeDirScene(QGraphicsScene):
         for ste_pos in self.tree_data_map[1:]:
             x_ini_vezier = (ste_pos["indent"] * 2.5 - 1) * x_scale
             x_end_vezier = (ste_pos["indent"] * 2.5 + 1) * x_scale
-            y_ini_vezier = (ste_pos["my_row"] + 0.5) * y_scale
+            y_ini_vezier = (ste_pos["my_row"] + 0.9) * y_scale
             y_end_vezier = (ste_pos["my_row"] + 1.5) * y_scale
 
             draw_quadratic_bezier_3_points(
@@ -160,7 +160,7 @@ class TreeDirScene(QGraphicsScene):
 
             self.addLine(
                 x_ini_vezier, y_ini_vezier,
-                x_ini_vezier, (ste_pos["parent_row"] + 1.5) * y_scale,
+                x_ini_vezier, (ste_pos["parent_row"] + 2.0) * y_scale,
                 self.arrow_blue_pen
             )
 
@@ -171,12 +171,10 @@ class TreeDirScene(QGraphicsScene):
             )'''
 
         for ste_pos in self.tree_data_map:
-            x_ini_vezier = (ste_pos["indent"] * 2.5 - 1) * x_scale
-            x_end_vezier = (ste_pos["indent"] * 2.5 + 1) * x_scale
-            y_ini_vezier = (ste_pos["my_row"] + 0.5) * y_scale
-            y_end_vezier = (ste_pos["my_row"] + 1.5) * y_scale
+            x_text_corner = (ste_pos["indent"] * 2.5 + 1) * x_scale
+            y_text_corner = (ste_pos["my_row"] + 1.6) * y_scale
             cmd_text = self.addSimpleText(str(ste_pos["command"]))
-            cmd_text.setPos(x_end_vezier, y_end_vezier - self.row_height / 2)
+            cmd_text.setPos(x_text_corner, y_text_corner - self.row_height / 2)
             cmd_text.setBrush(self.font_brush)
 
         self.update()
