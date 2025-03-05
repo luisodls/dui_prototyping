@@ -125,7 +125,7 @@ class TreeDirScene(QGraphicsScene):
 
         self.clear()
         x_ini = -5
-        box_wit = self.max_indent * 40
+        box_wit = self.max_indent * 140
         self.addRect(
             x_ini - 10, -10,
             box_wit + 20, self.row_height * (tot_hey  + 2),
@@ -167,9 +167,9 @@ class TreeDirScene(QGraphicsScene):
 
         for ste_pos in self.tree_data_map:
             x_text_corner = (ste_pos["indent"] * 2.5 + 0.3) * x_scale
-            y_text_corner = (ste_pos["my_row"] + 1.6) * y_scale
+            y_text_corner = (ste_pos["my_row"] + 1.1) * y_scale
             cmd_text = self.addSimpleText(str(ste_pos["command"]))
-            cmd_text.setPos(x_text_corner, y_text_corner - self.row_height / 2)
+            cmd_text.setPos(x_text_corner, y_text_corner)
             cmd_text.setBrush(self.font_brush)
 
         self.update()
