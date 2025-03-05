@@ -143,7 +143,6 @@ class TreeDirScene(QGraphicsScene):
             )
 
         x_scale = 25
-
         y_scale = self.row_height
         for ste_pos in self.tree_data_map[1:]:
             x_ini_vezier = (ste_pos["indent"] * 2.5 - 1.5) * x_scale
