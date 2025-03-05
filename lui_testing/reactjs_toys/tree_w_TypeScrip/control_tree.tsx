@@ -76,6 +76,11 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
   const x_scale = 25;
   const y_scale = 30;
 
+  ctx.fillStyle = "lightgray";
+  for (let i = 0; i < tree_data_map.length; i=i + 2) {
+    ctx.fillRect(0, i * y_scale, 900, y_scale);
+  }
+
   for (let ste_pos of tree_data_map) {
     let x_text_corner = (ste_pos.indent * 2.5 + 0.3) * x_scale;
     let y_text_corner = (ste_pos["my_row"] + 1.7) * y_scale;
@@ -87,32 +92,7 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
       x_text_corner,
       y_text_corner - y_scale
     );
-
-    //cmd_text.setPos(x_text_corner, y_text_corner - self.row_height / 2)
-
-    }
-
-  /*
-  for (let i = 0; i < tree_data_map.length; i++) {
-    ctx.fillStyle = i % 2 === 0 ? "white" : "lightgray";
-    ctx.fillRect(0, i * y_scale, 900, y_scale);
-
-    ctx.fillStyle = "black";
-    ctx.font = "16px Mono";
-    if (tree_data_map[i].here) {
-      ctx.fillText(">>>", 5, (i + 1) * y_scale - 10);
-    }
-    ctx.fillText(` ${tree_data_map[i].lin_num}`, 35, (i + 1) * y_scale - 10);
-    let x_text_corner = (tree_data_map[i].indent * 2.5 + 0.3) * x_scale;
-    //let y_text_corner = (tree_data_map[i].my_row + 1.6) * y_scale
-
-    ctx.fillText(
-      tree_data_map[i].command,
-      x_text_corner,
-      (i + 1) * y_scale - 10
-    );
   }
-  */
 
   for (let ste_pos of tree_data_map) {
     let x_ini_vezier = (ste_pos.indent * 2.5 - 1.5) * x_scale;
