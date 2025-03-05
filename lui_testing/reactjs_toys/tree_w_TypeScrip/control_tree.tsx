@@ -78,7 +78,7 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
 
   for (let ste_pos of tree_data_map) {
     let x_text_corner = (ste_pos.indent * 2.5 + 0.3) * x_scale;
-    let y_text_corner = (ste_pos["my_row"] + 1.6) * y_scale;
+    let y_text_corner = (ste_pos["my_row"] + 1.7) * y_scale;
 
     ctx.fillStyle = "black";
     ctx.font = "16px Mono";
