@@ -66,7 +66,7 @@ class TreeDirScene(QGraphicsScene):
         self.first_gray_brush = QBrush(Qt.lightGray, Qt.SolidPattern)
         self.another_gray_brush = QBrush(Qt.white, Qt.SolidPattern)
         self.arrow_blue_pen = QPen(
-                Qt.blue, 1.6, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
+                Qt.blue, 2, Qt.SolidLine, Qt.RoundCap, Qt.RoundJoin
             )
         self.invisible_brush = QBrush(Qt.white, Qt.NoBrush)
         self.rectang_pen = QPen(
@@ -124,21 +124,20 @@ class TreeDirScene(QGraphicsScene):
         print("self.max_indent =", self.max_indent)
 
         self.clear()
-        x_ini = -5
+        x_ini = 0
         box_wit = self.max_indent * 140
         self.addRect(
-            x_ini - 10, -10,
-            box_wit + 20, self.row_height * (tot_hey  + 2),
+            x_ini - 10, 5,
+            box_wit + 20, self.row_height * (tot_hey  + 1),
             self.gray_pen, self.first_gray_brush
         )
 
-        for row_num in range(0, tot_hey + 1, 2):
+        for row_num in range(1, tot_hey, 2):
             print("row_num =", row_num)
             y_ini = row_num * self.row_height
             y_end = (row_num + 1) * self.row_height
             self.addRect(
-                x_ini, y_ini,
-                box_wit, self.row_height,
+                x_ini, y_ini, box_wit, self.row_height,
                 self.rectang_pen, self.another_gray_brush
             )
 
@@ -165,10 +164,22 @@ class TreeDirScene(QGraphicsScene):
                 self.arrow_blue_pen
             )
 
+
+
+
+
         for ste_pos in self.tree_data_map:
             x_text_corner = (ste_pos["indent"] * 2.5 + 0.3) * x_scale
             y_text_corner = (ste_pos["my_row"] + 1.1) * y_scale
-            cmd_text = self.addSimpleText(str(ste_pos["command"]))
+
+            str_2_drwad = str(ste_pos["command"])
+            self.addRect(
+                x_text_corner - 7, y_text_corner,
+                (len(str_2_drwad) + 1) * self.f_width, y_scale - 7,
+                self.arrow_blue_pen, self.invisible_brush
+            )
+
+            cmd_text = self.addSimpleText(str_2_drwad)
             cmd_text.setPos(x_text_corner, y_text_corner)
             cmd_text.setBrush(self.font_brush)
 
