@@ -1,8 +1,14 @@
 import numpy as np
+from matplotlib import pyplot as plt
 
 from dials.array_family import flex
 from dxtbx.model import ExperimentList
 from dxtbx.flumpy import to_numpy
+
+def draw_pyplot(img_arr):
+    plt.imshow(img_arr, interpolation = "nearest")
+    plt.show()
+
 
 def get_np_full_img(raw_dat):
     i23_multipanel = False
@@ -33,6 +39,8 @@ if __name__ == "__main__":
     raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
 
     np_arr, i23_multipanel = get_np_full_img(raw_dat)
+
+    draw_pyplot(np_arr)
 
     print("type(np_arr) = ", type(np_arr))
 
