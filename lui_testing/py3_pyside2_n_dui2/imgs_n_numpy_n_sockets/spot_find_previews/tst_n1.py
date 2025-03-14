@@ -29,7 +29,6 @@ if __name__ == "__main__":
     print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
     print("my_sweep.params() =", my_sweep.params())
 
-
     on_sweep_img_num = 0
     raw_dat = my_sweep.get_raw_data(on_sweep_img_num)
 
