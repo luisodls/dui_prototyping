@@ -26,11 +26,6 @@ if __name__ == "__main__":
     experiments = ExperimentList.from_file(exp_path)
     my_sweep = experiments.imagesets()[0]
 
-    #print("dir(my_sweep)", dir(my_sweep))
-    '''
-    ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getinitargs__', '__getitem__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__safe_for_unpickling__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'as_imageset', 'clear_cache', 'complete_set', 'data', 'external_lookup', 'get_array_range', 'get_beam', 'get_corrected_data', 'get_detector', 'get_detectorbase', 'get_format_class', 'get_gain', 'get_goniometer', 'get_image_identifier', 'get_mask', 'get_path', 'get_pedestal', 'get_raw_data', 'get_scan', 'get_spectrum', 'get_template', 'get_vendortype', 'has_dynamic_mask', 'indices', 'is_marked_for_rejection', 'mark_for_rejection', 'masker', 'params', 'partial_set', 'paths', 'reader', 'set_beam', 'set_detector', 'set_goniometer', 'set_scan', 'size', 'update_detector_px_mm_data']
-    '''
-
     print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
     print("my_sweep.params() =", my_sweep.params())
 
@@ -44,3 +39,7 @@ if __name__ == "__main__":
 
     print("type(np_arr) = ", type(np_arr))
 
+    #print("dir(my_sweep)", dir(my_sweep))
+    '''
+    ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getinitargs__', '__getitem__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__safe_for_unpickling__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'as_imageset', 'clear_cache', 'complete_set', 'data', 'external_lookup', 'get_array_range', 'get_beam', 'get_corrected_data', 'get_detector', 'get_detectorbase', 'get_format_class', 'get_gain', 'get_goniometer', 'get_image_identifier', 'get_mask', 'get_path', 'get_pedestal', 'get_raw_data', 'get_scan', 'get_spectrum', 'get_template', 'get_vendortype', 'has_dynamic_mask', 'indices', 'is_marked_for_rejection', 'mark_for_rejection', 'masker', 'params', 'partial_set', 'paths', 'reader', 'set_beam', 'set_detector', 'set_goniometer', 'set_scan', 'size', 'update_detector_px_mm_data']
+    '''
