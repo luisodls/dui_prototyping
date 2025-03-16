@@ -11,7 +11,7 @@ class Greeter {
 
     greet() {
         console.log("local_num =", this.local_num)
-        return `Hi there, ${this.who_2_greet}!`;
+        return "Hi there, " + this.who_2_greet;
     }
 }
 
