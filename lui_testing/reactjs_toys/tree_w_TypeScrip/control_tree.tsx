@@ -90,6 +90,12 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
     ctx.fillText(
       ste_pos.command, x_text_corner, y_text_corner
     );
+
+    ctx.fillText(
+      ste_pos.lin_num, x_scale * 0.5, y_text_corner
+    );
+
+
   }
 
   for (let ste_pos of tree_data_map) {
@@ -208,7 +214,7 @@ export default function Home() {
 
   return (
     <div>
-      <h2>Dui Style tree</h2>
+      <h2>Dui2 Style tree</h2>
       <canvas
         ref={canvasRef}
         width={900}
