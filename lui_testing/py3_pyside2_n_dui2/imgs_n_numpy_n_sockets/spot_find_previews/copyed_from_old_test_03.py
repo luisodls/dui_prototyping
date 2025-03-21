@@ -13,8 +13,8 @@ class Test:
         experiments = ExperimentList.from_file(self.n_json_file_path)
         my_sweep = experiments.imagesets()[0]
 
-        print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
-        print("my_sweep.params() =", my_sweep.params())
+        #print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
+        #print("my_sweep.params() =", my_sweep.params())
 
         on_sweep_img_num = 0
         self.image = my_sweep.get_raw_data(on_sweep_img_num)[0]
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     np_final_mask = a.final_mask().as_numpy_array()
     plt.imshow( np_final_mask , interpolation = "nearest" )
     plt.show()
-
+    print(dir(a))
     np_global_mask = a.global_mask().as_numpy_array()
     plt.imshow( np_global_mask , interpolation = "nearest" )
     plt.show()
@@ -87,9 +87,6 @@ if __name__ == "__main__":
     np_mean = a.mean().as_numpy_array()
     plt.imshow( np_mean , interpolation = "nearest" )
     plt.show()
-    tmp_off = '''
     np_variance = a.variance().as_numpy_array()
     plt.imshow( np_variance , interpolation = "nearest" )
     plt.show()
-    '''
-
