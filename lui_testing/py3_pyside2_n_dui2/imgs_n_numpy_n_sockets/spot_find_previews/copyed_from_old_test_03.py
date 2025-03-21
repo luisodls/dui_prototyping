@@ -12,29 +12,40 @@ def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
-
 class Test:
     def __init__(self):
-        self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+
+        #self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+        self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
+
         experiments = ExperimentList.from_file(self.n_json_file_path)
         my_sweep = experiments.imagesets()[0]
+
+        #print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
+        #print("my_sweep.params() =", my_sweep.params())
+
         on_sweep_img_num = 0
         self.image = my_sweep.get_raw_data(on_sweep_img_num)[0]
 
     def set_mask(self):
-        mask_file = "/tmp/run_dui2_nodes/run2/tmp_mask.pickle"
+
+        #mask_file = "/tmp/run_dui2_nodes/run2/tmp_mask.pickle"
+        mask_file = "/scratch/30day_tmp/run_dui2_nodes/run2/tmp_mask.pickle"
+
         pick_file = open(mask_file, "rb")
         mask_tup_obj = pickle.load(pick_file)
         pick_file.close()
         self.mask = mask_tup_obj[0]
 
     def set_pars(self):
-        self.gain = 0.5
-        self.size = (3, 3)
         self.nsig_b = 3
         self.nsig_s = 3
         self.global_threshold = 0
         self.min_count = 2
+        self.gain = 1.0
+        self.size = (3, 3)
+
+
 
     def test_dispersion_debug(self):
         self.gain_map = flex.double(flex.grid(2527, 2463), self.gain)
@@ -61,10 +72,27 @@ if __name__ == "__main__":
 
     a = test1.test_dispersion_debug()
 
+    print("final_mask")
     draw_pyplot(a.final_mask().as_numpy_array())
+
+    print("global_mask")
     draw_pyplot(a.global_mask().as_numpy_array())
+
+    print("cv_mask")
     draw_pyplot(a.cv_mask().as_numpy_array())
+
+    print("value_mask")
     draw_pyplot(a.value_mask().as_numpy_array())
+
+    print("index_of_dispersion")
     draw_pyplot(a.index_of_dispersion().as_numpy_array())
+
+    print("mean")
     draw_pyplot(a.mean().as_numpy_array())
+
+    print("variance")
     draw_pyplot(a.variance().as_numpy_array())
+
+
+
+
