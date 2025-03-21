@@ -15,9 +15,9 @@ def draw_pyplot(img_arr):
 class Test:
     def __init__(self):
 
-        self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+        #self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+        self.n_json_file_path = "/tmp/run_dui2_nodes/run2/masked.expt"
         #self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
-        #self.n_json_file_path = "/tmp/run_dui2_nodes/run2/masked.expt"
         experiments = ExperimentList.from_file(self.n_json_file_path)
         self.my_sweep = experiments.imagesets()[0]
 
