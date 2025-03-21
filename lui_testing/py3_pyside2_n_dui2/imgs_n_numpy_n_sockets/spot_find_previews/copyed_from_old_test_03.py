@@ -15,8 +15,8 @@ def draw_pyplot(img_arr):
 class Test:
     def __init__(self):
 
-        #self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
-        self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
+        self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+        #self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
 
         experiments = ExperimentList.from_file(self.n_json_file_path)
         my_sweep = experiments.imagesets()[0]
@@ -29,8 +29,8 @@ class Test:
 
     def set_mask(self):
 
-        #mask_file = "/tmp/run_dui2_nodes/run2/tmp_mask.pickle"
-        mask_file = "/scratch/30day_tmp/run_dui2_nodes/run2/tmp_mask.pickle"
+        mask_file = "/tmp/run_dui2_nodes/run2/tmp_mask.pickle"
+        #mask_file = "/scratch/30day_tmp/run_dui2_nodes/run2/tmp_mask.pickle"
 
         pick_file = open(mask_file, "rb")
         mask_tup_obj = pickle.load(pick_file)
@@ -45,10 +45,11 @@ class Test:
         self.gain = 1.0
         self.size = (3, 3)
 
-
-
     def test_dispersion_debug(self):
-        self.gain_map = flex.double(flex.grid(2527, 2463), self.gain)
+        self.gain_map = flex.double(
+            flex.grid(self.image.all()),
+            self.gain
+        )
         debug = DispersionThresholdDebug(
             self.image.as_double(),
             self.mask,
