@@ -1,4 +1,6 @@
 import numpy as np
+from matplotlib import pyplot as plt
+
 from dials.array_family import flex
 from dxtbx.model import ExperimentList
 from dxtbx.flumpy import to_numpy
@@ -6,16 +8,16 @@ from dials.algorithms.image.threshold import DispersionThresholdDebug
 
 import pickle
 
+def draw_pyplot(img_arr):
+    plt.imshow(img_arr, interpolation = "nearest")
+    plt.show()
+
+
 class Test:
     def __init__(self):
         self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
-
         experiments = ExperimentList.from_file(self.n_json_file_path)
         my_sweep = experiments.imagesets()[0]
-
-        #print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
-        #print("my_sweep.params() =", my_sweep.params())
-
         on_sweep_img_num = 0
         self.image = my_sweep.get_raw_data(on_sweep_img_num)[0]
 
@@ -35,9 +37,7 @@ class Test:
         self.min_count = 2
 
     def test_dispersion_debug(self):
-
         self.gain_map = flex.double(flex.grid(2527, 2463), self.gain)
-
         debug = DispersionThresholdDebug(
             self.image.as_double(),
             self.mask,
@@ -61,32 +61,10 @@ if __name__ == "__main__":
 
     a = test1.test_dispersion_debug()
 
-    from matplotlib import pyplot as plt
-
-    np_final_mask = a.final_mask().as_numpy_array()
-    plt.imshow( np_final_mask , interpolation = "nearest" )
-    plt.show()
-    print(dir(a))
-    np_global_mask = a.global_mask().as_numpy_array()
-    plt.imshow( np_global_mask , interpolation = "nearest" )
-    plt.show()
-
-
-    np_cv_mask = a.cv_mask().as_numpy_array()
-    plt.imshow( np_cv_mask , interpolation = "nearest" )
-    plt.show()
-
-    np_value_mask = a.value_mask().as_numpy_array()
-    plt.imshow( np_value_mask , interpolation = "nearest" )
-    plt.show()
-
-    np_index_of_dispersion = a.index_of_dispersion().as_numpy_array()
-    plt.imshow( np_index_of_dispersion , interpolation = "nearest" )
-    plt.show()
-
-    np_mean = a.mean().as_numpy_array()
-    plt.imshow( np_mean , interpolation = "nearest" )
-    plt.show()
-    np_variance = a.variance().as_numpy_array()
-    plt.imshow( np_variance , interpolation = "nearest" )
-    plt.show()
+    draw_pyplot(a.final_mask().as_numpy_array())
+    draw_pyplot(a.global_mask().as_numpy_array())
+    draw_pyplot(a.cv_mask().as_numpy_array())
+    draw_pyplot(a.value_mask().as_numpy_array())
+    draw_pyplot(a.index_of_dispersion().as_numpy_array())
+    draw_pyplot(a.mean().as_numpy_array())
+    draw_pyplot(a.variance().as_numpy_array())
