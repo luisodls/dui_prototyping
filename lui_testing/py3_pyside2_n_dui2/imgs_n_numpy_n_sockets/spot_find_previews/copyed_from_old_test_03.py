@@ -17,25 +17,27 @@ class Test:
 
         self.n_json_file_path = "/tmp/run_dui2_nodes/run1/imported.expt"
         #self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
-
+        #self.n_json_file_path = "/tmp/run_dui2_nodes/run2/masked.expt"
         experiments = ExperimentList.from_file(self.n_json_file_path)
-        my_sweep = experiments.imagesets()[0]
-
-        #print("dir(my_sweep.params)", dir(my_sweep.params), "\n")
-        #print("my_sweep.params() =", my_sweep.params())
+        self.my_sweep = experiments.imagesets()[0]
 
         on_sweep_img_num = 0
-        self.image = my_sweep.get_raw_data(on_sweep_img_num)[0]
+        self.image = self.my_sweep.get_raw_data(on_sweep_img_num)[0]
 
     def set_mask(self):
+        try:
+            mask_file = self.my_sweep.external_lookup.mask.filename
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+            self.mask = mask_tup_obj[0]
+            print("type(self.mask) =", type(self.mask))
 
-        mask_file = "/tmp/run_dui2_nodes/run2/tmp_mask.pickle"
-        #mask_file = "/scratch/30day_tmp/run_dui2_nodes/run2/tmp_mask.pickle"
-
-        pick_file = open(mask_file, "rb")
-        mask_tup_obj = pickle.load(pick_file)
-        pick_file.close()
-        self.mask = mask_tup_obj[0]
+        except FileNotFoundError:
+            self.mask = flex.bool(
+                flex.grid(self.image.all()),
+                True
+            )
 
     def set_pars(self):
         self.nsig_b = 3
@@ -46,6 +48,9 @@ class Test:
         self.size = (3, 3)
 
     def test_dispersion_debug(self):
+
+        print("self.image.all() =", self.image.all())
+
         self.gain_map = flex.double(
             flex.grid(self.image.all()),
             self.gain
