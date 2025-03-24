@@ -56,25 +56,26 @@ if __name__ == "__main__":
     #a = get_dispersion_debug_obj("/tmp/run_dui2_nodes/run2/masked.expt")
 
     print("final_mask")
-    draw_pyplot(a.final_mask().as_numpy_array())
+    draw_pyplot(to_numpy(a.final_mask()))
 
     print("global_mask")
-    draw_pyplot(a.global_mask().as_numpy_array())
+    draw_pyplot(to_numpy(a.global_mask()))
 
     print("cv_mask")
-    draw_pyplot(a.cv_mask().as_numpy_array())
+    draw_pyplot(to_numpy(a.cv_mask()))
 
     print("value_mask")
-    draw_pyplot(a.value_mask().as_numpy_array())
+    draw_pyplot(to_numpy(a.value_mask()))
 
     print("index_of_dispersion")
-    draw_pyplot(a.index_of_dispersion().as_numpy_array())
+    draw_pyplot(to_numpy(a.index_of_dispersion()))
 
     print("mean")
-    draw_pyplot(a.mean().as_numpy_array())
+    draw_pyplot(to_numpy(a.mean()))
 
     print("variance")
-    draw_pyplot(a.variance().as_numpy_array())
+    draw_pyplot(to_numpy(a.variance()))
+
 
 
 
