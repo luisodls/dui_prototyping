@@ -13,7 +13,6 @@ def draw_pyplot(img_arr):
     plt.show()
 
 def get_dispersion_debug_obj(expt_path):
-    #self.n_json_file_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
     experiments = ExperimentList.from_file(expt_path)
     my_sweep = experiments.imagesets()[0]
 
@@ -31,63 +30,34 @@ def get_dispersion_debug_obj(expt_path):
     except FileNotFoundError:
         mask = flex.bool(flex.grid(image.all()),True)
 
+    nsig_b = 3
+    nsig_s = 3
+    global_threshold = 0
+    min_count = 2
+    gain = 1.0
+    size = (3, 3)
 
-    return (image, mask)
+    print("self.image.all() =", image.all())
 
+    gain_map = flex.double(flex.grid(image.all()), gain)
+    debug = DispersionThresholdDebug(
+        image.as_double(),
+        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
 
-class Test:
-    def __init__(self):
-        self.image, self.mask = get_dispersion_debug_obj(
-            "/tmp/run_dui2_nodes/run1/imported.expt"
-        )
-        '''self.image, self.mask = get_dispersion_debug_obj(
-            "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt"
-        )
-        self.image, self.mask = get_dispersion_debug_obj(
-            "/tmp/run_dui2_nodes/run2/masked.expt"
-        )'''
-
-    def set_pars(self):
-        self.nsig_b = 3
-        self.nsig_s = 3
-        self.global_threshold = 0
-        self.min_count = 2
-        self.gain = 1.0
-        self.size = (3, 3)
-
-    def test_dispersion_debug(self):
-
-        print("self.image.all() =", self.image.all())
-
-        self.gain_map = flex.double(
-            flex.grid(self.image.all()),
-            self.gain
-        )
-        debug = DispersionThresholdDebug(
-            self.image.as_double(),
-            self.mask,
-            self.gain_map,
-            self.size,
-            self.nsig_b,
-            self.nsig_s,
-            self.global_threshold,
-            self.min_count,
-        )
-
-        return debug
+    return debug
 
 
 if __name__ == "__main__":
     print("Hi")
 
-    test1 = Test()
-    test1.set_pars()
-
-    a = test1.test_dispersion_debug()
+    a = get_dispersion_debug_obj("/tmp/run_dui2_nodes/run1/imported.expt")
+    #a = get_dispersion_debug_obj("/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt")
+    #a = get_dispersion_debug_obj("/tmp/run_dui2_nodes/run2/masked.expt")
 
     print("final_mask")
     draw_pyplot(a.final_mask().as_numpy_array())
-    tmp_off = '''
+
     print("global_mask")
     draw_pyplot(a.global_mask().as_numpy_array())
 
@@ -105,7 +75,7 @@ if __name__ == "__main__":
 
     print("variance")
     draw_pyplot(a.variance().as_numpy_array())
-    '''
+
 
 
 
