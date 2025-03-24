@@ -12,7 +12,15 @@ def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
     plt.show()
 
-def get_dispersion_debug_obj(expt_path):
+def get_dispersion_debug_obj(
+    expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
+    nsig_b = 3,
+    nsig_s = 3,
+    global_threshold = 0,
+    min_count = 2,
+    gain = 1.0,
+    size = (3, 3),
+    ):
     experiments = ExperimentList.from_file(expt_path)
     my_sweep = experiments.imagesets()[0]
 
@@ -30,12 +38,6 @@ def get_dispersion_debug_obj(expt_path):
     except FileNotFoundError:
         mask = flex.bool(flex.grid(image.all()),True)
 
-    nsig_b = 3
-    nsig_s = 3
-    global_threshold = 0
-    min_count = 2
-    gain = 1.0
-    size = (3, 3)
 
     print("self.image.all() =", image.all())
 
@@ -51,9 +53,17 @@ def get_dispersion_debug_obj(expt_path):
 if __name__ == "__main__":
     print("Hi")
 
-    a = get_dispersion_debug_obj("/tmp/run_dui2_nodes/run1/imported.expt")
-    #a = get_dispersion_debug_obj("/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt")
-    #a = get_dispersion_debug_obj("/tmp/run_dui2_nodes/run2/masked.expt")
+    a = get_dispersion_debug_obj(
+        expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
+        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        nsig_b = 3,
+        nsig_s = 3,
+        global_threshold = 0,
+        min_count = 2,
+        gain = 1.0,
+        size = (3, 3),
+    )
 
     print("final_mask")
     draw_pyplot(to_numpy(a.final_mask()))
@@ -75,6 +85,7 @@ if __name__ == "__main__":
 
     print("variance")
     draw_pyplot(to_numpy(a.variance()))
+
 
 
 
