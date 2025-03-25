@@ -3,7 +3,7 @@ from matplotlib import pyplot as plt
 
 from dials.array_family import flex
 from dxtbx.model import ExperimentList
-from dxtbx.flumpy import to_numpy
+from dxtbx.flumpy import to_numpy, from_numpy
 from dials.algorithms.image.threshold import DispersionThresholdDebug
 
 import pickle
@@ -33,10 +33,7 @@ def get_dispersion_debug_obj(
     image = my_sweep.get_raw_data(on_sweep_img_num)[0]
 
     np_img = to_numpy(image)
-    '''
-    sig_img = (np_img + 0.00000001) / np.abs(np_img + 0.00000001)
-    abs_img = (sig_img + 1) / 2
-    '''
+
     abs_img = convert_2_black_n_white(np_img)
     draw_pyplot(abs_img)
 
@@ -46,21 +43,21 @@ def get_dispersion_debug_obj(
         mask_tup_obj = pickle.load(pick_file)
         pick_file.close()
         mask = mask_tup_obj[0]
-
-        np_mask = to_numpy(mask)
-
-        sum_np_mask = np_mask + abs_img + 1
-
-        draw_pyplot(convert_2_black_n_white(sum_np_mask))
-        draw_pyplot(sum_np_mask)
-
-        draw_pyplot(to_numpy(mask))
-
         print("type(mask) =", type(mask))
 
     except FileNotFoundError:
         mask = flex.bool(flex.grid(image.all()),True)
 
+    np_mask = to_numpy(mask)
+    sum_np_mask = np_mask + abs_img - 1.5
+    draw_pyplot(sum_np_mask)
+    added_np_mask = convert_2_black_n_white(sum_np_mask)
+    draw_pyplot(added_np_mask)
+
+    bool_np_mask = added_np_mask.astype(bool)
+    mask = from_numpy(bool_np_mask)
+
+    print("type(mask) =", type(mask))
     print("self.image.all() =", image.all())
 
     gain_map = flex.double(flex.grid(image.all()), gain)
@@ -77,8 +74,8 @@ if __name__ == "__main__":
 
     a = get_dispersion_debug_obj(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
         expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
         nsig_b = 3,
         nsig_s = 3,
         global_threshold = 0,
@@ -89,7 +86,6 @@ if __name__ == "__main__":
 
     print("final_mask")
     draw_pyplot(to_numpy(a.final_mask()))
-    '''
 
     print("global_mask")
     draw_pyplot(to_numpy(a.global_mask()))
@@ -108,4 +104,3 @@ if __name__ == "__main__":
 
     print("variance")
     draw_pyplot(to_numpy(a.variance()))
-    '''
