@@ -1,12 +1,14 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import pickle
 
 from dials.array_family import flex
 from dxtbx.model import ExperimentList
 from dxtbx.flumpy import to_numpy, from_numpy
-from dials.algorithms.image.threshold import DispersionThresholdDebug
+from dials.algorithms.image.threshold import (
+    DispersionThresholdDebug, DispersionExtendedThresholdDebug
+)
 
-import pickle
 
 def draw_pyplot(img_arr):
     plt.imshow(img_arr, interpolation = "nearest")
@@ -61,20 +63,30 @@ def get_dispersion_debug_obj(
     print("self.image.all() =", image.all())
 
     gain_map = flex.double(flex.grid(image.all()), gain)
-    debug = DispersionThresholdDebug(
-        image.as_double(),
-        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
-    )
-    to_consider = '''
-    if self.settings.threshold_algorithm == "dispersion_extended":
+
+    my_algorithm = "dispersion"
+
+    if my_algorithm == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
-    elif self.settings.threshold_algorithm == "dispersion":
+    elif my_algorithm == "dispersion":
         algorithm = DispersionThresholdDebug
+    to_view_later = '''
     else:
         algorithm = RadialProfileThresholdDebug(
             image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
         )
+
+    radial_profile {
+      n_iqr = 6
+      blur = narrow wide
+      n_bins = 100
     '''
+
+
+    debug = algorithm(
+        image.as_double(),
+        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
 
     return debug
 
@@ -83,8 +95,8 @@ if __name__ == "__main__":
     print("Hi")
 
     a = get_dispersion_debug_obj(
-        expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
+        expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
         #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
         nsig_b = 3,
         nsig_s = 3,
@@ -94,23 +106,23 @@ if __name__ == "__main__":
         size = (3, 3),
     )
 
-    print("final_mask")
+    print("a.final_mask ... threshold")
     draw_pyplot(to_numpy(a.final_mask()))
 
-    print("global_mask")
+    print("global_mask ... global")
     draw_pyplot(to_numpy(a.global_mask()))
 
-    print("cv_mask")
+    print("cv_mask  ... sigma_b")
     draw_pyplot(to_numpy(a.cv_mask()))
 
-    print("value_mask")
+    print("value_mask ... sigma_s")
     draw_pyplot(to_numpy(a.value_mask()))
 
-    print("index_of_dispersion")
+    print("index_of_dispersion ... dispersion")
     draw_pyplot(to_numpy(a.index_of_dispersion()))
 
-    print("mean")
+    print("mean ... mean")
     draw_pyplot(to_numpy(a.mean()))
 
-    print("variance")
+    print("variance ... variance")
     draw_pyplot(to_numpy(a.variance()))
