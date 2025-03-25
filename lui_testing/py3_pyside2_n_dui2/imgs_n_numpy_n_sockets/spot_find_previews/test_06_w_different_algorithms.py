@@ -37,7 +37,7 @@ def get_dispersion_debug_obj(
     np_img = to_numpy(image)
 
     abs_img = convert_2_black_n_white(np_img)
-    draw_pyplot(abs_img)
+    #draw_pyplot(abs_img)
 
     try:
         mask_file = my_sweep.external_lookup.mask.filename
@@ -52,19 +52,19 @@ def get_dispersion_debug_obj(
 
     np_mask = to_numpy(mask)
     sum_np_mask = np_mask + abs_img - 1.5
-    draw_pyplot(sum_np_mask)
+    #draw_pyplot(sum_np_mask)
     added_np_mask = convert_2_black_n_white(sum_np_mask)
-    draw_pyplot(added_np_mask)
+    #draw_pyplot(added_np_mask)
 
     bool_np_mask = added_np_mask.astype(bool)
     mask = from_numpy(bool_np_mask)
 
-    print("type(mask) =", type(mask))
-    print("self.image.all() =", image.all())
+    #print("type(mask) =", type(mask))
+    #print("self.image.all() =", image.all())
 
     gain_map = flex.double(flex.grid(image.all()), gain)
 
-    my_algorithm = "dispersion"
+    my_algorithm = "dispersion_extended"
 
     if my_algorithm == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
@@ -92,8 +92,6 @@ def get_dispersion_debug_obj(
 
 
 if __name__ == "__main__":
-    print("Hi")
-
     a = get_dispersion_debug_obj(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
         expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
