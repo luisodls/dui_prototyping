@@ -65,6 +65,16 @@ def get_dispersion_debug_obj(
         image.as_double(),
         mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
     )
+    to_consider = '''
+    if self.settings.threshold_algorithm == "dispersion_extended":
+        algorithm = DispersionExtendedThresholdDebug
+    elif self.settings.threshold_algorithm == "dispersion":
+        algorithm = DispersionThresholdDebug
+    else:
+        algorithm = RadialProfileThresholdDebug(
+            image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
+        )
+    '''
 
     return debug
 
@@ -73,8 +83,8 @@ if __name__ == "__main__":
     print("Hi")
 
     a = get_dispersion_debug_obj(
-        #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
         #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
         nsig_b = 3,
         nsig_s = 3,
