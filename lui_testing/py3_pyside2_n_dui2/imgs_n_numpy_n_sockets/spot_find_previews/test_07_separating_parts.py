@@ -19,6 +19,50 @@ def convert_2_black_n_white(np_img):
     abs_img = (sig_img + 1) / 2
     return abs_img
 
+def from_image_n_mask_2_threshold(image, abs_img, np_mask, pars):
+
+    (nsig_b,nsig_s,global_threshold,min_count,gain,size) = pars
+
+    sum_np_mask = np_mask + abs_img - 1.5
+    #draw_pyplot(sum_np_mask)
+    added_np_mask = convert_2_black_n_white(sum_np_mask)
+    #draw_pyplot(added_np_mask)
+
+    bool_np_mask = added_np_mask.astype(bool)
+    mask = from_numpy(bool_np_mask)
+
+    #print("type(mask) =", type(mask))
+    #print("self.image.all() =", image.all())
+
+    #gain_map = flex.double(flex.grid(abs_img.shape), gain)
+    gain_map = flex.double(flex.grid(image.all()), gain)
+
+    my_algorithm = "dispersion_extended"
+
+    if my_algorithm == "dispersion_extended":
+        algorithm = DispersionExtendedThresholdDebug
+    elif my_algorithm == "dispersion":
+        algorithm = DispersionThresholdDebug
+    to_view_later = '''
+    else:
+        algorithm = RadialProfileThresholdDebug(
+            image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
+        )
+
+    radial_profile {
+      n_iqr = 6
+      blur = narrow wide
+      n_bins = 100
+    '''
+
+
+    debug = algorithm(
+        image.as_double(),
+        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
+
+    return debug
+
 def get_dispersion_debug_obj(
     expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
     nsig_b = 3,
@@ -51,44 +95,11 @@ def get_dispersion_debug_obj(
         mask = flex.bool(flex.grid(image.all()),True)
 
     np_mask = to_numpy(mask)
-    sum_np_mask = np_mask + abs_img - 1.5
-    #draw_pyplot(sum_np_mask)
-    added_np_mask = convert_2_black_n_white(sum_np_mask)
-    #draw_pyplot(added_np_mask)
 
-    bool_np_mask = added_np_mask.astype(bool)
-    mask = from_numpy(bool_np_mask)
+    pars = (nsig_b,nsig_s,global_threshold,min_count,gain,size)
 
-    #print("type(mask) =", type(mask))
-    #print("self.image.all() =", image.all())
-
-    gain_map = flex.double(flex.grid(image.all()), gain)
-
-    my_algorithm = "dispersion_extended"
-
-    if my_algorithm == "dispersion_extended":
-        algorithm = DispersionExtendedThresholdDebug
-    elif my_algorithm == "dispersion":
-        algorithm = DispersionThresholdDebug
-    to_view_later = '''
-    else:
-        algorithm = RadialProfileThresholdDebug(
-            image, self.settings.n_iqr, self.settings.blur, self.settings.n_bins
-        )
-
-    radial_profile {
-      n_iqr = 6
-      blur = narrow wide
-      n_bins = 100
-    '''
-
-
-    debug = algorithm(
-        image.as_double(),
-        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
-    )
-
-    return debug
+    obj_w_alg = from_image_n_mask_2_threshold(image, abs_img, np_mask, pars)
+    return obj_w_alg
 
 
 if __name__ == "__main__":

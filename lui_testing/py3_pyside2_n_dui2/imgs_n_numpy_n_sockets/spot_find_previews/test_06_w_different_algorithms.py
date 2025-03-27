@@ -62,6 +62,12 @@ def get_dispersion_debug_obj(
     #print("type(mask) =", type(mask))
     #print("self.image.all() =", image.all())
 
+    print("image.all() =", image.all())
+    print("np_img(shape)=", np_img.shape)
+
+    print("image.all() =", type(image.all()))
+    print("np_img(shape)=", type(np_img.shape))
+
     gain_map = flex.double(flex.grid(image.all()), gain)
 
     my_algorithm = "dispersion_extended"
