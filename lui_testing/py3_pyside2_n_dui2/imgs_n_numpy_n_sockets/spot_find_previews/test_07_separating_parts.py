@@ -19,7 +19,11 @@ def convert_2_black_n_white(np_img):
     abs_img = (sig_img + 1) / 2
     return abs_img
 
-def from_image_n_mask_2_threshold(image, abs_img, np_mask, pars):
+def from_image_n_mask_2_threshold(image, mask, pars):
+    np_mask = to_numpy(mask)
+    np_img = to_numpy(image)
+    abs_img = convert_2_black_n_white(np_img)
+    #draw_pyplot(abs_img)
 
     (nsig_b,nsig_s,global_threshold,min_count,gain,size) = pars
 
@@ -29,10 +33,7 @@ def from_image_n_mask_2_threshold(image, abs_img, np_mask, pars):
     #draw_pyplot(added_np_mask)
 
     bool_np_mask = added_np_mask.astype(bool)
-    mask = from_numpy(bool_np_mask)
-
-    #print("type(mask) =", type(mask))
-    #print("self.image.all() =", image.all())
+    mask_w_panels = from_numpy(bool_np_mask)
 
     #gain_map = flex.double(flex.grid(abs_img.shape), gain)
     gain_map = flex.double(flex.grid(image.all()), gain)
@@ -43,6 +44,7 @@ def from_image_n_mask_2_threshold(image, abs_img, np_mask, pars):
         algorithm = DispersionExtendedThresholdDebug
     elif my_algorithm == "dispersion":
         algorithm = DispersionThresholdDebug
+
     to_view_later = '''
     else:
         algorithm = RadialProfileThresholdDebug(
@@ -55,10 +57,10 @@ def from_image_n_mask_2_threshold(image, abs_img, np_mask, pars):
       n_bins = 100
     '''
 
-
     debug = algorithm(
         image.as_double(),
-        mask, gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+        mask_w_panels,
+        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
     )
 
     return debug
@@ -78,11 +80,6 @@ def get_dispersion_debug_obj(
     on_sweep_img_num = 0
     image = my_sweep.get_raw_data(on_sweep_img_num)[0]
 
-    np_img = to_numpy(image)
-
-    abs_img = convert_2_black_n_white(np_img)
-    #draw_pyplot(abs_img)
-
     try:
         mask_file = my_sweep.external_lookup.mask.filename
         pick_file = open(mask_file, "rb")
@@ -94,11 +91,11 @@ def get_dispersion_debug_obj(
     except FileNotFoundError:
         mask = flex.bool(flex.grid(image.all()),True)
 
-    np_mask = to_numpy(mask)
+    #np_mask = to_numpy(mask)
 
     pars = (nsig_b,nsig_s,global_threshold,min_count,gain,size)
 
-    obj_w_alg = from_image_n_mask_2_threshold(image, abs_img, np_mask, pars)
+    obj_w_alg = from_image_n_mask_2_threshold(image, mask, pars)
     return obj_w_alg
 
 
