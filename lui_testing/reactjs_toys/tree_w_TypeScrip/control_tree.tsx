@@ -36,7 +36,7 @@ function build_tree_recr(pos_num: number, my_lst: Step[], indent: number = 1, pa
   const str_lin_num = String(step.lin_num);
   let stp_prn = stp_suss + "  " + str_lin_num + "     ".repeat(indent) + " └──";
   const stp_cmd = String(step.command);
-  stp_prn = stp_prn + stp_cmd;
+  stp_prn = stp_prn + " [ " + stp_cmd+ " ] ";
   const step_map: StepMap = {
     command: stp_cmd,
     lin_num: step.lin_num,
@@ -94,8 +94,6 @@ function draw_tree(canvasRef: React.RefObject<HTMLCanvasElement>): void {
     ctx.fillText(
       ste_pos.lin_num, x_scale * 0.5, y_text_corner
     );
-
-
   }
 
   for (let ste_pos of tree_data_map) {

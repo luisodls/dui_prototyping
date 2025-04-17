@@ -23,7 +23,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         response["Answer"] = str_out
         self.wfile.write(json.dumps(response).encode('utf-8'))
 
-
     def do_GET(self):
         print("do_GET")
         self.send_response(200)
@@ -38,7 +37,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.send_ok_dict(lst_out)
 
-
     def do_PUT(self):
         print("do_PUT")
         self.send_response(200)
@@ -51,7 +49,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         data = self.rfile.read(dataLength)
         print("data =", data)
         self.send_ok_dict()
-
 
     def do_POST(self):
         print("do_POST")

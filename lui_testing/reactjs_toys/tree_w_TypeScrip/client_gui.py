@@ -1,4 +1,4 @@
-import sys, requests, json
+import sys, requests, json, os
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
 from PySide2.QtGui import *
@@ -164,18 +164,19 @@ class TreeDirScene(QGraphicsScene):
                 self.arrow_blue_pen
             )
 
-
-
-
-
         for ste_pos in self.tree_data_map:
             x_text_corner = (ste_pos["indent"] * 2.5 + 0.3) * x_scale
             y_text_corner = (ste_pos["my_row"] + 1.1) * y_scale
 
             str_2_drwad = str(ste_pos["command"])
+
+            len_of_rect = len(str_2_drwad)
+            if len_of_rect < 10:
+                len_of_rect = 10
+
             self.addRect(
                 x_text_corner - 7, y_text_corner,
-                (len(str_2_drwad) + 1) * self.f_width, y_scale - 7,
+                (len_of_rect + 1) * self.f_width, y_scale - 7,
                 self.arrow_blue_pen, self.invisible_brush
             )
 
@@ -192,7 +193,11 @@ class TreeDirScene(QGraphicsScene):
 class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("simple.ui")
+
+        ui_dir_path = os.path.dirname(os.path.abspath(__file__))
+        ui_path = ui_dir_path + os.sep
+
+        self.window = QtUiTools.QUiLoader().load(ui_path + "simple.ui")
 
         self.window.Button4Get.clicked.connect(self.clicked_4_get)
         self.window.Button4Post.clicked.connect(self.clicked_4_post)
