@@ -7,9 +7,11 @@ print "using PyQt4"
 #'''
 
 #PySide_ver = '''
-from PySide.QtGui import *
-from PySide.QtCore import *
-print "using PySide"
+from PySide2.QtGui import *
+from PySide2.QtCore import *
+from PySide2.QtWidgets import *
+
+print("using PySide")
 #'''
 def get_my_step_lst():
     return [
