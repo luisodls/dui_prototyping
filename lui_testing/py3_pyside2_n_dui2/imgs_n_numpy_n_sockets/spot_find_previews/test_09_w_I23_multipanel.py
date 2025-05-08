@@ -51,9 +51,9 @@ def convert_2_black_n_white(np_img):
     abs_img = (sig_img + 1) / 2
     return abs_img
 
-def from_image_n_mask_2_threshold(image, mask, imageset_tmp, pars):
+def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars):
     np_mask = to_numpy(mask)
-    np_img = to_numpy(image)
+    np_img = to_numpy(flex_image)
     abs_img = convert_2_black_n_white(np_img)
 
     (
@@ -67,7 +67,7 @@ def from_image_n_mask_2_threshold(image, mask, imageset_tmp, pars):
     bool_np_mask = added_np_mask.astype(bool)
     mask_w_panels = from_numpy(bool_np_mask)
 
-    gain_map = flex.double(flex.grid(image.all()), gain)
+    gain_map = flex.double(flex.grid(flex_image.all()), gain)
 
     my_algorithm = "radial_profile"
 
@@ -82,15 +82,42 @@ def from_image_n_mask_2_threshold(image, mask, imageset_tmp, pars):
             imageset_tmp, n_iqr, blur, n_bins
         )
 
-    debug = algorithm(
-        image.as_double(),
-        mask_w_panels,
-        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
-    )
+    detector=imageset_tmp.get_detector()
+    print("len(detector) =", len(detector))
 
-    return debug
+    debug_lst = []
+    for repts in range(len(detector)):
+        debug = algorithm(
+            flex_image.as_double(),
+            mask_w_panels,
+            gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+        )
+        debug_lst.append(debug)
 
-def get_dispersion_debug_obj(
+
+    '''
+
+    dispersion_debug_list = []
+    for i_panel in range(len(detector)):
+        dispersion_debug_list.append(
+            algorithm(
+                image_data[i_panel].as_double(),
+                image_mask[i_panel],
+                gain_map[i_panel],
+                self.settings.kernel_size,
+                self.settings.nsigma_b,
+                self.settings.nsigma_s,
+                self.settings.global_threshold,
+                self.settings.min_local,
+            )
+        )
+
+
+    '''
+
+    return debug_lst
+
+def get_dispersion_debug_obj_lst(
     expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
     nsig_b = 3,
     nsig_s = 3,
@@ -105,7 +132,7 @@ def get_dispersion_debug_obj(
     experiments = ExperimentList.from_file(expt_path)
     my_imageset = experiments.imagesets()[0]
     on_sweep_img_num = 0
-    image = my_imageset.get_raw_data(on_sweep_img_num)[0]
+    flex_image = my_imageset.get_raw_data(on_sweep_img_num)[0]
 
     try:
         mask_file = my_imageset.external_lookup.mask.filename
@@ -116,19 +143,21 @@ def get_dispersion_debug_obj(
         print("type(mask) =", type(mask))
 
     except FileNotFoundError:
-        mask = flex.bool(flex.grid(image.all()),True)
+        mask = flex.bool(flex.grid(flex_image.all()),True)
 
     pars = (
         nsig_b, nsig_s, global_threshold, min_count, gain, size,
         n_iqr, blur, n_bins
     )
 
-    obj_w_alg = from_image_n_mask_2_threshold(image, mask, my_imageset, pars)
-    return obj_w_alg
+    obj_w_alg_lst = from_image_n_mask_2_threshold(
+        flex_image, mask, my_imageset, pars
+    )
+    return obj_w_alg_lst
 
 
 if __name__ == "__main__":
-    a = get_dispersion_debug_obj(
+    a_lst = get_dispersion_debug_obj_lst(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
         #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
         expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
@@ -140,6 +169,7 @@ if __name__ == "__main__":
         gain = 1.0,
         size = (3, 3),
     )
+    for a in a_lst:
+        print("a.final_mask ... threshold")
+        draw_pyplot(to_numpy(a.final_mask()))
 
-    print("a.final_mask ... threshold")
-    draw_pyplot(to_numpy(a.final_mask()))
