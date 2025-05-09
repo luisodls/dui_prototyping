@@ -13,13 +13,16 @@ from dials.command_line.find_spots import phil_scope as find_spots_phil_scope
 from dials.extensions import SpotFinderThreshold
 
 
-
 class RadialProfileThresholdDebug:
     # The radial_profile threshold algorithm does not have an associated
     # 'Debug' class. It does not create the same set of intermediate images
     # as the dispersion algorithms, so we can delegate to a
     # DispersionThresholdDebug object for those, while overriding the final_mask
     # method. This wrapper class handles that.
+
+    # This class was Copy/Pasted and edited from the module spotfinder_frame.py
+    # that is par of the Dials image viewer
+
     def __init__(self, imageset, n_iqr, blur, n_bins):
         self.imageset = imageset
         params = find_spots_phil_scope.extract()
@@ -27,19 +30,17 @@ class RadialProfileThresholdDebug:
         params.spotfinder.threshold.radial_profile.n_bins = n_bins
         params.spotfinder.threshold.radial_profile.n_iqr = n_iqr
         self.radial_profile = SpotFinderThreshold.load("radial_profile")(params)
-        self._i_panel = 0
+        self.i_panel = 0
 
     def __call__(self, *args):
         dispersion = DispersionThresholdDebug(*args)
         image = args[0]
         mask = args[1]
         dispersion._final_mask = self.radial_profile.compute_threshold(
-            image, mask, imageset=self.imageset, i_panel=self._i_panel
+            image, mask, imageset=self.imageset, i_panel=self.i_panel
         )
         dispersion.final_mask = types.MethodType(lambda x: x._final_mask, dispersion)
-        self._i_panel += 1
         return dispersion
-
 
 
 def draw_pyplot(img_arr):
@@ -51,7 +52,7 @@ def convert_2_black_n_white(np_img):
     abs_img = (sig_img + 1) / 2
     return abs_img
 
-def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars):
+def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars, panel_number):
     np_mask = to_numpy(mask)
     np_img = to_numpy(flex_image)
     abs_img = convert_2_black_n_white(np_img)
@@ -81,35 +82,12 @@ def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars):
         algorithm = RadialProfileThresholdDebug(
             imageset_tmp, n_iqr, blur, n_bins
         )
-    '''
-    detector=imageset_tmp.get_detector()
-    print("len(detector) =", len(detector))
-    debug_lst = []
-    for repts in range(len(detector)):
-    '''
+    algorithm.i_panel = panel_number
     debug = algorithm(
         flex_image.as_double(),
         mask_w_panels,
         gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
     )
-        #debug_lst.append(debug)
-
-    just_a_guide = '''dispersion_debug_list = []
-    for i_panel in range(len(detector)):
-        dispersion_debug_list.append(
-            algorithm(
-                image_data[i_panel].as_double(),
-                image_mask[i_panel],
-                gain_map[i_panel],
-                self.settings.kernel_size,
-                self.settings.nsigma_b,
-                self.settings.nsigma_s,
-                self.settings.global_threshold,
-                self.settings.min_local,
-            )
-        )'''
-
-    #return debug_lst
     return debug
 
 def get_dispersion_debug_obj_lst(
@@ -128,18 +106,18 @@ def get_dispersion_debug_obj_lst(
     my_imageset = experiments.imagesets()[0]
     on_sweep_img_num = 0
 
-    detector=my_imageset.get_detector()
+    detector = my_imageset.get_detector()
     print("len(detector) =", len(detector))
 
     obj_w_alg_lst = []
-    for det_num in range(len(detector)):
-        flex_image = my_imageset.get_raw_data(on_sweep_img_num)[det_num]
+    for panel_number in range(len(detector)):
+        flex_image = my_imageset.get_raw_data(on_sweep_img_num)[panel_number]
         try:
             mask_file = my_imageset.external_lookup.mask.filename
             pick_file = open(mask_file, "rb")
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
-            mask = mask_tup_obj[0]
+            mask = mask_tup_obj[panel_number]
             print("type(mask) =", type(mask))
 
         except FileNotFoundError:
@@ -152,7 +130,7 @@ def get_dispersion_debug_obj_lst(
         )
 
         obj_w_alg = from_image_n_mask_2_threshold(
-            flex_image, mask, my_imageset, pars
+            flex_image, mask, my_imageset, pars, panel_number
         )
         obj_w_alg_lst.append(obj_w_alg)
 
@@ -182,25 +160,6 @@ if __name__ == "__main__":
     for n, a in enumerate(a_lst):
         fig.suptitle('Multiple panels')
         axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
-        #axs[n].plot(to_numpy(a.final_mask()))
 
     plt.show()
-
-
-    '''
-    a = get_dispersion_debug_obj_lst(
-        #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
-        expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
-        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
-        nsig_b = 3,
-        nsig_s = 3,
-        global_threshold = 0,
-        min_count = 2,
-        gain = 1.0,
-        size = (3, 3),
-    )
-    print("a.final_mask ... threshold")
-    draw_pyplot(to_numpy(a.final_mask()))
-    '''
 
