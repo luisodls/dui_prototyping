@@ -81,23 +81,20 @@ def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars):
         algorithm = RadialProfileThresholdDebug(
             imageset_tmp, n_iqr, blur, n_bins
         )
-
+    '''
     detector=imageset_tmp.get_detector()
     print("len(detector) =", len(detector))
-
     debug_lst = []
     for repts in range(len(detector)):
-        debug = algorithm(
-            flex_image.as_double(),
-            mask_w_panels,
-            gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
-        )
-        debug_lst.append(debug)
-
-
     '''
+    debug = algorithm(
+        flex_image.as_double(),
+        mask_w_panels,
+        gain_map, size, nsig_b, nsig_s, global_threshold, min_count,
+    )
+        #debug_lst.append(debug)
 
-    dispersion_debug_list = []
+    just_a_guide = '''dispersion_debug_list = []
     for i_panel in range(len(detector)):
         dispersion_debug_list.append(
             algorithm(
@@ -110,12 +107,10 @@ def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars):
                 self.settings.global_threshold,
                 self.settings.min_local,
             )
-        )
+        )'''
 
-
-    '''
-
-    return debug_lst
+    #return debug_lst
+    return debug
 
 def get_dispersion_debug_obj_lst(
     expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
@@ -126,33 +121,40 @@ def get_dispersion_debug_obj_lst(
     gain = 1.0,
     size = (3, 3),
     n_iqr = 6,
-    blur = "narrow wide",
+    blur = None,
     n_bins = 100
 ):
     experiments = ExperimentList.from_file(expt_path)
     my_imageset = experiments.imagesets()[0]
     on_sweep_img_num = 0
-    flex_image = my_imageset.get_raw_data(on_sweep_img_num)[0]
 
-    try:
-        mask_file = my_imageset.external_lookup.mask.filename
-        pick_file = open(mask_file, "rb")
-        mask_tup_obj = pickle.load(pick_file)
-        pick_file.close()
-        mask = mask_tup_obj[0]
-        print("type(mask) =", type(mask))
+    detector=my_imageset.get_detector()
+    print("len(detector) =", len(detector))
 
-    except FileNotFoundError:
-        mask = flex.bool(flex.grid(flex_image.all()),True)
+    obj_w_alg_lst = []
+    for det_num in range(len(detector)):
+        flex_image = my_imageset.get_raw_data(on_sweep_img_num)[det_num]
+        try:
+            mask_file = my_imageset.external_lookup.mask.filename
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+            mask = mask_tup_obj[0]
+            print("type(mask) =", type(mask))
 
-    pars = (
-        nsig_b, nsig_s, global_threshold, min_count, gain, size,
-        n_iqr, blur, n_bins
-    )
+        except FileNotFoundError:
+            mask = flex.bool(flex.grid(flex_image.all()),True)
 
-    obj_w_alg_lst = from_image_n_mask_2_threshold(
-        flex_image, mask, my_imageset, pars
-    )
+        pars = (
+            nsig_b, nsig_s, global_threshold, min_count, gain, size,
+            n_iqr, blur, n_bins
+        )
+
+        obj_w_alg = from_image_n_mask_2_threshold(
+            flex_image, mask, my_imageset, pars
+        )
+        obj_w_alg_lst.append(obj_w_alg)
+
     return obj_w_alg_lst
 
 
@@ -169,7 +171,23 @@ if __name__ == "__main__":
         gain = 1.0,
         size = (3, 3),
     )
-    for a in a_lst:
-        print("a.final_mask ... threshold")
+    for n, a in enumerate(a_lst):
+        print("a.final_mask ... threshold(", n, ")")
         draw_pyplot(to_numpy(a.final_mask()))
+    '''
+    a = get_dispersion_debug_obj_lst(
+        #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
+        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
+        nsig_b = 3,
+        nsig_s = 3,
+        global_threshold = 0,
+        min_count = 2,
+        gain = 1.0,
+        size = (3, 3),
+    )
+    print("a.final_mask ... threshold")
+    draw_pyplot(to_numpy(a.final_mask()))
+    '''
 
