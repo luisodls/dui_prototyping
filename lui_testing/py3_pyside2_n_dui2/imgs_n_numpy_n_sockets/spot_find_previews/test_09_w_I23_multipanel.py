@@ -144,6 +144,7 @@ def get_dispersion_debug_obj_lst(
 
         except FileNotFoundError:
             mask = flex.bool(flex.grid(flex_image.all()),True)
+            print("defaulting to empty mask (FileNotFound Err catch)")
 
         pars = (
             nsig_b, nsig_s, global_threshold, min_count, gain, size,
@@ -171,9 +172,21 @@ if __name__ == "__main__":
         gain = 1.0,
         size = (3, 3),
     )
+    '''
     for n, a in enumerate(a_lst):
         print("a.final_mask ... threshold(", n, ")")
         draw_pyplot(to_numpy(a.final_mask()))
+    '''
+
+    fig, axs = plt.subplots(len(a_lst))
+    for n, a in enumerate(a_lst):
+        fig.suptitle('Multiple panels')
+        axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
+        #axs[n].plot(to_numpy(a.final_mask()))
+
+    plt.show()
+
+
     '''
     a = get_dispersion_debug_obj_lst(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
