@@ -70,7 +70,9 @@ def from_image_n_mask_2_threshold(flex_image, mask, imageset_tmp, pars, panel_nu
 
     gain_map = flex.double(flex.grid(flex_image.all()), gain)
 
-    my_algorithm = "radial_profile"
+    #my_algorithm = "radial_profile"
+    my_algorithm = "dispersion"
+    #my_algorithm = "dispersion_extended"
 
     if my_algorithm == "dispersion_extended":
         algorithm = DispersionExtendedThresholdDebug
@@ -118,7 +120,7 @@ def get_dispersion_debug_obj_lst(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
             mask = mask_tup_obj[panel_number]
-            print("type(mask) =", type(mask))
+            print("using mask on:", mask_file)
 
         except FileNotFoundError:
             mask = flex.bool(flex.grid(flex_image.all()),True)
@@ -140,9 +142,8 @@ def get_dispersion_debug_obj_lst(
 if __name__ == "__main__":
     a_lst = get_dispersion_debug_obj_lst(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
-        expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
-        #expt_path = "/scratch/30day_tmp/run_dui2_nodes/run2/masked.expt",
+        expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
         nsig_b = 3,
         nsig_s = 3,
         global_threshold = 0,
@@ -150,16 +151,18 @@ if __name__ == "__main__":
         gain = 1.0,
         size = (3, 3),
     )
-    '''
-    for n, a in enumerate(a_lst):
-        print("a.final_mask ... threshold(", n, ")")
-        draw_pyplot(to_numpy(a.final_mask()))
-    '''
 
-    fig, axs = plt.subplots(len(a_lst))
-    for n, a in enumerate(a_lst):
-        fig.suptitle('Multiple panels')
-        axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
+    try:
+        fig, axs = plt.subplots(len(a_lst))
+        for n, a in enumerate(a_lst):
+            fig.suptitle('Multiple panels')
+            axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
 
-    plt.show()
+        plt.show()
+
+    except TypeError:
+        for n, a in enumerate(a_lst):
+            print("a.final_mask ... threshold(", n, ")")
+            draw_pyplot(to_numpy(a.final_mask()))
+
 
