@@ -214,7 +214,6 @@ def get_dispersion_debug_obj_tup(
     return obj_w_alg_tup
 
 
-
 def get_bytes_w_2d_threshold_mask(
     experiments_list_path, img_num, params
 ):
@@ -229,34 +228,10 @@ def get_bytes_w_2d_threshold_mask(
             on_sweep_img_num = img_num,
             params_in = params
         )
-
-
-        to_study_this = '''
-        try:
-            pick_file = open(mask_file, "rb")
-            mask_tup_obj = pickle.load(pick_file)
-            pick_file.close()
-
-        except FileNotFoundError:
-            logging.info("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
-            mask_tup_obj = None
-
-        byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
-            img_tup_obj, mask_tup_obj, params, imageset_tmp
-        )
-
-        if byte_data == "Error":
-            logging.info('byte_data == "Error"')
-            byte_data = None
-
-
-        return byte_data
+        return tup_lst
 
     else:
         return None
-        '''
-
-    return tup_lst
 
 
 if __name__ == "__main__":
