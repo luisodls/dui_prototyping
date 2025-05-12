@@ -109,7 +109,7 @@ def get_dispersion_debug_obj_lst(
     on_sweep_img_num = 0
 
     detector = my_imageset.get_detector()
-    print("len(detector) =", len(detector))
+    print("len(detector obj) =", len(detector))
 
     obj_w_alg_lst = []
     for panel_number in range(len(detector)):
@@ -120,11 +120,11 @@ def get_dispersion_debug_obj_lst(
             mask_tup_obj = pickle.load(pick_file)
             pick_file.close()
             mask = mask_tup_obj[panel_number]
-            print("using mask on:", mask_file)
+            #print("using mask on:", mask_file)
 
         except FileNotFoundError:
             mask = flex.bool(flex.grid(flex_image.all()),True)
-            print("defaulting to empty mask (FileNotFound Err catch)")
+            #print("defaulting to empty mask (FileNotFound Err catch)")
 
         pars = (
             nsig_b, nsig_s, global_threshold, min_count, gain, size,
@@ -142,8 +142,8 @@ def get_dispersion_debug_obj_lst(
 if __name__ == "__main__":
     a_lst = get_dispersion_debug_obj_lst(
         #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-        expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
-        #expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
+        #expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
+        expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
         nsig_b = 3,
         nsig_s = 3,
         global_threshold = 0,
@@ -162,7 +162,7 @@ if __name__ == "__main__":
 
     except TypeError:
         for n, a in enumerate(a_lst):
-            print("a.final_mask ... threshold(", n, ")")
+            #print("a.final_mask ... threshold(", n, ")")
             draw_pyplot(to_numpy(a.final_mask()))
 
 
