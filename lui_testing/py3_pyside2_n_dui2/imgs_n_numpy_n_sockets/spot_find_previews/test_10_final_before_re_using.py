@@ -97,18 +97,19 @@ def from_image_n_mask_2_threshold(
     return debug
 
 def get_dispersion_debug_obj_lst(
-    expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
-    on_sweep_img_num = 0,
-    nsig_b = 3,
-    nsig_s = 3,
-    global_threshold = 0,
-    min_count = 2,
-    gain = 1.0,
-    size = (3, 3),
-    n_iqr = 6,
-    blur = None,
-    n_bins = 100
+    expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
 ):
+
+    nsig_b =            params_in["nsig_b"]
+    nsig_s =            params_in["nsig_s"]
+    global_threshold =  params_in["global_threshold"]
+    min_count =         params_in["min_count"]
+    gain =              params_in["gain"]
+    size =              params_in["size"]
+    n_iqr =             params_in["n_iqr"]
+    blur =              params_in["blur"]
+    n_bins =            params_in["n_bins"]
+
     experiments = ExperimentList.from_file(expt_path)
     my_imageset = experiments.imagesets()[0]
 
@@ -139,12 +140,133 @@ def get_dispersion_debug_obj_lst(
         obj_w_alg_lst.append(obj_w_alg)
 
     return obj_w_alg_lst
+###################################################################
+def get_correct_img_num_n_sweep_num(experiments, img_num):
+
+    # no need to copy/paste this function
+
+    lst_num_of_imgs = []
+    for single_sweep in experiments.imagesets():
+        lst_num_of_imgs.append(len(single_sweep.indices()))
+
+    on_sweep_img_num = img_num
+    n_sweep = 0
+    for num_of_imgs in lst_num_of_imgs:
+        if on_sweep_img_num >= num_of_imgs:
+            on_sweep_img_num -= num_of_imgs
+            n_sweep += 1
+
+        else:
+            break
+
+    return on_sweep_img_num, n_sweep
+
+def get_experiments(experiment_path):
+
+    # no need to copy/paste this function
+
+    print("importing from:" + experiment_path)
+    for repeat in range(10):
+        try:
+            new_experiments = ExperimentList.from_file(
+                experiment_path
+            )
+            break
+
+        except OSError:
+            new_experiments = None
+            print("OS Err catch in ExperimentListFactory, trying again")
+            time.sleep(0.333)
+
+    return new_experiments
+
+
+
+
+################################################################
+
+def get_bytes_w_2d_threshold_mask(
+    experiments_list_path, img_num, params
+):
+    experiments = get_experiments(experiments_list_path[0])
+    if experiments is not None:
+        on_sweep_img_num, n_sweep = get_correct_img_num_n_sweep_num(
+            experiments, img_num
+        )
+
+        may_not_be_needed = '''
+        imageset_tmp = experiments.imagesets()[n_sweep]
+        mask_file = imageset_tmp.external_lookup.mask.filename
+        img_tup_obj = imageset_tmp.get_raw_data(on_sweep_img_num)
+        '''
+
+        a_lst = get_dispersion_debug_obj_lst(
+            expt_path = experiments_list_path[n_sweep],
+            on_sweep_img_num = img_num,
+            params_in = params
+        )
+
+
+        try:
+            fig, axs = plt.subplots(len(a_lst))
+            for n, a in enumerate(a_lst):
+                fig.suptitle('Multiple panels')
+                axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
+
+            plt.show()
+
+        except TypeError:
+            for n, a in enumerate(a_lst):
+                draw_pyplot(to_numpy(a.final_mask()))
+
+
+
+        to_study_this = '''
+        try:
+            pick_file = open(mask_file, "rb")
+            mask_tup_obj = pickle.load(pick_file)
+            pick_file.close()
+
+        except FileNotFoundError:
+            logging.info("FileNotFoundError <<< get_bytes_w_2d_threshold_mask")
+            mask_tup_obj = None
+
+        byte_data, i23_multipanel = img_stream_py.mask_threshold_2_byte(
+            img_tup_obj, mask_tup_obj, params, imageset_tmp
+        )
+
+        if byte_data == "Error":
+            logging.info('byte_data == "Error"')
+            byte_data = None
+
+
+        return byte_data
+
+    else:
+        return None
+        '''
+
 
 
 if __name__ == "__main__":
 
-    for img_num_in in range(20):
+    (experiments_list_path, img_num, params) = (
+        ['/tmp/run_dui2_nodes/run2/masked.expt'],
+        0,
+        {
+            'algorithm': 'radial_profile', 'nsig_b': 6.0, 'nsig_s': 3.0,
+            'global_threshold': 0.0, 'min_count': 2, 'gain': 1.0,
+            'size': (3, 3), 'n_iqr': 6, 'blur': None, 'n_bins': 100
+        },
+    )
 
+
+    print("params =", params )
+
+    get_bytes_w_2d_threshold_mask(experiments_list_path, img_num, params)
+
+    old_stable = '''
+    for img_num_in in range(20):
         a_lst = get_dispersion_debug_obj_lst(
             #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
             expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
@@ -169,5 +291,5 @@ if __name__ == "__main__":
         except TypeError:
             for n, a in enumerate(a_lst):
                 draw_pyplot(to_numpy(a.final_mask()))
-
+    '''
 
