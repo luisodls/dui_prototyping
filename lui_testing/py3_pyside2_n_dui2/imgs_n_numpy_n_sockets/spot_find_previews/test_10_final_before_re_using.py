@@ -96,7 +96,7 @@ def from_image_n_mask_2_threshold(
     )
     return debug
 
-def get_dispersion_debug_obj_lst(
+def get_dispersion_debug_obj_tup(
     expt_path = "/tmp/...", on_sweep_img_num = 0, params_in = {None}
 ):
 
@@ -137,10 +137,15 @@ def get_dispersion_debug_obj_lst(
         obj_w_alg = from_image_n_mask_2_threshold(
             flex_image, mask, my_imageset, pars, panel_number
         )
-        obj_w_alg_lst.append(obj_w_alg)
+        fin_mask = obj_w_alg.final_mask()
+        obj_w_alg_lst.append(fin_mask)
 
-    return obj_w_alg_lst
-###################################################################
+    obj_w_alg_tup = tuple(obj_w_alg_lst)
+    return obj_w_alg_tup
+
+
+################################          no need to copy/paste start
+
 def get_correct_img_num_n_sweep_num(experiments, img_num):
 
     # no need to copy/paste this function
@@ -180,10 +185,32 @@ def get_experiments(experiment_path):
 
     return new_experiments
 
+def get_np_full_mask_from_i23_raw(raw_mask_data):
 
+    # no need to copy/paste this function
 
+    pan_tup = tuple(range(24))
+    np_top_pan = to_numpy(raw_mask_data[pan_tup[0]])
+    p_siz0 = np.size(np_top_pan[:, 0:1])
+    p_siz1 = np.size(np_top_pan[0:1, :])
+    p_siz_bg = p_siz0 + 18
 
-################################################################
+    im_siz0 = p_siz_bg * len(pan_tup)
+    im_siz1 = p_siz1
+
+    np_arr = np.zeros((im_siz0, im_siz1), dtype=bool)
+    np_arr[:, :] = 1
+    np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
+
+    for s_num in pan_tup[1:]:
+        pan_dat = to_numpy(raw_mask_data[pan_tup[s_num]])
+        np_arr[
+            s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
+        ] = pan_dat[:, :]
+
+    return np_arr
+
+################################          no need to copy/paste end
 
 def get_bytes_w_2d_threshold_mask(
     experiments_list_path, img_num, params
@@ -194,31 +221,11 @@ def get_bytes_w_2d_threshold_mask(
             experiments, img_num
         )
 
-        may_not_be_needed = '''
-        imageset_tmp = experiments.imagesets()[n_sweep]
-        mask_file = imageset_tmp.external_lookup.mask.filename
-        img_tup_obj = imageset_tmp.get_raw_data(on_sweep_img_num)
-        '''
-
-        a_lst = get_dispersion_debug_obj_lst(
+        tup_lst = get_dispersion_debug_obj_tup(
             expt_path = experiments_list_path[n_sweep],
             on_sweep_img_num = img_num,
             params_in = params
         )
-
-
-        try:
-            fig, axs = plt.subplots(len(a_lst))
-            for n, a in enumerate(a_lst):
-                fig.suptitle('Multiple panels')
-                axs[n].imshow(to_numpy(a.final_mask()), interpolation = "nearest")
-
-            plt.show()
-
-        except TypeError:
-            for n, a in enumerate(a_lst):
-                draw_pyplot(to_numpy(a.final_mask()))
-
 
 
         to_study_this = '''
@@ -246,12 +253,14 @@ def get_bytes_w_2d_threshold_mask(
         return None
         '''
 
+    return tup_lst
+
 
 
 if __name__ == "__main__":
 
     (experiments_list_path, img_num, params) = (
-        ['/tmp/run_dui2_nodes/run2/masked.expt'],
+        ['/tmp/run_dui2_nodes/run4/masked.expt'],
         0,
         {
             'algorithm': 'radial_profile', 'nsig_b': 6.0, 'nsig_s': 3.0,
@@ -263,11 +272,28 @@ if __name__ == "__main__":
 
     print("params =", params )
 
-    get_bytes_w_2d_threshold_mask(experiments_list_path, img_num, params)
+    for img_num_in in range(20):
+        a_lst = get_bytes_w_2d_threshold_mask(
+            experiments_list_path, img_num_in, params
+        )
+
+        try:
+            fig, axs = plt.subplots(len(a_lst))
+            for n, a in enumerate(a_lst):
+                fig.suptitle('Multiple panels')
+                axs[n].imshow(to_numpy(a), interpolation = "nearest")
+
+            plt.show()
+
+        except TypeError:
+            for n, a in enumerate(a_lst):
+                draw_pyplot(to_numpy(a))
+
+
 
     old_stable = '''
     for img_num_in in range(20):
-        a_lst = get_dispersion_debug_obj_lst(
+        a_lst = get_dispersion_debug_obj_tup(
             #expt_path = "/tmp/run_dui2_nodes/run1/imported.expt",
             expt_path = "/tmp/run_dui2_nodes/run2/masked.expt",
             #expt_path = "/tmp/run_dui2_nodes/run4/masked.expt",
