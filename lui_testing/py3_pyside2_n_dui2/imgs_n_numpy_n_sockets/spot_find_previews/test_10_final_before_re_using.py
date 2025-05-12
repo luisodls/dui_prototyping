@@ -261,9 +261,13 @@ def get_bytes_w_2d_threshold_mask(
 
 if __name__ == "__main__":
 
+    path_1 = '/tmp/run_dui2_nodes/run1/imported.expt'
+    path_2 = '/tmp/run_dui2_nodes/run3/imported.expt'
+    path_3 = '/tmp/run_dui2_nodes/run2/masked.expt'
+    path_4 = '/tmp/run_dui2_nodes/run4/masked.expt'
+
     (experiments_list_path, img_num, params) = (
-        ['/tmp/run_dui2_nodes/run4/masked.expt'],
-        0,
+        [path_2], 0,
         {
             'algorithm': 'radial_profile', 'nsig_b': 6.0, 'nsig_s': 3.0,
             'global_threshold': 0.0, 'min_count': 2, 'gain': 1.0,
