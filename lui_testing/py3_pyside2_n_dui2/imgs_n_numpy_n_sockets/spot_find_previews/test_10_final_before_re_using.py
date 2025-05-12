@@ -60,12 +60,12 @@ def get_experiments(experiment_path):
 
     return new_experiments
 
-def get_np_full_mask_from_i23_raw(raw_mask_data):
+def get_np_full_mask_from_i23_raw(tuple_of_flex_mask):
 
     # no need to copy/paste this function
 
     pan_tup = tuple(range(24))
-    np_top_pan = to_numpy(raw_mask_data[pan_tup[0]])
+    np_top_pan = to_numpy(tuple_of_flex_mask[pan_tup[0]])
     p_siz0 = np.size(np_top_pan[:, 0:1])
     p_siz1 = np.size(np_top_pan[0:1, :])
     p_siz_bg = p_siz0 + 18
@@ -78,7 +78,7 @@ def get_np_full_mask_from_i23_raw(raw_mask_data):
     np_arr[0:p_siz0, 0:p_siz1] = np_top_pan[:, :]
 
     for s_num in pan_tup[1:]:
-        pan_dat = to_numpy(raw_mask_data[pan_tup[s_num]])
+        pan_dat = to_numpy(tuple_of_flex_mask[pan_tup[s_num]])
         np_arr[
             s_num * p_siz_bg : s_num * p_siz_bg + p_siz0, 0:p_siz1
         ] = pan_dat[:, :]
@@ -259,11 +259,10 @@ def get_bytes_w_2d_threshold_mask(
     return tup_lst
 
 
-
 if __name__ == "__main__":
 
     (experiments_list_path, img_num, params) = (
-        ['/tmp/run_dui2_nodes/run2/masked.expt'],
+        ['/tmp/run_dui2_nodes/run4/masked.expt'],
         0,
         {
             'algorithm': 'radial_profile', 'nsig_b': 6.0, 'nsig_s': 3.0,
@@ -271,24 +270,21 @@ if __name__ == "__main__":
             'size': (3, 3), 'n_iqr': 6, 'blur': None, 'n_bins': 100
         },
     )
-
-
     print("params =", params )
-
     for img_num_in in range(20):
-        a_lst = get_bytes_w_2d_threshold_mask(
+        tuple_of_flex_mask = get_bytes_w_2d_threshold_mask(
             experiments_list_path, img_num_in, params
         )
+        if len(tuple_of_flex_mask) == 24:
+            print("24 panels, assuming i23 data(masking 1)")
+            i23_multipanel = True
+            np_arr = get_np_full_mask_from_i23_raw(tuple_of_flex_mask)
 
-        try:
-            fig, axs = plt.subplots(len(a_lst))
-            for n, a in enumerate(a_lst):
-                fig.suptitle('Multiple panels')
-                axs[n].imshow(to_numpy(a), interpolation = "nearest")
+        else:
+            print("Using the first panel only (masking 1)")
+            data_xy_flex = tuple_of_flex_mask[0]
+            np_arr = to_numpy(data_xy_flex)
 
-            plt.show()
+        draw_pyplot(np_arr)
 
-        except TypeError:
-            for n, a in enumerate(a_lst):
-                draw_pyplot(to_numpy(a))
 
