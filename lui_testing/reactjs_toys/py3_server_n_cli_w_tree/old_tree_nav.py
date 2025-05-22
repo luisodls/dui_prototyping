@@ -65,8 +65,14 @@ def build_dict_list(lst, curr):
     print(lst_stp)
     return lst_stp
 
-def show_tree(step = None, curr = None, indent = 1):
-    build_recursive_list(step = step, curr = curr, indent = indent)
+old_2_be_removed = '''def show_tree(step = None, curr = None, indent = 1):
+    build_recursive_list(step = step, curr = curr, indent = indent)'''
+
+def show_tree(uni_controler):
+    build_recursive_list(
+        step = uni_controler.step_list[0],
+        curr = uni_controler.current, indent = 1
+    )
 
 
 def build_recursive_list(step = None, curr = None, indent = 1):
@@ -194,10 +200,13 @@ if __name__ == "__main__":
 
         # showing tree
         print("________ showing steps tree:")
-        show_tree(
+        old_2_be_removed = '''show_tree(
             step = uni_controler.step_list[0],
             curr = uni_controler.current, indent = 1
-        )
+        )'''
+
+        show_tree(uni_controler)
+
 
         try:
             command = str(input(">>> "))
