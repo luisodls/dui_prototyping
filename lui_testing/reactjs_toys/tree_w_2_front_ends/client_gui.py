@@ -1,3 +1,10 @@
+# This is the old first testing remote gui
+# new developments should NOT go here
+
+# more resent developments are in:
+# /lui_testing/reactjs_toys/tree_w_TypeScrip/client_gui.py
+
+
 import sys, requests, json
 from PySide2.QtCore import *
 from PySide2.QtWidgets import *
