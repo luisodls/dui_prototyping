@@ -88,4 +88,9 @@ if __name__ == "__main__":
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
     full_url = "http://" + ip_adr + ":" + str(port_num)
     print("Hosting server on:", full_url )
-    httpd.serve_forever()
+    try:
+        httpd.serve_forever()
+
+    except KeyboardInterrupt:
+        print(" ...tweak key pressed ... quitting")
+
