@@ -2,7 +2,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from old_tree_nav import runner, prin_lst, show_tree, build_lst
+from old_tree_nav import runner, prin_lst, show_tree, build_dict_list
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -33,7 +33,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         url_dict = parse_qs(urlparse(url_path).query)
         print("url_path =", url_path)
         print("url_dict =", url_dict)
-        lst_out = build_lst(uni_controler.step_list, uni_controler.current)
+        lst_out = build_dict_list(uni_controler.step_list, uni_controler.current)
 
         self.send_ok_dict(lst_out)
 

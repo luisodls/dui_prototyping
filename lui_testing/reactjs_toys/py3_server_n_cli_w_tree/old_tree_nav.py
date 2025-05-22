@@ -29,7 +29,7 @@ def prin_lst(lst, curr):
     return lst_stp
 
 
-def build_lst(lst, curr):
+def build_dict_list(lst, curr):
     print(" - - - - - building list:")
     lst_stp = []
     for uni in lst:
@@ -65,8 +65,11 @@ def build_lst(lst, curr):
     print(lst_stp)
     return lst_stp
 
-
 def show_tree(step = None, curr = None, indent = 1):
+    build_recursive_list(step = step, curr = curr, indent = indent)
+
+
+def build_recursive_list(step = None, curr = None, indent = 1):
     if step.success == True:
         stp_prn = " T "
 
@@ -91,7 +94,7 @@ def show_tree(step = None, curr = None, indent = 1):
     print(stp_prn)
     try:
         for line in step.next_step_list:
-            show_tree(step = line, curr = curr, indent = indent + 1)
+            build_recursive_list(step = line, curr = curr, indent = indent + 1)
 
     except:
         #print("last indent =", indent)
