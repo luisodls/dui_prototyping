@@ -114,7 +114,6 @@ class uni_step(object):
             self.success = False
 
         else:
-            print("__________________________________\n << running >>", cmd_lst)
             self.command = cmd_lst
             self.success = True
 
@@ -129,20 +128,25 @@ class runner(object):
     def run(self, command):
         print("command =", command)
         cmd_lst = command.split()
-        if cmd_lst[0] == "goto":
-            self.goto(int(cmd_lst[1]))
+        print("__________________________________\n << running >>", cmd_lst)
+        try:
+            if cmd_lst[0] == "goto":
+                self.goto(int(cmd_lst[1]))
 
-        elif cmd_lst[0] == "slist":
-            self.slist()
+            elif cmd_lst[0] == "slist":
+                self.slist()
 
-        elif cmd_lst[0].isdigit():
-            print("Should go to line", int(cmd_lst[0]))
-            self.goto(int(cmd_lst[0]))
-            if len(cmd_lst) > 1:
-                self.exec_step(cmd_lst[1:])
+            elif cmd_lst[0].isdigit():
+                print("Should go to line", int(cmd_lst[0]))
+                self.goto(int(cmd_lst[0]))
+                if len(cmd_lst) > 1:
+                    self.exec_step(cmd_lst[1:])
 
-        else:
-            self.exec_step(cmd_lst)
+            else:
+                self.exec_step(cmd_lst)
+
+        except IndexError:
+            print("\n empty command \n")
 
     def exec_step(self, cmd_lst):
         print("self.current =", self.current)
@@ -196,7 +200,7 @@ if __name__ == "__main__":
             command = str(input(">>> "))
 
         except:
-            print("tweak key pressed ... quitting")
+            print(" ...tweak key pressed ... quitting")
             sys.exit(0)
 
         uni_controler.run(command)

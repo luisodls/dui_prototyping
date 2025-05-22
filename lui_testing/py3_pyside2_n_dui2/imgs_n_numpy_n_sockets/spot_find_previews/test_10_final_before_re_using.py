@@ -96,7 +96,7 @@ class RadialProfileThresholdDebug:
     # method. This wrapper class handles that.
 
     # This class was Copy/Pasted and edited from the module spotfinder_frame.py
-    # that is par of the Dials image viewer
+    # that is part of the Dials image viewer
 
     def __init__(self, imageset, n_iqr, blur, n_bins):
         self.imageset = imageset
