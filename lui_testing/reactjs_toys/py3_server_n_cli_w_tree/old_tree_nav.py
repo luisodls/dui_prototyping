@@ -67,13 +67,25 @@ def build_dict_list(lst, curr):
 
 class show_tree(object):
     def __init__(self, uni_controler):
+        self.lst_nodes = []
         self.build_recursive_list(
             step = uni_controler.step_list[0],
             curr = uni_controler.current, indent = 1
         )
 
+        for node in self.lst_nodes:
+            col = node["indent"] * 5 + 7
+            for row_num in range(node["parent_row"] + 2, node["my_row"]):
+                str_2_cp_from = str(self.lst_nodes[row_num]["lin2print"])
+                new_str = str_2_cp_from[:col] + "|" + str_2_cp_from[col + 1:]
+                self.lst_nodes[row_num]["lin2print"] = new_str
 
-    def build_recursive_list(self, step = None, curr = None, indent = 1):
+        for node in self.lst_nodes:
+            print(node["lin2print"])
+
+    def build_recursive_list(
+        self, step = None, curr = None, indent = 1, parent_row = 0
+    ):
         if step.success == True:
             stp_prn = " T "
 
@@ -85,7 +97,8 @@ class show_tree(object):
 
         str_lin_num = "{:3}".format(step.lin_num)
 
-        stp_prn += str_lin_num + "     " * indent + " └──"
+        #stp_prn += str_lin_num + "     " * indent + " └──"
+        stp_prn += str_lin_num + "     " * indent + " \__"
         try:
             stp_prn += str(step.command)
 
@@ -95,11 +108,19 @@ class show_tree(object):
         if step.lin_num == curr:
             stp_prn += "            <<< here "
 
-        print(stp_prn)
+        my_row = len(self.lst_nodes)
+
+        step_node = {
+            "indent":indent, "lin2print":stp_prn,
+            "my_row":my_row, "parent_row":parent_row,
+        }
+        self.lst_nodes.append(step_node)
+
         try:
             for line in step.next_step_list:
                 self.build_recursive_list(
-                    step = line, curr = curr, indent = indent + 1
+                    step = line, curr = curr,
+                    indent = indent + 1, parent_row = my_row
                 )
 
         except:
