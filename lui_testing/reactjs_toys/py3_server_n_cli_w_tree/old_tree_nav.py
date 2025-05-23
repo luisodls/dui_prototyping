@@ -65,44 +65,46 @@ def build_dict_list(lst, curr):
     print(lst_stp)
     return lst_stp
 
+class show_tree(object):
+    def __init__(self, uni_controler):
+        self.build_recursive_list(
+            step = uni_controler.step_list[0],
+            curr = uni_controler.current, indent = 1
+        )
 
-def show_tree(uni_controler):
-    build_recursive_list(
-        step = uni_controler.step_list[0],
-        curr = uni_controler.current, indent = 1
-    )
 
+    def build_recursive_list(self, step = None, curr = None, indent = 1):
+        if step.success == True:
+            stp_prn = " T "
 
-def build_recursive_list(step = None, curr = None, indent = 1):
-    if step.success == True:
-        stp_prn = " T "
+        elif step.success == False:
+            stp_prn = " F "
 
-    elif step.success == False:
-        stp_prn = " F "
+        else:
+            stp_prn = " N "
 
-    else:
-        stp_prn = " N "
+        str_lin_num = "{:3}".format(step.lin_num)
 
-    str_lin_num = "{:3}".format(step.lin_num)
+        stp_prn += str_lin_num + "     " * indent + " └──"
+        try:
+            stp_prn += str(step.command)
 
-    stp_prn += str_lin_num + "     " * indent + " └──"
-    try:
-        stp_prn += str(step.command)
+        except:
+            stp_prn += "None"
 
-    except:
-        stp_prn += "None"
+        if step.lin_num == curr:
+            stp_prn += "            <<< here "
 
-    if step.lin_num == curr:
-        stp_prn += "            <<< here "
+        print(stp_prn)
+        try:
+            for line in step.next_step_list:
+                self.build_recursive_list(
+                    step = line, curr = curr, indent = indent + 1
+                )
 
-    print(stp_prn)
-    try:
-        for line in step.next_step_list:
-            build_recursive_list(step = line, curr = curr, indent = indent + 1)
-
-    except:
-        #print("last indent =", indent)
-        pass
+        except:
+            #print("last indent =", indent)
+            pass
 
 
 class uni_step(object):
