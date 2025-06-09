@@ -19,12 +19,11 @@ def get_number_from_string(str_in):
 
 
 if __name__ == "__main__":
-    my_lst = build_lst_w_names()
-    for single_name in my_lst:
-        print(get_number_from_string(single_name))
+    my_lst = build_lst_w_names(size = 15, n_times = 2)
 
-    tmp_off = '''
     print("my_lst =", my_lst)
-    new_lst = sorted(my_lst)
+    new_lst = sorted(my_lst, key=get_number_from_string)
     print("\n new_lst =", new_lst)
-    '''
+
+    lst_n_2 = sorted(my_lst)
+    print("\n lst_n_2 =", lst_n_2)
