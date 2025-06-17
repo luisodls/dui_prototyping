@@ -219,3 +219,10 @@ def update_all_data(reflections_path = None, experiments_path = None):
 
     return dat
 
+if __name__ == "__main__":
+    print("Running")
+    data2update = update_all_data(
+        reflections_path = "/tmp/run_dui2_nodes/run2/strong.refl",
+        experiments_path = "/tmp/run_dui2_nodes/run1/imported.expt"
+    )
+    print("Data(xb, yb) =", data2update.xb, data2update.yb)
