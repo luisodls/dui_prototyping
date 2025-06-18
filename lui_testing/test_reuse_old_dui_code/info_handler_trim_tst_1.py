@@ -124,7 +124,7 @@ def update_all_data(experiments_path = None):
             exp.detector.get_ray_intersection(exp.beam.get_s0())
         pnl = exp.detector[pnl_beam_intersects]
         print( "beam_x, beam_y =", beam_x, beam_y)
-
+        print("pnl =", pnl)
         dat.xb = beam_x
         dat.yb = beam_y
 
