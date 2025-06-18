@@ -80,10 +80,12 @@ def update_all_data(experiments_path = None):
         dat["x_px_size"], dat["y_px_size"]
     )
 
-
     dat["xb"] = beam_x / dat["x_px_size"]
     dat["yb"] = beam_y / dat["y_px_size"]
+    det_mov =  float(pnl_beam_intersects) * 213.0
+    print("det_mov =", det_mov)
 
+    dat["yb"] += det_mov
 
     code_2_modify_or_copy = '''
     try:
