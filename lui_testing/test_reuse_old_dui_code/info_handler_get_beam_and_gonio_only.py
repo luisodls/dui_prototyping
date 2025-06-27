@@ -87,43 +87,6 @@ def update_all_data(experiments_path = None):
 
     dat["yb"] += det_mov
 
-    code_2_modify_or_copy = '''
-    try:
-        xb = all_data.xb / all_data.x_px_size
-        yb = all_data.yb / all_data.y_px_size
-        n_pan_xb_yb = all_data.n_pan_xb_yb
-
-    except TypeError:
-        xb, yb, n_pan_xb_yb = None, None, None
-        logger.info("\n xb, yb, n_pan_xb_yb = None, None, None \n")
-
-    ###############################################################################
-
-    det_mov = float(self.all_data.n_pan_xb_yb) * 213.0 * self.all_data.y_px_size
-    update_data_label(self.yb_data, self.all_data.yb + det_mov)
-
-    ###############################################################################
-
-    def _paint_crosshairs(self, painter):
-        cen_siz = 20.0
-        if self.xb is not None and self.yb is not None:
-            painter.setPen(self.indexed_pen)
-            det_mov = self.n_pan_xb_yb * 213
-            painter.drawLine(
-                int(self.xb * self.my_scale),
-                int((self.yb + det_mov) * self.my_scale - cen_siz),
-                int(self.xb * self.my_scale),
-                int((self.yb + det_mov) * self.my_scale + cen_siz),
-            )
-
-            painter.drawLine(
-                int(self.xb * self.my_scale + cen_siz),
-                int((self.yb + det_mov) * self.my_scale),
-                int(self.xb * self.my_scale - cen_siz),
-                int((self.yb + det_mov) * self.my_scale),
-            )
-
-    '''
     return dat
 
 if __name__ == "__main__":
