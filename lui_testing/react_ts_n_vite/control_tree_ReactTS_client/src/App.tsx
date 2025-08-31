@@ -1,18 +1,3 @@
-/*
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-    </>
-  )
-}
-
-export default App
-*/
 
 'use client'
 import './App.css'
@@ -176,7 +161,12 @@ function MyGetButton({ msgHere, tmpRef }: MyGetButtonProps) {
         Do GET
       </button>
       {tree_data_str && (
-        <pre style={{ background: "#f4f4f4", padding: "10px", borderRadius: "5px" }}>
+        <pre style={
+            {
+              background: "#f4f4f4", padding: "10px", borderRadius: "5px",
+              font: "12px Mono", textAlign: "left"
+            }
+          }>
           {JSON.stringify(tree_data_str, null, 2)}
         </pre>
       )}
