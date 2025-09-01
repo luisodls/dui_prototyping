@@ -1,0 +1,15 @@
+echo "removing all << .js >>, << .map >> and << .d. >> files"
+rm *.map
+rm *.d.*
+rm *.js
+echo "translating ts 2 js and bundling"
+tsc
+echo "running"
+node main_tst.js
+echo  "... Done"
+echo "removing all << .js >>, << .map >> and << .d. >> files again"
+rm *.map
+rm *.d.*
+rm *.js
+
+
