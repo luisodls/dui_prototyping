@@ -1,5 +1,5 @@
 
-export function greet(): string {
-  return "Hello from module greet( func )...";
+export function greet(name_in: string): string {
+  return "Hello ..." + name_in + "...nice to see you";
 }
 
