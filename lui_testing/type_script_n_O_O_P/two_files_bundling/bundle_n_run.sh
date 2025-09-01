@@ -5,7 +5,9 @@ rm *.js
 echo "translating ts 2 js and bundling"
 tsc
 echo "running"
+echo " "
 node main_tst.js
+echo " "
 echo  "... Done"
 echo "removing all << .js >>, << .map >> and << .d. >> files again"
 rm *.map
