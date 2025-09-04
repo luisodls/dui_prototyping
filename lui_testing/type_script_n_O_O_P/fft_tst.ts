@@ -5,7 +5,7 @@ function f(x: number): number{
 }
 let pi = 3.14159265358;
 let n = 5;
-let step = 0.1;
+let step = 0.001;
 
 let interval_from = -pi;
 let interval_to = pi;
@@ -22,33 +22,26 @@ function summation_a_0(x_min: number, x_max: number): number {
 let a0 = summation_a_0(interval_from, interval_to);
 console.log("a0", a0);
 
-function summation_a_n(x_min: number, x_max: number, n: number): number {
-  let sum = 0;
+function summation_an_p_bn(x_min: number, x_max: number, n: number): [number, number] {
+  let sum_a = 0;
+  let sum_b = 0;
   for (let x = x_min; x < x_max; x += step) {
-    sum +=  f(x) * Math.cos(n * x) * step;
+    sum_a +=  f(x) * Math.cos(n * x) * step;
+    sum_b +=  f(x) * Math.sin(n * x) * step;
   }
-  sum = ( 1 / diff_L ) * sum;
-  return sum;
+  sum_a = ( 1 / diff_L ) * sum_a;
+  sum_b = ( 1 / diff_L ) * sum_b;
+  return [sum_a, sum_b];
 }
-function summation_b_n(x_min: number, x_max: number, n: number): number {
-  let sum = 0;
-  for (let x = x_min; x < x_max; x += step) {
-    sum +=  f(x) * Math.sin(n * x) * step;
-  }
-  sum = ( 1 / diff_L ) * sum;
-  return sum;
-}
-let an: number[] = []
-let bn: number[] = []
-for (let num: number = 1; num < n + 1; num++) {
-  let an_val = summation_a_n(interval_from, interval_to, num);
-  console.log("a[", num, "] = ", an_val);
-  an.push(an_val);
 
-  let bn_val = summation_b_n(interval_from, interval_to, num);
-  console.log("b[", num, "] = ", bn_val);
-  bn.push(bn_val);
+let an: number[] = [];
+let bn: number[] = [];
+for (let num: number = 1; num < n + 1; num++) {
+  let [an_tst, bn_tst] = summation_an_p_bn(interval_from, interval_to, num);
+  an.push(an_tst);
+  bn.push(bn_tst);
 }
+
 console.log("an =", an)
 console.log("bn =", bn)
 
@@ -61,8 +54,6 @@ function fourier_approx(x: number): number {
     }
     return sum;
 }
-
-
-for (let x = interval_from; x < interval_to; x += step) {
+for (let x = interval_from; x < interval_to; x += step*100) {
     console.log(" f approx(", x, ")=", fourier_approx(x));
 }
