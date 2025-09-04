@@ -20,6 +20,8 @@ def integrand_a0(x):
 
 a0 = (1 / (2 * L)) * quad(integrand_a0, -L, L)[0]
 
+print("a0 =", a0)
+
 # Compute an and bn
 an = []
 bn = []
