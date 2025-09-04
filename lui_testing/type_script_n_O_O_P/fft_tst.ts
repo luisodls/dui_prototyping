@@ -52,28 +52,17 @@ for (let num: number = 1; num < n + 1; num++) {
 console.log("an =", an)
 console.log("bn =", bn)
 
-/*function fourier_approx(x: number): number {
+function fourier_approx(x: number): number {
     let sum = a0;
     for (let num: number = 1; num < n + 1; num++) {
-        sum +=  an[n - 1] * Math.cos((num * x * pi)/) + bn[n - 1] * Math.sin(num * x * pi);
+        sum +=  an[n - 1] * Math.cos((num * x * pi) / diff_L)
+              + bn[n - 1] * Math.sin((num * x * pi) / diff_L);
         //console.log("sum=", sum)
-    }
-    return sum;
-}*/
-
-
-function fourierApprox(x: number): number {
-    let sum = a0;
-    for (let num = 1; num <= n; num++) {
-        sum += an[num - 1] * Math.cos((num * pi * x) / diff_L);
-        sum += bn[num - 1] * Math.sin((num * pi * x) / diff_L);
     }
     return sum;
 }
 
 
-
 for (let x = interval_from; x < interval_to; x += step) {
-    let my_func = fourierApprox(x);
-    console.log("f(", x, ")=", my_func);
+    console.log(" f approx(", x, ")=", fourier_approx(x));
 }
