@@ -4,21 +4,24 @@ import numpy as np
 from scipy.integrate import quad
 import matplotlib.pyplot as plt
 
+pi = 3.14159235358
+
 # Editable function definition
 def f(x):
     return x # This function is used here
 
 # Interval
-L = np.pi
+L = 5.0
 
 # Number of Fourier terms
 N = 5
+
 
 # Compute a0
 def integrand_a0(x):
     return f(x)
 
-a0 = (1 / (2 * L)) * quad(integrand_a0, -L, L)[0]
+a0 = (1 / L) * quad(integrand_a0, 0, L)[0]
 
 print("a0 =", a0)
 
@@ -27,14 +30,14 @@ an = []
 bn = []
 
 def integrand_an(x, n):
-    return f(x) * np.cos(n * x)
+    return f(x) * np.cos(2 * pi * n * x / L)
 
 def integrand_bn(x, n):
-    return f(x) * np.sin(n * x)
+    return f(x) * np.sin(2 * pi * n * x / L)
 
 for n in range(1, N + 1):
-    an_val = (1 / L) * quad(integrand_an, -L, L, args=(n,))[0]
-    bn_val = (1 / L) * quad(integrand_bn, -L, L, args=(n,))[0]
+    an_val = (2 / L) * quad(integrand_an, 0, L, args=(n,))[0]
+    bn_val = (2 / L) * quad(integrand_bn, 0, L, args=(n,))[0]
     an.append(an_val)
     bn.append(bn_val)
 
@@ -45,11 +48,11 @@ print("bn=\n", bn, "\n")
 def fourier_approx(x):
     sum = a0
     for n in range(1, N + 1):
-        sum += an[n-1] * np.cos(n * x) + bn[n-1] * np.sin(n * x)
+        sum += an[n-1] * np.cos(2 * pi * n * x / L) + bn[n-1] * np.sin(2 * pi * n * x / L)
     return sum
 
 # Generate x values and compute approximations
-x_vals = np.arange(-L, L, 0.1)
+x_vals = np.arange(0, L, 0.1)
 
 f_vals = []
 for x in x_vals:
@@ -60,8 +63,6 @@ for x in x_vals:
     approx_y = fourier_approx(x)
     approx_vals.append(approx_y)
     print("x =", x,"f_approx =", approx_y)
-
-
 
 # Plotting
 plt.plot(x_vals, f_vals, label='Original Function', color='blue')
