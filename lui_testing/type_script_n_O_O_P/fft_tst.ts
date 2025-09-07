@@ -44,16 +44,15 @@ for (let num: number = 1; num < n + 1; num++) {
 
 console.log("an =", an)
 console.log("bn =", bn)
-
 function fourier_approx(x: number): number {
     let sum = a0;
     for (let num: number = 1; num < n + 1; num++) {
-        sum +=  an[n - 1] * Math.cos((num * x * pi) / diff_L)
-              + bn[n - 1] * Math.sin((num * x * pi) / diff_L);
-        //console.log("sum=", sum)
+        sum += an[num - 1] * Math.cos((num * x * pi) / diff_L)
+            +  bn[num - 1] * Math.sin((num * x * pi) / diff_L);
     }
     return sum;
 }
-for (let x = interval_from; x < interval_to; x += step*100) {
+
+for (let x = interval_from; x < interval_to; x += 0.1) {
     console.log(" f approx(", x, ")=", fourier_approx(x));
 }

@@ -38,6 +38,9 @@ for n in range(1, N + 1):
     an.append(an_val)
     bn.append(bn_val)
 
+print("an=\n", an, "\n")
+print("bn=\n", bn, "\n")
+
 # Fourier approximation using stored coefficients
 def fourier_approx(x):
     sum = a0
@@ -47,8 +50,18 @@ def fourier_approx(x):
 
 # Generate x values and compute approximations
 x_vals = np.arange(-L, L, 0.1)
-f_vals = [f(x) for x in x_vals]
-approx_vals = [fourier_approx(x) for x in x_vals]
+
+f_vals = []
+for x in x_vals:
+    f_vals.append(f(x))
+
+approx_vals = []
+for x in x_vals:
+    approx_y = fourier_approx(x)
+    approx_vals.append(approx_y)
+    print("x =", x,"f_approx =", approx_y)
+
+
 
 # Plotting
 plt.plot(x_vals, f_vals, label='Original Function', color='blue')
@@ -60,3 +73,4 @@ plt.legend()
 plt.grid(True)
 plt.savefig("fourier_approximation.png")
 plt.show()
+
