@@ -4,7 +4,7 @@ function f(x: number): number{
     return x
 }
 let pi = 3.14159265358;
-let n = 5;
+let n_max = 5;
 let step = 0.001;
 
 let interval_from = 0;
@@ -38,8 +38,8 @@ function summation_an_p_bn(
 
 let an: number[] = [];
 let bn: number[] = [];
-for (let num: number = 1; num < n + 1; num++) {
-  let [an_tst, bn_tst] = summation_an_p_bn(interval_from, interval_to, num);
+for (let n: number = 1; n < n_max + 1; n++) {
+  let [an_tst, bn_tst] = summation_an_p_bn(interval_from, interval_to, n);
   an.push(an_tst);
   bn.push(bn_tst);
 }
@@ -48,9 +48,9 @@ console.log("an =", an)
 console.log("bn =", bn)
 function fourier_approx(x: number): number {
     let sum = a0;
-    for (let num: number = 1; num < n + 1; num++) {
-        sum += an[num - 1] * Math.cos(2 * pi * num * x / diff_L)
-            +  bn[num - 1] * Math.sin(2 * pi * num * x / diff_L);
+    for (let n: number = 1; n < n_max + 1; n++) {
+        sum += an[n - 1] * Math.cos(2 * pi * n * x / diff_L)
+            +  bn[n - 1] * Math.sin(2 * pi * n * x / diff_L);
     }
     return sum;
 }
