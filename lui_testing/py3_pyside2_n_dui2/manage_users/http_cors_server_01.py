@@ -1,6 +1,6 @@
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
-from json import dumps
+import json
 
 from single_prog_local import SimpleAuthSystem
 
@@ -25,7 +25,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         response["body"] = str(body)
         print("response =", response)
 
-        self.wfile.write(bytes(dumps(response), "utf8"))
+        self.wfile.write(bytes(json.dumps(response), "utf8"))
 
     def do_GET(self):
         print("do_GET")
@@ -80,8 +80,39 @@ class RequestHandler(BaseHTTPRequestHandler):
         dataLength = int(self.headers["Content-Length"])
         print("dataLength =", dataLength)
         data = self.rfile.read(dataLength)
-        print("data =", data)
-        self.send_ok_dict(body = data)
+
+        body_str = str(data.decode('utf-8'))
+
+        print("body_str =", body_str)
+        url_dict = json.loads(body_str)
+        command = url_dict["command"]
+        print("command =", command)
+
+        username = url_dict["data1"]
+        password = url_dict["data2"]
+
+        if command == 'register':
+            #username = input("Username: ").strip()
+            #password = getpass.getpass("Password: ")
+
+            success, message = auth.create_user(username, password)
+            print(f"Result: {message}")
+
+        elif command == 'login':
+            #username = input("Username: ").strip()
+            #password = getpass.getpass("Password: ")
+
+            success, message = auth.login(username, password)
+            if success:
+                print(f"Login successful! Your token: {message}")
+            else:
+                print(f"Login failed: {message}")
+
+
+        ###########################################################
+
+        self.send_ok_dict(body = message)
+
 
 
 if __name__ == "__main__":

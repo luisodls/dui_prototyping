@@ -52,7 +52,12 @@ class Form(QObject):
 
         except requests.exceptions.RequestException:
             print(
-                "something went wrong with the << reset_graph >> request"
+                "something went wrong  << RequestException >> "
+            )
+
+        except json.decoder.JSONDecodeError:
+            print(
+                "something went wrong  << JSONDecodeError >> "
             )
 
         self.text_out.append("clicked")
