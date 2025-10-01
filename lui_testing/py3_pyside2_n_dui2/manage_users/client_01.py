@@ -24,14 +24,22 @@ class Form(QObject):
 
     def clicked(self):
         print("clicked")
+        command = str(self.window.CommadLineEdit.text())
+        data1 = str(self.window.Data_LineEdit_01.text())
+        data2 = str(self.window.Data_LineEdit_02.text())
+        print("CommadLineEdit =", command)
+        print("Data_LineEdit_01 =", data1)
+        print("Data_LineEdit_02 =", data2)
 
-
-        cmd = {"cmd_lst":["a1", "a1"]}
-        print("cmd =", cmd)
+        obj_dat = {
+            "command":command,
+            "data1":data1,
+            "data2":data2
+        }
+        print("obj_dat =", obj_dat)
         try:
-            full_cmd = {"message":"something here"}
             req_post = requests.post(
-                "http://127.0.0.1:45678", data = json.dumps(full_cmd)
+                "http://127.0.0.1:45678", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
             print("lst_out =", json.loads(lst_out))
@@ -40,10 +48,6 @@ class Form(QObject):
             print(
                 "something went wrong with the << reset_graph >> request"
             )
-
-        print("CommadLineEdit =", str(self.window.CommadLineEdit.text()))
-        print("Data_LineEdit_01 =", str(self.window.Data_LineEdit_01.text()))
-        print("Data_LineEdit_02 =", str(self.window.Data_LineEdit_02.text()))
 
 
 if __name__ == '__main__':
