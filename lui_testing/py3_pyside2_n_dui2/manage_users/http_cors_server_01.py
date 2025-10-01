@@ -16,11 +16,15 @@ class RequestHandler(BaseHTTPRequestHandler):
       self._send_cors_headers()
       self.end_headers()
 
-  def send_ok_dict(self):
+  def send_ok_dict(self, body = None):
       '''used by both, GET or POST,'''
       response = {}
       response["status"] = "OK"
+      response["body"] = str(body)
+      print("response =", response)
+
       self.wfile.write(bytes(dumps(response), "utf8"))
+
 
   def do_GET(self):
       print("do_GET")
@@ -61,7 +65,7 @@ class RequestHandler(BaseHTTPRequestHandler):
       print("dataLength =", dataLength)
       data = self.rfile.read(dataLength)
       print("data =", data)
-      self.send_ok_dict()
+      self.send_ok_dict(body = data)
 
 
 if __name__ == "__main__":
