@@ -6,6 +6,12 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from PySide2 import QtUiTools
 
+import hashlib
+import secrets
+import getpass
+from datetime import datetime
+
+
 os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
 
 class Form(QObject):
