@@ -9,15 +9,11 @@ class Form(QObject):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("simple.ui")
         self.window.PostButton.clicked.connect(self.post_clicked)
-
         self.window.GetButton.clicked.connect(self.get_clicked)
-
         self.window.show()
 
     def post_clicked(self):
-
         self.window.TextOut.append("Post clicked")
-
         command = str(self.window.PostCommadEdit.text())
         data_user = str(self.window.LineEditUser.text())
         data_pass = str(self.window.LineEditPass.text())
@@ -54,6 +50,45 @@ class Form(QObject):
         data_token = str(self.window.LineEditToken.text())
         print("GetCommadEdit =", command)
         print("LineEditToken =", data_token)
+
+        full_cmd = {"nod_lst":"", "cmd_str":["history"]}
+        try:
+            req_get = requests.get(
+                "http://127.0.0.1:45678", stream = True, params = full_cmd
+            )
+            raw_dat = req_get.raw.readline()
+
+            print("raw_dat =", raw_dat)
+
+        except requests.exceptions.ConnectionError:
+            print("something went wrong << ConnectionError >>")
+
+
+        code_2_study = '''
+
+
+    full_cmd = {"nod_lst":"", "cmd_str":["history"]}
+    req_get = requests.get(uni_url, stream = True, params = full_cmd)
+
+    while True:
+        tmp_dat = req_get.raw.readline()
+        print("tmp_dat =", tmp_dat)
+        line_str = str(tmp_dat.decode('utf-8'))
+
+        if '/*EOF*/' in line_str:
+            print('/*EOF*/ received')
+            break
+
+        else:
+            json_out = json.loads(line_str)
+            print("\n List of commands: \n")
+            for single_command in json_out:
+                print(single_command)
+
+            print("\n")
+
+
+        '''
 
 
 if __name__ == '__main__':
