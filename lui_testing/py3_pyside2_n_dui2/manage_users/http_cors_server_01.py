@@ -59,8 +59,8 @@ class RequestHandler(BaseHTTPRequestHandler):
         command = url_dict["command"]
         print("command =", command)
 
-        username = url_dict["data1"]
-        password = url_dict["data2"]
+        username = url_dict["data_user"]
+        password = url_dict["data_pass"]
 
         if command == 'register':
             success, message = auth.create_user(username, password)
@@ -73,8 +73,11 @@ class RequestHandler(BaseHTTPRequestHandler):
             else:
                 print(f"Login failed: {message}")
 
+        try:
+            resp_dict = {"success":success, "message":message}
 
-        resp_dict = {"success":success, "message":message}
+        except UnboundLocalError:
+            resp_dict = {"success":False, "message":"command not found"}
 
         self.send_ok_dict(body = resp_dict)
 

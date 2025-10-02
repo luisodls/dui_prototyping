@@ -6,14 +6,6 @@ from PySide2.QtGui import *
 from PySide2.QtWebEngineWidgets import QWebEngineView
 from PySide2 import QtUiTools
 
-import hashlib
-import secrets
-import getpass
-from datetime import datetime
-
-
-os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
-
 class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
@@ -30,16 +22,16 @@ class Form(QObject):
 
     def clicked(self):
         command = str(self.window.CommadLineEdit.text())
-        data1 = str(self.window.Data_LineEdit_01.text())
-        data2 = str(self.window.Data_LineEdit_02.text())
+        data_user = str(self.window.LineEditUser.text())
+        data_pass = str(self.window.LineEditPass.text())
         print("CommadLineEdit =", command)
-        print("Data_LineEdit_01 =", data1)
-        print("Data_LineEdit_02 =", data2)
+        print("LineEditUser =", data_user)
+        print("LineEditPass =", data_pass)
 
         obj_dat = {
             "command":command,
-            "data1":data1,
-            "data2":data2
+            "data_user":data_user,
+            "data_pass":data_pass
         }
         print("obj_dat =", obj_dat)
         try:
