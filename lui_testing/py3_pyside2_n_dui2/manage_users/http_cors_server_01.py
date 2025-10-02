@@ -87,7 +87,6 @@ if __name__ == "__main__":
 
     auth = SimpleAuthSystem()
 
-
     ip_adr = "127.0.0.1"
     port_num = 45678
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
