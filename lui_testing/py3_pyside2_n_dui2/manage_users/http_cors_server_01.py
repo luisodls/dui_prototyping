@@ -21,8 +21,8 @@ class RequestHandler(BaseHTTPRequestHandler):
     def send_ok_dict(self, body = None):
         '''used by both, GET or POST,'''
         response = {}
-        response["status"] = "OK"
-        response["body"] = str(body)
+        response["connection status"] = "OK"
+        response["body"] = body
         print("response =", response)
 
         self.wfile.write(bytes(json.dumps(response), "utf8"))
@@ -40,35 +40,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         print("url_dict =", url_dict)
 
         self.send_ok_dict()
-
-        tmp_off = '''
-###############################################################
-
-    print("=== Simple Authentication System ===")
-    print("Commands: register, login, validate, logout, users, tokens, quit")
-
-    while True:
-        command = input("\nEnter command: ").strip().lower()
-
-        if command == 'register':
-            username = input("Username: ").strip()
-            password = getpass.getpass("Password: ")
-
-            success, message = auth.create_user(username, password)
-            print(f"Result: {message}")
-
-        elif command == 'login':
-            username = input("Username: ").strip()
-            password = getpass.getpass("Password: ")
-
-            success, message = auth.login(username, password)
-            if success:
-                print(f"Login successful! Your token: {message}")
-            else:
-                print(f"Login failed: {message}")
-
-###############################################################
-      '''
 
     def do_POST(self):
         print("do_POST")
@@ -109,9 +80,9 @@ class RequestHandler(BaseHTTPRequestHandler):
                 print(f"Login failed: {message}")
 
 
-        ###########################################################
+        resp_dict = {"success":success, "message":message}
 
-        self.send_ok_dict(body = message)
+        self.send_ok_dict(body = resp_dict)
 
 
 
