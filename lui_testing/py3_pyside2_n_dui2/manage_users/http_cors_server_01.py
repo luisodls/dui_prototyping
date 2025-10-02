@@ -63,16 +63,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         password = url_dict["data2"]
 
         if command == 'register':
-            #username = input("Username: ").strip()
-            #password = getpass.getpass("Password: ")
-
             success, message = auth.create_user(username, password)
             print(f"Result: {message}")
 
         elif command == 'login':
-            #username = input("Username: ").strip()
-            #password = getpass.getpass("Password: ")
-
             success, message = auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
@@ -83,7 +77,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         resp_dict = {"success":success, "message":message}
 
         self.send_ok_dict(body = resp_dict)
-
 
 
 if __name__ == "__main__":
@@ -97,4 +90,8 @@ if __name__ == "__main__":
     httpd = HTTPServer((ip_adr, port_num), RequestHandler)
     full_url = "http://" + ip_adr + ":" + str(port_num)
     print("Hosting server on:", full_url )
-    httpd.serve_forever()
+    try:
+        httpd.serve_forever()
+
+    except KeyboardInterrupt:
+        print(" Keyboard Interrupt ")
