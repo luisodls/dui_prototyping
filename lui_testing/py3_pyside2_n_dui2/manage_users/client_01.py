@@ -8,14 +8,20 @@ class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("simple.ui")
-        self.window.Button1.clicked.connect(self.clicked)
+        self.window.PostButton.clicked.connect(self.post_clicked)
+
+        self.window.GetButton.clicked.connect(self.get_clicked)
+
         self.window.show()
 
-    def clicked(self):
-        command = str(self.window.CommadLineEdit.text())
+    def post_clicked(self):
+
+        self.window.TextOut.append("Post clicked")
+
+        command = str(self.window.PostCommadEdit.text())
         data_user = str(self.window.LineEditUser.text())
         data_pass = str(self.window.LineEditPass.text())
-        print("CommadLineEdit =", command)
+        print("PostCommadEdit =", command)
         print("LineEditUser =", data_user)
         print("LineEditPass =", data_pass)
 
@@ -42,7 +48,12 @@ class Form(QObject):
                 "something went wrong  << JSONDecodeError >> "
             )
 
-        self.window.TextOut.append("clicked")
+    def get_clicked(self):
+        self.window.TextOut.append("Get clicked")
+        command = str(self.window.GetCommadEdit.text())
+        data_token = str(self.window.LineEditToken.text())
+        print("GetCommadEdit =", command)
+        print("LineEditToken =", data_token)
 
 
 if __name__ == '__main__':
