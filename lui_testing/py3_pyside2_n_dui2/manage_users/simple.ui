@@ -16,7 +16,7 @@
   <widget class="QWidget" name="HtmlWidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
-     <widget class="QWidget" name="InerWidget" native="true"/>
+     <widget class="QTextEdit" name="TextOut"/>
     </item>
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">

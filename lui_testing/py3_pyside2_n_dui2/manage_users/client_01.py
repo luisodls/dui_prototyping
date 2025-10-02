@@ -8,14 +8,7 @@ class Form(QObject):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
         self.window = QtUiTools.QUiLoader().load("simple.ui")
-
         self.window.Button1.clicked.connect(self.clicked)
-        main_box = QVBoxLayout()
-
-        self.text_out = QTextEdit()
-        main_box.addWidget(self.text_out)
-
-        self.window.InerWidget.setLayout(main_box)
         self.window.show()
 
     def clicked(self):
@@ -37,20 +30,19 @@ class Form(QObject):
                 "http://127.0.0.1:45678", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
-            #print("lst_out =", json.loads(lst_out))
-            self.text_out.append("lst_out =" + str(json.loads(lst_out)))
+            self.window.TextOut.append("lst_out =" + str(json.loads(lst_out)))
 
         except requests.exceptions.RequestException:
-            print(
+            self.window.TextOut.append(
                 "something went wrong  << RequestException >> "
             )
 
         except json.decoder.JSONDecodeError:
-            print(
+            self.window.TextOut.append(
                 "something went wrong  << JSONDecodeError >> "
             )
 
-        self.text_out.append("clicked")
+        self.window.TextOut.append("clicked")
 
 
 if __name__ == '__main__':

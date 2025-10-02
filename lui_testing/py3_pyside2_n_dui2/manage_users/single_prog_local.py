@@ -54,7 +54,6 @@ class SimpleAuthSystem:
 
 def main():
     auth = SimpleAuthSystem()
-
     print("=== Simple Authentication System ===")
     print("Commands: register, login, validate, logout, users, tokens, quit")
 
@@ -64,17 +63,16 @@ def main():
         if command == 'register':
             username = input("Username: ").strip()
             password = getpass.getpass("Password: ")
-
             success, message = auth.create_user(username, password)
             print(f"Result: {message}")
 
         elif command == 'login':
             username = input("Username: ").strip()
             password = getpass.getpass("Password: ")
-
             success, message = auth.login(username, password)
             if success:
                 print(f"Login successful! Your token: {message}")
+
             else:
                 print(f"Login failed: {message}")
 
@@ -84,6 +82,7 @@ def main():
 
             if username:
                 print(f"Token valid! User: {username}")
+
             else:
                 print("Invalid token")
 
