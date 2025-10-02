@@ -51,44 +51,20 @@ class Form(QObject):
         print("GetCommadEdit =", command)
         print("LineEditToken =", data_token)
 
-        full_cmd = {"nod_lst":"", "cmd_str":["history"]}
+        full_cmd = {"command":command, "token":data_token}
         try:
             req_get = requests.get(
                 "http://127.0.0.1:45678", stream = True, params = full_cmd
             )
             raw_dat = req_get.raw.readline()
+            line_str = str(raw_dat.decode('utf-8'))
 
-            print("raw_dat =", raw_dat)
+            print("line_str =", line_str)
+            self.window.TextOut.append("line_str =" + line_str)
 
         except requests.exceptions.ConnectionError:
             print("something went wrong << ConnectionError >>")
 
-
-        code_2_study = '''
-
-
-    full_cmd = {"nod_lst":"", "cmd_str":["history"]}
-    req_get = requests.get(uni_url, stream = True, params = full_cmd)
-
-    while True:
-        tmp_dat = req_get.raw.readline()
-        print("tmp_dat =", tmp_dat)
-        line_str = str(tmp_dat.decode('utf-8'))
-
-        if '/*EOF*/' in line_str:
-            print('/*EOF*/ received')
-            break
-
-        else:
-            json_out = json.loads(line_str)
-            print("\n List of commands: \n")
-            for single_command in json_out:
-                print(single_command)
-
-            print("\n")
-
-
-        '''
 
 
 if __name__ == '__main__':
