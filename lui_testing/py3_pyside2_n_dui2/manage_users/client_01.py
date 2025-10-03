@@ -1,8 +1,18 @@
 import sys, os, requests, json
-from PySide2.QtCore import *
-from PySide2.QtWidgets import *
-from PySide2.QtGui import *
-from PySide2 import QtUiTools
+
+try:
+    from PySide6 import QtUiTools
+    from PySide6.QtCore import *
+    from PySide6.QtWidgets import *
+    from PySide6.QtGui import *
+    print("Using PySide6 as Qt bindings")
+
+except ModuleNotFoundError:
+    from PySide2 import QtUiTools
+    from PySide2.QtCore import *
+    from PySide2.QtWidgets import *
+    from PySide2.QtGui import *
+    print("Using PySide2 as Qt bindings")
 
 class Form(QObject):
     def __init__(self, parent = None):
@@ -64,7 +74,6 @@ class Form(QObject):
 
         except requests.exceptions.ConnectionError:
             print("something went wrong << ConnectionError >>")
-
 
 
 if __name__ == '__main__':
