@@ -27,42 +27,6 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(bytes(json.dumps(response), "utf8"))
 
-    def do_GET(self):
-        print("do_GET")
-        self.send_response(200)
-        self._send_cors_headers()
-        self.end_headers()
-
-        url_path = self.path
-        url_dict = parse_qs(urlparse(url_path).query)
-
-        print("url_path =", url_path)
-        print("url_dict =", url_dict)
-        command = url_dict['command'][0]
-        token = url_dict['token'][0]
-
-        if command == 'validate':
-            success, message = auth.validate(token)
-
-        elif command == 'logout':
-            success, message = auth.logout(token)
-
-        elif command == 'users':
-            message = auth.list_users()
-            success = True
-
-        elif command == 'tokens':
-            message = auth.list_tokens()
-            success = True
-
-        try:
-            resp_dict = {"success":success, "message":message}
-
-        except UnboundLocalError:
-            resp_dict = {"success":False, "message":"command not found"}
-
-        self.send_ok_dict(body = resp_dict)
-
     def do_POST(self):
         print("do_POST")
         self.send_response(200)
@@ -94,6 +58,42 @@ class RequestHandler(BaseHTTPRequestHandler):
                 print(f"Login successful! Your token: {message}")
             else:
                 print(f"Login failed: {message}")
+
+        try:
+            resp_dict = {"success":success, "message":message}
+
+        except UnboundLocalError:
+            resp_dict = {"success":False, "message":"command not found"}
+
+        self.send_ok_dict(body = resp_dict)
+
+    def do_GET(self):
+        print("do_GET")
+        self.send_response(200)
+        self._send_cors_headers()
+        self.end_headers()
+
+        url_path = self.path
+        url_dict = parse_qs(urlparse(url_path).query)
+
+        print("url_path =", url_path)
+        print("url_dict =", url_dict)
+        command = url_dict['command'][0]
+        token = url_dict['token'][0]
+
+        if command == 'validate':
+            success, message = auth.validate(token)
+
+        elif command == 'logout':
+            success, message = auth.logout(token)
+
+        elif command == 'users':
+            message = auth.list_users()
+            success = True
+
+        elif command == 'tokens':
+            message = auth.list_tokens()
+            success = True
 
         try:
             resp_dict = {"success":success, "message":message}
