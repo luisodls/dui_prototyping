@@ -37,13 +37,18 @@ class SimpleAuthSystem:
         self.tokens[token] = username
         return True, token
 
-    def validate_token(self, token):
-        return self.tokens.get(token)
+    def validate(self, token):
+        username = self.tokens.get(token)
+        if username:
+            return True, "Validated user " + username
+
+        return False, "Invalid token"
 
     def logout(self, token):
         if token in self.tokens:
             del self.tokens[token]
             return True, "Logged out successfully"
+
         return False, "Invalid token"
 
     def list_users(self):
@@ -56,57 +61,62 @@ def main():
     auth = SimpleAuthSystem()
     print("=== Simple Authentication System ===")
     print("Commands: register, login, validate, logout, users, tokens, quit")
+    try:
+        while True:
+            command = input("\nEnter command: ").strip().lower()
 
-    while True:
-        command = input("\nEnter command: ").strip().lower()
+            if command == 'register':
+                username = input("Username: ").strip()
+                password = getpass.getpass("Password: ")
+                success, message = auth.create_user(username, password)
+                print(f"Result: {message}")
 
-        if command == 'register':
-            username = input("Username: ").strip()
-            password = getpass.getpass("Password: ")
-            success, message = auth.create_user(username, password)
-            print(f"Result: {message}")
+            elif command == 'login':
+                username = input("Username: ").strip()
+                password = getpass.getpass("Password: ")
+                success, message = auth.login(username, password)
+                if success:
+                    print(f"Login successful! Your token: {message}")
 
-        elif command == 'login':
-            username = input("Username: ").strip()
-            password = getpass.getpass("Password: ")
-            success, message = auth.login(username, password)
-            if success:
-                print(f"Login successful! Your token: {message}")
+                else:
+                    print(f"Login failed: {message}")
+
+            elif command == 'validate':
+                token = input("Token: ").strip()
+                success, message = auth.validate(token)
+                print(f"success: {success}")
+                print(f"Result: {message}")
+
+
+            elif command == 'logout':
+                token = input("Token: ").strip()
+                success, message = auth.logout(token)
+                print(f"success: {success}")
+                print(f"Result: {message}")
+
+            elif command == 'users':
+                users = auth.list_users()
+                print(f"Registered users: {users}")
+
+            elif command == 'tokens':
+                tokens = auth.list_tokens()
+                print("Active tokens:")
+                for token, username in tokens.items():
+                    print(f"  {username}: {token[:16]}...")
+
+            elif command in ['quit', 'exit', 'q']:
+                print("Goodbye!")
+                break
 
             else:
-                print(f"Login failed: {message}")
+                print("Unknown command. Available: register, login, validate, logout, users, tokens, quit")
 
-        elif command == 'validate':
-            token = input("Token: ").strip()
-            username = auth.validate_token(token)
+    except KeyboardInterrupt:
+        print(" Keyboard Interrupt ")
 
-            if username:
-                print(f"Token valid! User: {username}")
+    except EOFError:
+        print("EOF Error")
 
-            else:
-                print("Invalid token")
-
-        elif command == 'logout':
-            token = input("Token: ").strip()
-            success, message = auth.logout(token)
-            print(f"Result: {message}")
-
-        elif command == 'users':
-            users = auth.list_users()
-            print(f"Registered users: {users}")
-
-        elif command == 'tokens':
-            tokens = auth.list_tokens()
-            print("Active tokens:")
-            for token, username in tokens.items():
-                print(f"  {username}: {token[:16]}...")
-
-        elif command in ['quit', 'exit', 'q']:
-            print("Goodbye!")
-            break
-
-        else:
-            print("Unknown command. Available: register, login, validate, logout, users, tokens, quit")
 
 if __name__ == "__main__":
     main()

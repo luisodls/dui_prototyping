@@ -38,8 +38,30 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         print("url_path =", url_path)
         print("url_dict =", url_dict)
+        command = url_dict['command'][0]
+        token = url_dict['token'][0]
 
-        self.send_ok_dict()
+        if command == 'validate':
+            success, message = auth.validate(token)
+
+        elif command == 'logout':
+            success, message = auth.logout(token)
+
+        elif command == 'users':
+            message = auth.list_users()
+            success = True
+
+        elif command == 'tokens':
+            message = auth.list_tokens()
+            success = True
+
+        try:
+            resp_dict = {"success":success, "message":message}
+
+        except UnboundLocalError:
+            resp_dict = {"success":False, "message":"command not found"}
+
+        self.send_ok_dict(body = resp_dict)
 
     def do_POST(self):
         print("do_POST")
