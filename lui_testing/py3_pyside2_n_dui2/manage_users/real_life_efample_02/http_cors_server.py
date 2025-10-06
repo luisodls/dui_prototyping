@@ -2,7 +2,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from single_prog_local import SimpleAuthSystem
+from sever_side import SimpleAuthSystem
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -78,28 +78,32 @@ class RequestHandler(BaseHTTPRequestHandler):
 
         print("url_path =", url_path)
         print("url_dict =", url_dict)
-        command = url_dict['command'][0]
-        token = url_dict['token'][0]
-
-        if command == 'validate':
-            success, message = auth.validate(token)
-
-        elif command == 'logout':
-            success, message = auth.logout(token)
-
-        elif command == 'users':
-            message = auth.list_users()
-            success = True
-
-        elif command == 'tokens':
-            message = auth.list_tokens()
-            success = True
-
         try:
-            resp_dict = {"success":success, "message":message}
+            command = url_dict['command'][0]
+            token = url_dict['token'][0]
 
-        except UnboundLocalError:
-            resp_dict = {"success":False, "message":"command not found"}
+            if command == 'validate':
+                success, message = auth.validate(token)
+
+            elif command == 'logout':
+                success, message = auth.logout(token)
+
+            elif command == 'users':
+                message = auth.list_users()
+                success = True
+
+            elif command == 'tokens':
+                message = auth.list_tokens()
+                success = True
+
+            try:
+                resp_dict = {"success":success, "message":message}
+
+            except UnboundLocalError:
+                resp_dict = {"success":False, "message":"command not found 1"}
+
+        except KeyError:
+            resp_dict = {"success":False, "message":"command not found 2"}
 
         self.send_ok_dict(body = resp_dict)
 
