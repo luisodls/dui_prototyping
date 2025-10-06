@@ -3,16 +3,13 @@ import secrets
 import getpass
 from datetime import datetime
 
-class SimpleAuthSystem:
+class AuthSystem:
     def __init__(self):
         self.users = {}  # username -> user_data
         self.tokens = {}  # token -> username
 
     def hash_password(self, password):
         return hashlib.sha256(password.encode()).hexdigest()
-
-    def generate_token(self):
-        return secrets.token_hex(16)
 
     def create_user(self, username, password):
         if username in self.users:
@@ -33,7 +30,8 @@ class SimpleAuthSystem:
         if self.users[username]['password_hash'] != password_hash:
             return False, "Invalid password"
 
-        token = self.generate_token()
+        token = str(secrets.token_hex(16))
+
         self.tokens[token] = username
         return True, token
 
@@ -51,14 +49,16 @@ class SimpleAuthSystem:
 
         return False, "Invalid token"
 
-    def list_users(self):
+    def _list_users(self):
+        # only used for testing consider removing
         return list(self.users.keys())
 
-    def list_tokens(self):
+    def _list_tokens(self):
+        # only used for testing consider removing
         return self.tokens.copy()
 
 def main():
-    auth = SimpleAuthSystem()
+    auth = AuthSystem()
     print("=== Simple Authentication System ===")
     print("Commands: register, login, validate, logout, users, tokens, quit")
     try:
@@ -87,7 +87,6 @@ def main():
                 print(f"success: {success}")
                 print(f"Result: {message}")
 
-
             elif command == 'logout':
                 token = input("Token: ").strip()
                 success, message = auth.logout(token)
@@ -95,11 +94,13 @@ def main():
                 print(f"Result: {message}")
 
             elif command == 'users':
-                users = auth.list_users()
+                # for testing only, consider removing
+                users = auth._list_users()
                 print(f"Registered users: {users}")
 
             elif command == 'tokens':
-                tokens = auth.list_tokens()
+                # for testing only, consider removing
+                tokens = auth._list_tokens()
                 print("Active tokens:")
                 for token, username in tokens.items():
                     print(f"  {username}: {token[:16]}...")

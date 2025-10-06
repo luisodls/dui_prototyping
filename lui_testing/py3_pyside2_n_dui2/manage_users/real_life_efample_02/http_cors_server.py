@@ -2,7 +2,7 @@ from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 
-from sever_side import SimpleAuthSystem
+from sever_side import AuthSystem
 
 """ The HTTP request handler """
 class RequestHandler(BaseHTTPRequestHandler):
@@ -88,22 +88,14 @@ class RequestHandler(BaseHTTPRequestHandler):
             elif command == 'logout':
                 success, message = auth.logout(token)
 
-            elif command == 'users':
-                message = auth.list_users()
-                success = True
-
-            elif command == 'tokens':
-                message = auth.list_tokens()
-                success = True
-
             try:
                 resp_dict = {"success":success, "message":message}
 
             except UnboundLocalError:
-                resp_dict = {"success":False, "message":"command not found 1"}
+                resp_dict = {"success":False, "message":"command not found"}
 
         except KeyError:
-            resp_dict = {"success":False, "message":"command not found 2"}
+            resp_dict = {"success":False, "message":"Key not found"}
 
         self.send_ok_dict(body = resp_dict)
 
@@ -111,7 +103,7 @@ class RequestHandler(BaseHTTPRequestHandler):
 if __name__ == "__main__":
     print("Starting server")
 
-    auth = SimpleAuthSystem()
+    auth = AuthSystem()
 
     ip_adr = "127.0.0.1"
     port_num = 45678
