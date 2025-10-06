@@ -1,12 +1,26 @@
-import hashlib
-import secrets
-import getpass
+import hashlib, secrets, getpass
+import os, json
 from datetime import datetime
 
 class AuthSystem:
-    def __init__(self):
-        self.users = {}  # username -> user_data
+    def __init__(self, filename = "users_data.json"):
+        self.filename = filename
+        self.users = self.load_data()
         self.tokens = {}  # token -> username
+
+    def load_data(self):
+        if os.path.exists(self.filename):
+            try:
+                with open(self.filename, 'r') as f:
+                    return json.load(f)
+            except:
+                return {}
+        return {}
+
+    def save_data(self):
+        print("self.users =", self.users)
+        with open(self.filename, 'w') as usr_dat:
+            json.dump(self.users, usr_dat)
 
     def hash_password(self, password):
         return hashlib.sha256(password.encode()).hexdigest()
@@ -18,8 +32,9 @@ class AuthSystem:
         password_hash = self.hash_password(password)
         self.users[username] = {
             'password_hash': password_hash,
-            'created_at': datetime.now()
+            'created_at': datetime.now().isoformat()
         }
+        self.save_data()
         return True, "User created successfully"
 
     def login(self, username, password):
