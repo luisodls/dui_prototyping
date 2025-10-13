@@ -18,12 +18,24 @@ class Form(QWidget):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
         #self.window = QtUiTools.QUiLoader().load("tester_gui.ui")
-
-
-
         #self.window.PostButton.clicked.connect(self.post_clicked)
         #self.window.GetButton.clicked.connect(self.get_clicked)
+        main_box = QVBoxLayout()
+        top_layout_1 = QHBoxLayout()
+        top_layout_1.addWidget(QLabel("User"))
+        top_layout_1.addWidget(QLineEdit())
+        main_box.addLayout(top_layout_1)
+        top_layout_2 = QHBoxLayout()
+        top_layout_2.addWidget(QLabel("Password"))
+        top_layout_2.addWidget(QLineEdit())
+        main_box.addLayout(top_layout_2)
+        low_h_layout = QHBoxLayout()
+        low_h_layout.addWidget(QPushButton("Login"))
+        low_h_layout.addWidget(QPushButton("Register"))
+        main_box.addLayout(low_h_layout)
+        self.setLayout(main_box)
         self.show()
+
         tmp_off = '''
     def post_clicked(self):
         self.window.TextOut.append("Post clicked")
