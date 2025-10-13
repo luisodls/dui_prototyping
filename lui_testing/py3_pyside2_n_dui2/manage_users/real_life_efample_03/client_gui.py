@@ -14,14 +14,17 @@ except ModuleNotFoundError:
     from PySide2.QtGui import *
     print("Using PySide2 as Qt bindings")
 
-class Form(QObject):
+class Form(QWidget):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
-        self.window = QtUiTools.QUiLoader().load("tester_gui.ui")
-        self.window.PostButton.clicked.connect(self.post_clicked)
-        self.window.GetButton.clicked.connect(self.get_clicked)
-        self.window.show()
+        #self.window = QtUiTools.QUiLoader().load("tester_gui.ui")
 
+
+
+        #self.window.PostButton.clicked.connect(self.post_clicked)
+        #self.window.GetButton.clicked.connect(self.get_clicked)
+        self.show()
+        tmp_off = '''
     def post_clicked(self):
         self.window.TextOut.append("Post clicked")
         command = str(self.window.PostCommadEdit.text())
@@ -74,6 +77,7 @@ class Form(QObject):
 
         except requests.exceptions.ConnectionError:
             print("something went wrong << ConnectionError >>")
+        '''
 
 
 if __name__ == '__main__':
