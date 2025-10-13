@@ -17,31 +17,39 @@ except ModuleNotFoundError:
 class Form(QWidget):
     def __init__(self, parent = None):
         super(Form, self).__init__(parent)
-        #self.window = QtUiTools.QUiLoader().load("tester_gui.ui")
-        #self.window.PostButton.clicked.connect(self.post_clicked)
-        #self.window.GetButton.clicked.connect(self.get_clicked)
         main_box = QVBoxLayout()
         top_layout_1 = QHBoxLayout()
         top_layout_1.addWidget(QLabel("User"))
-        top_layout_1.addWidget(QLineEdit())
+        self.LineEditUser = QLineEdit()
+        top_layout_1.addWidget(self.LineEditUser)
         main_box.addLayout(top_layout_1)
         top_layout_2 = QHBoxLayout()
         top_layout_2.addWidget(QLabel("Password"))
-        top_layout_2.addWidget(QLineEdit())
+        self.LineEditPass = QLineEdit()
+        top_layout_2.addWidget(self.LineEditPass)
         main_box.addLayout(top_layout_2)
         low_h_layout = QHBoxLayout()
-        low_h_layout.addWidget(QPushButton("Login"))
-        low_h_layout.addWidget(QPushButton("Register"))
+        self.login_button = QPushButton("Login")
+        self.login_button.clicked.connect(self.login_clicked)
+        low_h_layout.addWidget(self.login_button)
+        self.register_button = QPushButton("Register")
+        self.register_button.clicked.connect(self.register_clicked)
+        low_h_layout.addWidget(self.register_button)
         main_box.addLayout(low_h_layout)
         self.setLayout(main_box)
         self.show()
 
-        tmp_off = '''
-    def post_clicked(self):
-        self.window.TextOut.append("Post clicked")
-        command = str(self.window.PostCommadEdit.text())
-        data_user = str(self.window.LineEditUser.text())
-        data_pass = str(self.window.LineEditPass.text())
+    def login_clicked(self):
+        self.post_clicked(new_command = "login")
+
+    def register_clicked(self):
+        self.post_clicked(new_command = "register")
+
+    def post_clicked(self, new_command):
+        print("Post clicked")
+        command = str(new_command)
+        data_user = str(self.LineEditUser.text())
+        data_pass = str(self.LineEditPass.text())
         print("PostCommadEdit =", command)
         print("LineEditUser =", data_user)
         print("LineEditPass =", data_pass)
@@ -57,39 +65,17 @@ class Form(QWidget):
                 "http://127.0.0.1:45678", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
-            self.window.TextOut.append("lst_out =" + str(json.loads(lst_out)))
+            print("lst_out =" + str(json.loads(lst_out)))
 
         except requests.exceptions.RequestException:
-            self.window.TextOut.append(
+            print(
                 "something went wrong  << RequestException >> "
             )
 
         except json.decoder.JSONDecodeError:
-            self.window.TextOut.append(
+            print(
                 "something went wrong  << JSONDecodeError >> "
             )
-
-    def get_clicked(self):
-        self.window.TextOut.append("Get clicked")
-        command = str(self.window.GetCommadEdit.text())
-        data_token = str(self.window.LineEditToken.text())
-        print("GetCommadEdit =", command)
-        print("LineEditToken =", data_token)
-
-        full_cmd = {"command":command, "token":data_token}
-        try:
-            req_get = requests.get(
-                "http://127.0.0.1:45678", stream = True, params = full_cmd
-            )
-            raw_dat = req_get.raw.readline()
-            line_str = str(raw_dat.decode('utf-8'))
-
-            print("line_str =", line_str)
-            self.window.TextOut.append("line_str =" + line_str)
-
-        except requests.exceptions.ConnectionError:
-            print("something went wrong << ConnectionError >>")
-        '''
 
 
 if __name__ == '__main__':
