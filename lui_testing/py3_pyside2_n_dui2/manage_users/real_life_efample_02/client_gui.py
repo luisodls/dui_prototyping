@@ -39,7 +39,7 @@ class Form(QObject):
         print("obj_dat =", obj_dat)
         try:
             req_post = requests.post(
-                "http://127.0.0.1:45678", data = json.dumps(obj_dat)
+                "http://127.0.0.1:34567", data = json.dumps(obj_dat)
             )
             lst_out = req_post.content
             self.window.TextOut.append("lst_out =" + str(json.loads(lst_out)))
@@ -64,7 +64,7 @@ class Form(QObject):
         full_cmd = {"command":command, "token":data_token}
         try:
             req_get = requests.get(
-                "http://127.0.0.1:45678", stream = True, params = full_cmd
+                "http://127.0.0.1:34567", stream = True, params = full_cmd
             )
             raw_dat = req_get.raw.readline()
             line_str = str(raw_dat.decode('utf-8'))
