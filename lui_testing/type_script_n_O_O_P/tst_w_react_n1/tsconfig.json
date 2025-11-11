@@ -6,6 +6,15 @@
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
+
+    "noImplicitAny": true,                // Highly recommended to keep true, but if you must.
+    "strictNullChecks": true,             // THIS IS THE ONE that fixes your ref error (TS2322).
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": false,
+
     "skipLibCheck": true,
     "outDir": "./dist"
   },
