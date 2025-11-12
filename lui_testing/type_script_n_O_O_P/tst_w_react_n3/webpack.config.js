@@ -3,7 +3,7 @@ const path = require('path');
 
 module.exports = {
   // 1. Where Webpack starts looking for code
-  entry: './index.tsx',
+  entry: './mainApp.tsx',
 
   // 2. The final compiled and bundled output file
   output: {

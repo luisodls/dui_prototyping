@@ -18,5 +18,5 @@
     "skipLibCheck": true,
     "outDir": "./dist"
   },
-  "include": ["index.tsx", "deps.tsx"]
+  "include": ["mainApp.tsx", "deps.tsx"]
 }
