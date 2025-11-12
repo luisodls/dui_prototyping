@@ -3,8 +3,6 @@ import ReactDOM from 'react-dom/client';
 //import { plot, Plot } from 'nodeplotlib';
 
 const rootElement = document.getElementById('root');
-////////////////////////////////////////////////////////////////////////////////////
-
 
 function f(x: number): number{
     return x * x
@@ -42,16 +40,6 @@ function summation_an_p_bn(
   return [sum_a, sum_b];
 }
 
-let an: number[] = [];
-let bn: number[] = [];
-for (let n: number = 1; n < n_max + 1; n++) {
-  let [an_tst, bn_tst] = summation_an_p_bn(interval_from, interval_to, n);
-  an.push(an_tst);
-  bn.push(bn_tst);
-}
-
-console.log("an =", an)
-console.log("bn =", bn)
 function fourier_approx(x: number): number {
     let sum = a0;
     for (let n: number = 1; n < n_max + 1; n++) {
@@ -60,16 +48,35 @@ function fourier_approx(x: number): number {
     }
     return sum;
 }
+let an: number[] = [];
+let bn: number[] = [];
 
 let fun_org_x: number[] = [];
 let fun_org_y: number[] = [];
 let fun_app_y: number[] = [];
 
-for (let x = interval_from; x < interval_to; x += 0.1) {
-    console.log(" f approx(", x, ")=", fourier_approx(x));
-    fun_org_x.push(x);
-    fun_org_y.push(f(x));
-    fun_app_y.push(fourier_approx(x));
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+
+  for (let n: number = 1; n < n_max + 1; n++) {
+    let [an_tst, bn_tst] = summation_an_p_bn(interval_from, interval_to, n);
+    an.push(an_tst);
+    bn.push(bn_tst);
+  }
+  for (let x = interval_from; x < interval_to; x += 0.1) {
+      console.log(" f approx(", x, ")=", fourier_approx(x));
+      fun_org_x.push(x);
+      fun_org_y.push(f(x));
+      fun_app_y.push(fourier_approx(x));
+  }
+
+  root.render(
+    <React.StrictMode>
+      <h1>Hi there!</h1>
+    </React.StrictMode>
+  );
+} else {
+  console.error("Failed to find the root element.");
 }
 /*
 const data1: Plot[] = [
@@ -81,16 +88,3 @@ const data2: Plot[] = [
 plot(data1);
 plot(data2);
 */
-
-////////////////////////////////////////////////////////////////////////////////////
-if (rootElement) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <React.StrictMode>
-      <h1>Hello there!</h1>
-    </React.StrictMode>
-  );
-} else {
-  console.error("Failed to find the root element.");
-}
