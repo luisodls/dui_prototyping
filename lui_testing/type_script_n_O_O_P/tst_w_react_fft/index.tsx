@@ -1,4 +1,10 @@
-import { plot, Plot } from 'nodeplotlib';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+//import { plot, Plot } from 'nodeplotlib';
+
+const rootElement = document.getElementById('root');
+////////////////////////////////////////////////////////////////////////////////////
+
 
 function f(x: number): number{
     return x * x
@@ -65,6 +71,7 @@ for (let x = interval_from; x < interval_to; x += 0.1) {
     fun_org_y.push(f(x));
     fun_app_y.push(fourier_approx(x));
 }
+/*
 const data1: Plot[] = [
   { x: fun_org_x, y: fun_org_y, type: 'scatter', },
 ];
@@ -73,3 +80,17 @@ const data2: Plot[] = [
 ];
 plot(data1);
 plot(data2);
+*/
+
+////////////////////////////////////////////////////////////////////////////////////
+if (rootElement) {
+  const root = ReactDOM.createRoot(rootElement);
+
+  root.render(
+    <React.StrictMode>
+      <h1>Hello there!</h1>
+    </React.StrictMode>
+  );
+} else {
+  console.error("Failed to find the root element.");
+}

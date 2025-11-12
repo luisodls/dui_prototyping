@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs", // Essential for Webpack/ts-loader
+    "jsx": "react-jsx",   // Use the modern JSX transform
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+
+    "noImplicitAny": true,                // Highly recommended to keep true, but if you must.
+    "strictNullChecks": true,             // THIS IS THE ONE that fixes your ref error (TS2322).
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": false,
+
+    "skipLibCheck": true,
+    "outDir": "./dist"
+  },
+  "include": ["index.tsx"]
+}
