@@ -1,3 +1,8 @@
+
+# this in a very outdated old exercise of the command tree,
+# here where we have several try/except with an empty except
+# this is a bad practice and should be avoided
+
 import sys
 def prin_lst(lst, curr):
     print("__________________________listing:")

@@ -1,3 +1,8 @@
+
+# this in a very outdated old exercise of the server for the command
+# tree, it relies on an old version of old_tree_nav, where we have
+# several try/except with an empty except, this is a bad practice
+
 from urllib.parse import urlparse, parse_qs
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
