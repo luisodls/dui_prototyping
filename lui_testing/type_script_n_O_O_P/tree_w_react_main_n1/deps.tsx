@@ -57,15 +57,9 @@ export function draw_tree(
       ste_pos.command, x_text_corner, y_text_corner
     );
 
-    /*ctx.fillText(
-      String(ste_pos.lin_num), x_scale * 0.5, y_text_corner
-    );*/
-
     ctx.fillText(
-      String(ste_pos.success), "  ",
       String(ste_pos.lin_num), x_scale * 0.5, y_text_corner
     );
-
   }
 
   for (let ste_pos of tree_data_map) {
