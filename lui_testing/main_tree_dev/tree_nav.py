@@ -228,7 +228,7 @@ class root_node(object):
         print("Root dir =", self._run_dir)
         self.number = 0
         self.command = [None]
-        self.success = True
+        self.success = None
         self.next_step_list = []
 
 
@@ -279,12 +279,13 @@ class runner(object):
 
     def exec_step(self, cmd_lst):
         print("self.current =", self.current)
-        if self.step_list[self.current].success == True:
-            self.create_step(self.step_list[self.current])
-            self.step_list[self.current](cmd_lst)
+        #if self.step_list[self.current].success == True:
+        if self.step_list[self.current].success == False:
+            print("\n cannot run from failed step \n")
 
         else:
-            print("cannot run from failed step")
+            self.create_step(self.step_list[self.current])
+            self.step_list[self.current](cmd_lst)
 
     def create_step(self, prev_step):
         new_step = uni_step(prev_step)

@@ -30,7 +30,7 @@ function build_tree_recr(pos_num: number, my_lst: Step[], indent: number = 1, pa
   } else if (step.success === false) {
     stp_suss = " ✘ ";
   } else {
-    stp_suss = " n ";
+    stp_suss = " ? ";
   }
   const str_lin_num = String(step.lin_num);
   let stp_prn = stp_suss + "  " + str_lin_num + "     ".repeat(indent) + " >__";
