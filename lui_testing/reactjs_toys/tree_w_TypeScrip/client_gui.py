@@ -79,8 +79,6 @@ class TreeDirScene(QGraphicsScene):
 
     def build_tree_recr(self, pos_num, my_lst, indent = 1, parent_row = 0):
         step = my_lst[pos_num]
-        stp_suss = ""
-        tmp_off = '''
         if step["success"] == True:
             stp_suss = " T "
 
@@ -89,7 +87,7 @@ class TreeDirScene(QGraphicsScene):
 
         else:
             stp_suss = " N "
-        '''
+
         if indent > self.max_indent:
             self.max_indent = int(indent)
 

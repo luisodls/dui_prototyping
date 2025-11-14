@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs", // Essential for Webpack/ts-loader
+    "jsx": "react-jsx",   // Use the modern JSX transform
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+
+    "noImplicitAny": true,
+    "strictNullChecks": false,
+    "strictFunctionTypes": true,
+    "strictBindCallApply": true,
+    "strictPropertyInitialization": false,
+    "noImplicitThis": true,
+    "alwaysStrict": false,
+
+    "skipLibCheck": true,
+    "outDir": "./dist"
+  },
+  "include": ["mainApp.tsx", "deps.tsx"]
+}
