@@ -37,7 +37,6 @@ export function draw_tree(
   if (!canvas) return; // Ensure canvas exists
   const ctx = canvas.getContext("2d");
   if (!ctx) return; // Ensure context exists
-
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   const x_scale = 25;
   const y_scale = 30;
@@ -56,15 +55,12 @@ export function draw_tree(
     ctx.fillText(
       ste_pos.command, x_text_corner, y_text_corner
     );
-
     ctx.fillText(
       String(ste_pos.lin_num), x_scale * 1.5, y_text_corner
     );
-
     ctx.fillText(
-      String(ste_pos.success), x_scale * 0.5, y_text_corner
+      ste_pos.success, x_scale * 0.2, y_text_corner
     );
-
   }
 
   for (let ste_pos of tree_data_map) {

@@ -26,11 +26,11 @@ function build_tree_recr(pos_num: number, my_lst: Step[], indent: number = 1, pa
   const step = my_lst[pos_num];
   let stp_suss: string;
   if (step.success === true) {
-    stp_suss = " T ";
+    stp_suss = " ✓ ";
   } else if (step.success === false) {
-    stp_suss = " F ";
+    stp_suss = " ✘ ";
   } else {
-    stp_suss = " N ";
+    stp_suss = " n ";
   }
   const str_lin_num = String(step.lin_num);
   let stp_prn = stp_suss + "  " + str_lin_num + "     ".repeat(indent) + " >__";
