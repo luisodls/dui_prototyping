@@ -58,8 +58,13 @@ export function draw_tree(
     );
 
     ctx.fillText(
-      String(ste_pos.lin_num), x_scale * 0.5, y_text_corner
+      String(ste_pos.lin_num), x_scale * 1.5, y_text_corner
     );
+
+    ctx.fillText(
+      String(ste_pos.success), x_scale * 0.5, y_text_corner
+    );
+
   }
 
   for (let ste_pos of tree_data_map) {
