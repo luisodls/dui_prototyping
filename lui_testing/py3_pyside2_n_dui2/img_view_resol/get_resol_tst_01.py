@@ -30,7 +30,9 @@ def get_resolution(detector, experiments, x, y, readout=None):
 
 
 if __name__ == "__main__":
-    experiments_path = "/tmp/tst4dials_img_view/imported.expt"
+    # if imported.expt is from a dataset taken at I23
+    # it should give a very big resolution result
+    experiments_path = "imported.expt"
 
     experiments = ExperimentList.from_file(experiments_path)
     my_imageset = experiments.imagesets()[0]
@@ -38,7 +40,11 @@ if __name__ == "__main__":
 
     print("importing from:", experiments_path)
 
-    resolution = get_resolution(detector, experiments, 900, 900, readout = 0)
+    # this are the coordinates of somewhere very close to the beam center
+    # the last 3 parameters are x,y in that panel than panel number
+    resolution = get_resolution(
+        detector, experiments, 1063.531, 41.597, readout = 12
+    )
 
     print("resolution =", resolution)
 
