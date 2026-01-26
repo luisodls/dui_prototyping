@@ -1,7 +1,6 @@
 import sys, os, platform
 
 try:
-    from PySide6.QtWebEngineWidgets import QWebEngineView
     from PySide6.QtWebEngineCore import QWebEngineSettings
     from PySide6 import QtUiTools
     from PySide6.QtCore import *
@@ -10,7 +9,6 @@ try:
     print("Using PySide6 as Qt bindings")
 
 except ModuleNotFoundError:
-    from PySide2.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
     from PySide2 import QtUiTools
     from PySide2.QtCore import *
     from PySide2.QtWidgets import *
@@ -24,20 +22,15 @@ class Form(QObject):
         self.window = QtUiTools.QUiLoader().load("simple.ui")
 
         self.window.Button1.clicked.connect(self.clicked)
-        self.html_view = QWebEngineView()
 
         main_box = QVBoxLayout()
-        main_box.addWidget(self.html_view)
-        #main_box.addWidget(QLabel("Testing"))
+        main_box.addWidget(QLabel("Testing"))
 
         self.window.InerWidget.setLayout(main_box)
         self.window.show()
 
     def clicked(self):
         print("clicked")
-        self.html_view.load(QUrl("http://google.com"))
-        self.html_view.show()
-
 
 if __name__ == '__main__':
     os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox"
