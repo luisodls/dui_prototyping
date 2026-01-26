@@ -24,7 +24,6 @@ class Progress_Box(QDialog):
         Stop_Butn.clicked.connect(self.stop_me)
 
         self.live_label = QLabel("progress")
-        self.num_in_label = 0
 
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.live_label)
@@ -32,6 +31,8 @@ class Progress_Box(QDialog):
         self.setLayout(mainLayout)
         self.setWindowTitle("Loading")
 
+    def ini_timer(self):
+        self.num_in_label = 0
         timer = QTimer(self)
         timer.timeout.connect(self.update_me)
         timer.start(500)
@@ -60,6 +61,7 @@ class Form(QObject):
 
     def clicked(self):
         print("clicked")
+        self.p_box.ini_timer()
         self.p_box.show()
 
 
