@@ -1,6 +1,5 @@
 import sys, os, platform
 
-
 try:
     from PySide6.QtWebEngineWidgets import QWebEngineView
     from PySide6.QtWebEngineCore import QWebEngineSettings
@@ -37,8 +36,8 @@ class Form(QObject):
     def clicked(self):
         print("clicked")
         self.html_view.load(QUrl("http://google.com"))
-        #self.html_view.load(QUrl("http://localhost:3000"))
 
+        #self.html_view.load(QUrl("http://localhost:3000"))
         '''self.html_view.load(
             QUrl.fromLocalFile(
                 "/tmp/run_dui2_nodes/run4/dials.report.html"
