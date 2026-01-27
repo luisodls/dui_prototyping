@@ -30,15 +30,17 @@ class Progress_Box(QDialog):
         mainLayout.addWidget(Stop_Butn)
         self.setLayout(mainLayout)
         self.setWindowTitle("Loading")
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_me)
 
     def ini_timer(self):
         self.num_in_label = 0
-        timer = QTimer(self)
-        timer.timeout.connect(self.update_me)
-        timer.start(500)
+        self.timer.start(500)
 
     def stop_me(self):
         print("time to stop")
+        self.timer.stop()
+        self.close()
 
     def update_me(self):
         self.num_in_label += 5
