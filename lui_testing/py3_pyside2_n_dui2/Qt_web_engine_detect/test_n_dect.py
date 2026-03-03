@@ -24,12 +24,19 @@ def is_webengine_functional():
 
     if not os.path.exists(full_path):
         # Path might be different in virtualenvs or bundled apps
-        # fallback check in standard PySide2/PySide6 path
+        # fallback check in standard QtWebEngineWidgets path
 
+        stable_4_now = '''
         #import PySide2
         import PySide6
         #full_path = os.path.join(os.path.dirname(PySide2.__file__), "Qt", "bin", filename)
         full_path = os.path.join(os.path.dirname(PySide6.__file__), "Qt", "bin", filename)
+        '''
+
+        #testing simplification
+        full_path = os.path.join(
+            os.path.dirname(QtWebEngineWidgets.__file__), "Qt", "bin", filename
+        )
 
     if not os.path.exists(full_path):
         print("Here fail #2")
@@ -40,10 +47,10 @@ def is_webengine_functional():
 
 # --- MAIN LOGIC ---
 if is_webengine_functional():
-    print("Environment healthy. Launching Full Mode...")
+    print("Environment healthy. viewer Full Mode...")
     # use the embedded report viewer
 
 else:
-    print("QtWebEngine is polluted or missing. Launching Shoul use system web browser...")
+    print("QtWebEngine is polluted or missing. Should use system web browser...")
     # Launch Fallback mode
 
