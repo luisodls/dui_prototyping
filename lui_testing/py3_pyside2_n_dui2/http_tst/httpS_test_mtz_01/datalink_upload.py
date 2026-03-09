@@ -35,6 +35,7 @@ try:
     if response.status_code == 200:
         print("Upload Successful!")
         print(response.json())
+
     else:
         print(f"Upload failed with status code: {response.status_code}")
         print(response.text)
