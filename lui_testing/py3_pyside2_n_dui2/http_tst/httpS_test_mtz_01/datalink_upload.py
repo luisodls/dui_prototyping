@@ -40,6 +40,12 @@ try:
         print(f"Upload failed with status code: {response.status_code}")
         print(response.text)
 
+except ConnectionRefusedError:
+    print("Connection Refused Err Catch")
+
+except requests.exceptions.ConnectionError:
+    print("Connection Err Catch")
+
 finally:
     # Ensure the file is closed
     files['file'][1].close()
