@@ -1,14 +1,13 @@
 import requests
 
 # Variables
-oroginal_example = '''
+original_example = '''
 base_url = "https://data.cloud.ccp4.ac.uk/api" # Replace with actual API base URL
 user = "example_user"
 source_id = "upload"
 data_id = "my_dataset_01"  # The {id} for this specific data entry
 
 # Construct the endpoint URL
-
 url = f"{base_url}/data/{user}/{source_id}/{data_id}/upload"
 '''
 url = 'http://localhost:8080/'
@@ -18,7 +17,6 @@ cloudrun_id = "XXXX-XXXX-XXXX-XXXX"
 headers = {
     "cloudrun_id": cloudrun_id
 }
-
 # Define the files to upload
 # Format: 'file': ('filename', file_object)
 '''files = {

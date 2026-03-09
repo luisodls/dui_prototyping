@@ -1,7 +1,5 @@
 import http.server
 import socketserver
-from urllib.parse import urlparse, parse_qs
-import time, subprocess, json
 from json import dumps
 
 class ReqHandler(http.server.BaseHTTPRequestHandler):
@@ -17,7 +15,6 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
         )
 
     def send_ok_dict(self):
-        '''used by both, GET or POST,'''
         response = {}
         response["status"] = "OK"
         self.wfile.write(bytes(dumps(response), "utf8"))
@@ -25,7 +22,7 @@ class ReqHandler(http.server.BaseHTTPRequestHandler):
     def do_POST(self):
         print("do_POST")
         self.send_response(200)
-        #self._send_cors_headers()
+        self._send_cors_headers()
         self.send_header("Content-Type", "application/json")
         self.end_headers()
         content_len = int(self.headers.get('Content-Length'))
