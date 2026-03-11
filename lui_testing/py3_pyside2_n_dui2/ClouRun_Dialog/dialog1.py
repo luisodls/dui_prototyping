@@ -38,6 +38,26 @@ class Client(QDialog):
         user_layout.addWidget(self.user_txt)
         mainLayout.addLayout(user_layout)
 
+        id_layout = QHBoxLayout()
+        id_layout.addWidget(QLabel("CLOUDRUN_ID:"))
+        self.id_txt = QLineEdit()
+        self.id_txt.textChanged.connect(self.line_changed)
+        id_layout.addWidget(self.id_txt)
+        mainLayout.addLayout(id_layout)
+
+        project_layout = QHBoxLayout()
+        project_layout.addWidget(QLabel("PROJECT:"))
+        self.project_txt = QLineEdit()
+        self.project_txt.textChanged.connect(self.line_changed)
+        project_layout.addWidget(self.project_txt)
+        mainLayout.addLayout(project_layout)
+
+        title_layout = QHBoxLayout()
+        title_layout.addWidget(QLabel("TITLE:"))
+        self.title_txt = QLineEdit()
+        self.title_txt.textChanged.connect(self.line_changed)
+        title_layout.addWidget(self.title_txt)
+        mainLayout.addLayout(title_layout)
 
         send2serverButton = QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
@@ -47,6 +67,25 @@ class Client(QDialog):
     def line_changed(self):
         self.data_out["url"] = str(self.url_txt.text())
         self.data_out["user"] = str(self.user_txt.text())
+
+        tmp_id_str = str(self.id_txt.text())
+
+        for pos_minus in [4, 9, 14]:
+            if len(tmp_id_str) >= pos_minus + 1:
+                if tmp_id_str[pos_minus] != "-":
+                    tmp_id_str = tmp_id_str[:pos_minus] + "-" + tmp_id_str[pos_minus:]
+
+                self.id_txt.setText(tmp_id_str)
+
+            if len(tmp_id_str) >= pos_minus + 2:
+                if tmp_id_str[pos_minus:pos_minus + 2] == "--":
+                    tmp_id_str = tmp_id_str[:pos_minus] + "-" + tmp_id_str[pos_minus + 2:]
+
+        self.id_txt.setText(tmp_id_str)
+
+        self.data_out["id"] = tmp_id_str
+        self.data_out["project"] = str(self.project_txt.text())
+        self.data_out["title"] = str(self.title_txt.text())
 
     def request_launch(self):
         print("data_out =", self.data_out)
