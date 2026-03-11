@@ -17,9 +17,9 @@ else:
     print("neither Linux or Windows")
 
 
-class Client(QDialog):
+class UploadDialog(QDialog):
     def __init__(self, parent=None):
-        super(Client, self).__init__(parent)
+        super(UploadDialog, self).__init__(parent)
         mainLayout = QVBoxLayout()
 
         self.data_out = {}
@@ -58,16 +58,14 @@ class Client(QDialog):
         self.title_txt.textChanged.connect(self.line_changed)
         title_layout.addWidget(self.title_txt)
         mainLayout.addLayout(title_layout)
-
         mainLayout.addWidget(
             QLabel(
                 "______________________________________________________________"
             )
         )
-
-        send2serverButton = QPushButton("Launch command")
-        send2serverButton.clicked.connect(self.request_launch)
-        mainLayout.addWidget(send2serverButton)
+        LaunchButton = QPushButton("Launch command")
+        LaunchButton.clicked.connect(self.request_launch)
+        mainLayout.addWidget(LaunchButton)
         self.setLayout(mainLayout)
 
     def line_changed(self):
@@ -99,9 +97,9 @@ class Client(QDialog):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    client = Client()
-    client.show()
-    sys.exit(client.exec_())
+    gui_tst = UploadDialog()
+    gui_tst.show()
+    sys.exit(gui_tst.exec_())
 
 guide = '''
 URL         https://cloud.ccp4.ac.uk
