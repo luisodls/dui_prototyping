@@ -14,7 +14,7 @@ elif platform.system() == "Linux":
     os.environ["WAYLAND_DISPLAY"] = ""
 
 else:
-    print("nether Linux or Windows")
+    print("neither Linux or Windows")
 
 
 class Client(QDialog):
@@ -58,6 +58,12 @@ class Client(QDialog):
         self.title_txt.textChanged.connect(self.line_changed)
         title_layout.addWidget(self.title_txt)
         mainLayout.addLayout(title_layout)
+
+        mainLayout.addWidget(
+            QLabel(
+                "______________________________________________________________"
+            )
+        )
 
         send2serverButton = QPushButton("Launch command")
         send2serverButton.clicked.connect(self.request_launch)
