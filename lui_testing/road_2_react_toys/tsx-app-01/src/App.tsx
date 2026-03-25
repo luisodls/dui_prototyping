@@ -18,14 +18,13 @@ function App() {
       <div>
         <h1>My App #1</h1>
         <button
-
-          onClick={() => setCount(count + 1)}>
-          Clicked {count} times
+          className="counter"
+          onClick={() => setCount((count) => count + 1)}
+        >
+        Count is {count}
         </button>
-
       </div>
     </section>
-
   )
 }
 
