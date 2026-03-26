@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import './App.css'
 
+const ext_var = 'times'
+
 function App() {
   const [count1, setCount1] = useState(0)
   const [count2, setCount2] = useState(0)
@@ -24,7 +26,7 @@ function App() {
 
           onClick={() => setCount2((count2) => count2 + 1)}
         >
-        Count is {count2}
+        Clicked {count2} {ext_var}
         </button>
 
         </div>
