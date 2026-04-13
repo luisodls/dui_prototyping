@@ -1,6 +1,5 @@
 import sys
 
-
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
     log_file = open(path_in, 'r', encoding="utf-8")
@@ -34,6 +33,7 @@ def main():
 
     for command in lst_cmd:
         print(command)
+
 
 if __name__ == "__main__":
     main()
