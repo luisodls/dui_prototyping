@@ -1,5 +1,6 @@
 import sys
 
+
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
     log_file = open(path_in, 'r', encoding="utf-8")
