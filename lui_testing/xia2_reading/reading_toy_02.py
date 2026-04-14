@@ -13,18 +13,54 @@ def get_list_of_commands(path_in):
             print("<<", new_cmd_str, ">> \n")
             per_line_cmd_lst = new_cmd_str.split(" ")
 
-            par_lst = []
+            exe_cmd = per_line_cmd_lst[0]
+
+            full_cmd_lst = []
             for inner_cmd in per_line_cmd_lst:
-                if inner_cmd == '':
-                    per_line_cmd_lst.remove(inner_cmd)
+                if inner_cmd == "":
+                    pass
 
-                elif inner_cmd[-1] == "'":
-                    par_lst.append(inner_cmd[1:-1])
+                elif inner_cmd[0] == "'":
+                    full_cmd_lst.append(inner_cmd[1:-1])
 
-            print("per_line_cmd_lst(after) =", per_line_cmd_lst, "\n")
+                else:
+                    full_cmd_lst.append(inner_cmd)
+
+            conect_for_next_lst = []
+            connect_from_prev_lst = []
+            for single_par in full_cmd_lst:
+                if "input" in single_par:
+                    connect_from_prev_lst.append(single_par)
+
+                if "output" in single_par:
+                    conect_for_next_lst.append(single_par)
+
+            for single_par in full_cmd_lst:
+                if single_par[-5:] == ".refl" and (
+                    single_par not in connect_from_prev_lst
+                ) and (
+                    single_par not in conect_for_next_lst
+                ):
+                    connect_from_prev_lst.append(single_par)
+
+                if single_par[-5:] == ".expt" and (
+                    single_par not in connect_from_prev_lst
+                ) and (
+                    single_par not in conect_for_next_lst
+                ):
+                    connect_from_prev_lst.append(single_par)
+
+            print("connect_from_prev_lst =", connect_from_prev_lst, "\n")
+            print("conect_for_next_lst =", conect_for_next_lst, "\n")
+
+            print("full_cmd_lst =", full_cmd_lst, "\n")
+
+            #print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
             cmd_dict = {
-                'exe_cmd'       :per_line_cmd_lst[0],
-                'par_lst'   :par_lst
+                'exe_cmd'           :exe_cmd,
+                'full_cmd_lst'      :full_cmd_lst,
+                'connect_from_prev_lst' :connect_from_prev_lst,
+                'conect_for_next_lst' :conect_for_next_lst,
             }
             if len(cmd_dict['exe_cmd']) > 6:
                 if cmd_dict['exe_cmd'][0:6] == "dials.":
@@ -43,11 +79,14 @@ def get_list_of_commands(path_in):
 
 def main():
     try:
-        lst_cmd = get_list_of_commands(sys.argv[1])
+        arg_in = sys.argv[1]
 
     except IndexError:
         print("Enter path of file to read")
         lst_cmd = []
+
+    else:
+        lst_cmd = get_list_of_commands(arg_in)
 
     for command in lst_cmd:
         print(command)
