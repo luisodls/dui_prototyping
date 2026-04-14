@@ -13,12 +13,30 @@ def get_list_of_commands(path_in):
             print("<<", new_cmd_str, ">> \n")
             per_line_cmd_lst = new_cmd_str.split(" ")
 
+            par_lst = []
             for inner_cmd in per_line_cmd_lst:
                 if inner_cmd == '':
                     per_line_cmd_lst.remove(inner_cmd)
 
+                elif inner_cmd[-1] == "'":
+                    par_lst.append(inner_cmd[1:-1])
+
             print("per_line_cmd_lst(after) =", per_line_cmd_lst, "\n")
-            list_of_commands.append(per_line_cmd_lst)
+            cmd_dict = {
+                'exe_cmd'       :per_line_cmd_lst[0],
+                'par_lst'   :par_lst
+            }
+            if len(cmd_dict['exe_cmd']) > 6:
+                if cmd_dict['exe_cmd'][0:6] == "dials.":
+                    cmd_dict['dials_cmd'] = cmd_dict['exe_cmd'][6:]
+
+                else:
+                    cmd_dict['dials_cmd'] = False
+
+            else:
+                cmd_dict['dials_cmd'] = False
+
+            list_of_commands.append(cmd_dict)
 
     return list_of_commands
 
