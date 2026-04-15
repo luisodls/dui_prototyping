@@ -13,7 +13,6 @@ def get_list_of_commands(path_in):
             print("<<", new_cmd_str, ">> \n")
             per_line_cmd_lst = new_cmd_str.split(" ")
 
-            exe_cmd = per_line_cmd_lst[0]
 
             full_cmd_lst = []
             for inner_cmd in per_line_cmd_lst:
@@ -24,6 +23,7 @@ def get_list_of_commands(path_in):
                     full_cmd_lst.append(inner_cmd[1:-1])
 
                 else:
+                    exe_cmd = inner_cmd
                     full_cmd_lst.append(inner_cmd)
 
             conect_for_next_lst = []
@@ -55,7 +55,6 @@ def get_list_of_commands(path_in):
 
             print("full_cmd_lst =", full_cmd_lst, "\n")
 
-            #print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
             cmd_dict = {
                 'exe_cmd'           :exe_cmd,
                 'full_cmd_lst'      :full_cmd_lst,
@@ -89,7 +88,7 @@ def main():
         lst_cmd = get_list_of_commands(arg_in)
 
     for command in lst_cmd:
-        print(command)
+        print(command, "\n")
 
 
 if __name__ == "__main__":
