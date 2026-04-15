@@ -49,6 +49,15 @@ def get_list_of_commands(path_in):
                     single_par not in conect_for_next_lst
                 ):
                     connect_from_prev_lst.append(single_par)
+            tuning_params_lst = []
+            for single_par in full_cmd_lst:
+                if(
+                    (single_par not in exe_cmd) and
+                    (single_par not in connect_from_prev_lst) and
+                    (single_par not in conect_for_next_lst)
+                ):
+                    tuning_params_lst.append(single_par)
+
 
             print("connect_from_prev_lst =", connect_from_prev_lst, "\n")
             print("conect_for_next_lst =", conect_for_next_lst, "\n")
@@ -56,10 +65,11 @@ def get_list_of_commands(path_in):
             print("full_cmd_lst =", full_cmd_lst, "\n")
 
             cmd_dict = {
-                'exe_cmd'           :exe_cmd,
-                'full_cmd_lst'      :full_cmd_lst,
-                'connect_from_prev_lst' :connect_from_prev_lst,
-                'conect_for_next_lst' :conect_for_next_lst,
+                'full_cmd_lst'              :full_cmd_lst,
+                'exe_cmd'                   :exe_cmd,
+                'connect_from_prev_lst'     :connect_from_prev_lst,
+                'conect_for_next_lst'       :conect_for_next_lst,
+                'tuning_params_lst'              :tuning_params_lst,
             }
             if len(cmd_dict['exe_cmd']) > 6:
                 if cmd_dict['exe_cmd'][0:6] == "dials.":
