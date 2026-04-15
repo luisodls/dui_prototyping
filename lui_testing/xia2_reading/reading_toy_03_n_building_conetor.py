@@ -97,8 +97,8 @@ def main():
     else:
         lst_cmd = get_list_of_commands(arg_in)
 
-    for command in lst_cmd:
-        print(command, "\n")
+    for pos_num, command in enumerate(lst_cmd):
+        print("\n num =", pos_num, "\n", command, "\n")
 
 
 if __name__ == "__main__":
