@@ -1,4 +1,15 @@
-import sys
+import sys, os
+
+def reversed_find_str(str_in = None, lst_sep_lst = ["=", os.sep]):
+    final_str = str_in
+    for pos, single_char in enumerate(reversed(str_in)):
+        for char in lst_sep_lst:
+            if single_char == char:
+                final_str = str_in[-pos:]
+                return final_str
+
+    return final_str
+
 
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
@@ -17,7 +28,7 @@ def get_list_of_commands(path_in):
             exe_cmd = new_cmd_str[0:divide_pos]
             print("exe_cmd =", exe_cmd)
             per_line_cmd_lst = new_cmd_str[divide_pos + 1:-1].split("' '")
-            print("per_line_cmd_lst =", per_line_cmd_lst)
+            print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
 
             full_cmd_lst = [exe_cmd]
 
@@ -58,6 +69,35 @@ def get_list_of_commands(path_in):
                 ):
                     connect_from_prev_lst.append(single_par)
 
+            expt_from_prev_lst = []
+            refl_from_prev_lst = []
+            another_from_prev_lst = []
+            for par in connect_from_prev_lst:
+                par = reversed_find_str(str_in = par)
+
+                if par[-5:] == ".refl":
+                    refl_from_prev_lst.append(par)
+
+                elif par[-5:] == ".expt":
+                    expt_from_prev_lst.append(par)
+
+                else:
+                    another_from_prev_lst.append(par)
+
+            expt_for_next_lst = []
+            refl_for_next_lst = []
+            another_for_next_lst = []
+            for par in connect_for_next_lst:
+                par = reversed_find_str(str_in = par)
+                if par[-5:] == ".refl":
+                    refl_for_next_lst.append(par)
+
+                elif par[-5:] == ".expt":
+                    expt_for_next_lst.append(par)
+
+                else:
+                    another_for_next_lst.append(par)
+
             tuning_params_lst = []
             for single_par in full_cmd_lst:
                 if(
@@ -67,19 +107,28 @@ def get_list_of_commands(path_in):
                 ):
                     tuning_params_lst.append(single_par)
 
-            print("connect_from_prev_lst =", connect_from_prev_lst, "\n")
-            print("connect_for_next_lst =", connect_for_next_lst, "\n")
-            print("full_cmd_lst =", full_cmd_lst, "\n")
+            #print("full_cmd_lst =", full_cmd_lst, "\n")
 
             cmd_dict = {
                 'full_cmd_lst'              :full_cmd_lst,
                 'exe_cmd'                   :exe_cmd,
-                'connect_from_prev_lst'     :connect_from_prev_lst,
-                'connect_for_next_lst'      :connect_for_next_lst,
+                'expt_from_prev_lst'        :expt_from_prev_lst,
+                'refl_from_prev_lst'        :refl_from_prev_lst,
+                'another_from_prev_lst'     :another_from_prev_lst,
+                'expt_for_next_lst'         :expt_for_next_lst,
+                'refl_for_next_lst'         :refl_for_next_lst,
+                'another_for_next_lst'      :another_for_next_lst,
                 'tuning_params_lst'         :tuning_params_lst,
             }
 
             list_of_commands.append(cmd_dict)
+    for cur_num, command_dict in enumerate(reversed(list_of_commands)):
+        for prev_num, prev_com in enumerate(reversed(list_of_commands[0:cur_num - 1])):
+            if command_dict['expt_from_prev_lst'] == prev_com['expt_for_next_lst']:
+                print("connecting:" , prev_num, " with ", cur_num)
+
+            if command_dict['refl_from_prev_lst'] == prev_com['refl_for_next_lst']:
+                print("connecting:" , prev_num, " with ", cur_num)
 
     return list_of_commands
 
@@ -95,10 +144,10 @@ def main():
     else:
         lst_cmd = get_list_of_commands(arg_in)
 
-    #off_for_now = '''
+    off_for_now = '''
     for pos_num, command in enumerate(lst_cmd):
         print("\n num =", pos_num, "\n", command, "\n")
-    #'''
+    '''
 
     tmp_off = '''
     for pos_num, command in enumerate(lst_cmd):
