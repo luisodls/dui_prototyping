@@ -1,4 +1,4 @@
-import sys, os
+import sys, os, json
 
 def reversed_find_str(str_in = None, lst_sep_lst = ["=", os.sep]):
     final_str = str_in
@@ -167,6 +167,43 @@ def get_list_of_commands(path_in):
 
 
     return list_of_commands
+
+
+def write_json_with_data(dat_list_in):
+
+    #starting from a copy/pasted piece of Dui2 (multi_node module)
+    lst_nod = []
+    for uni in self.step_list:
+        node = {
+            "_base_dir"             :uni._base_dir,
+            "cmd_dict_ini"          :uni.cmd_dict_ini,
+            "full_cmd_lst"          :uni.full_cmd_lst,
+            "lst2run"               :uni.lst2run,
+            "_lst_expt_in"          :uni._lst_expt_in,
+            "_lst_refl_in"          :uni._lst_refl_in,
+            "_lst_expt_out"         :uni._lst_expt_out,
+            "_lst_refl_out"         :uni._lst_refl_out,
+            "_run_dir"              :uni._run_dir,
+            "_html_rep"             :uni._html_rep,
+            "_predic_refl"          :uni._predic_refl,
+            "log_file_path"         :uni.log_file_path,
+            "number"                :uni.number,
+            "parent_node_lst"       :uni.parent_node_lst,
+            "child_node_lst"        :uni.child_node_lst,
+            "status"                :uni.status
+        }
+        lst_nod.append(node)
+
+    all_dat = {
+            "step_list"             :lst_nod,
+            "bigger_lin"            :self.bigger_lin,
+    }
+
+    with open("run_data", "w") as fp:
+        json.dump(all_dat, fp, indent=4)
+
+
+
 
 
 def main():
