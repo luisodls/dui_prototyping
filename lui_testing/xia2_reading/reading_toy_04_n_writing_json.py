@@ -137,6 +137,9 @@ def get_list_of_commands(path_in):
                 curr_dict['another_from_prev_lst'] ==
                 prev_dict['another_for_next_lst'] != []
             ):
+                #TODO: have a look at the repeated use of the same integrated
+                #TODO: sweep on a multi sweep dataset
+
                 curr_dict['parent_pos_lst'].append(prev_dict['curr_poss'])
                 prev_dict['chidren_pos_lst'].append(curr_dict['curr_poss'])
                 print(
