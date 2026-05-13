@@ -17,18 +17,19 @@ def get_list_of_commands(path_in):
     lines_str = log_file.readlines()
     log_file.close()
     list_of_commands = []
+    curr_poss = 0
     for position, single_line in enumerate(lines_str):
         if single_line[0:15] == "# command line:":
             print("\n")
             new_cmd_str = lines_str[position + 1][1:-1]
-            print("<<", new_cmd_str, ">> \n")
+            #print("<<", new_cmd_str, ">> \n")
 
             divide_pos = new_cmd_str.find("'")
 
             exe_cmd = new_cmd_str[0:divide_pos]
-            print("exe_cmd =", exe_cmd)
+            #print("exe_cmd =", exe_cmd)
             per_line_cmd_lst = new_cmd_str[divide_pos + 1:-1].split("' '")
-            print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
+            #print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
 
             full_cmd_lst = [exe_cmd]
 
@@ -39,10 +40,10 @@ def get_list_of_commands(path_in):
                 elif inner_cmd not in full_cmd_lst:
                     full_cmd_lst.append(inner_cmd)
 
-            print("full_cmd_lst = ", full_cmd_lst)
+            #print("full_cmd_lst = ", full_cmd_lst)
 
             if exe_cmd == 'dials.report':
-                print('exe_cmd = dials.report')
+                #print('exe_cmd = dials.report')
                 continue
 
             connect_for_next_lst = []
@@ -107,7 +108,7 @@ def get_list_of_commands(path_in):
                 ):
                     tuning_params_lst.append(single_par)
 
-            #print("full_cmd_lst =", full_cmd_lst, "\n")
+            print("full_cmd_lst", curr_poss, " = ", full_cmd_lst, "\n")
 
             cmd_dict = {
                 'full_cmd_lst'              :full_cmd_lst,
@@ -119,16 +120,56 @@ def get_list_of_commands(path_in):
                 'refl_for_next_lst'         :refl_for_next_lst,
                 'another_for_next_lst'      :another_for_next_lst,
                 'tuning_params_lst'         :tuning_params_lst,
+                'parent_pos_lst'            :[],
+                'chidren_pos_lst'           :[],
+                'curr_poss'                 :curr_poss,
             }
-
+            curr_poss += 1
             list_of_commands.append(cmd_dict)
-    for cur_num, command_dict in enumerate(reversed(list_of_commands)):
-        for prev_num, prev_com in enumerate(reversed(list_of_commands[0:cur_num - 1])):
-            if command_dict['expt_from_prev_lst'] == prev_com['expt_for_next_lst']:
-                print("connecting:" , prev_num, " with ", cur_num)
 
-            if command_dict['refl_from_prev_lst'] == prev_com['refl_for_next_lst']:
-                print("connecting:" , prev_num, " with ", cur_num)
+    print("\n", "=" * 90)
+
+    for cur_num, curr_dict in enumerate(list_of_commands):
+        for prev_dict in list_of_commands[0:cur_num]:
+            #print("comparing:", curr_dict['curr_poss'], " with ", prev_dict['curr_poss'])
+            if(
+                curr_dict['expt_from_prev_lst'] ==
+                prev_dict['expt_for_next_lst'] != []
+                or
+                curr_dict['refl_from_prev_lst'] ==
+                prev_dict['refl_for_next_lst'] != []
+                or
+                curr_dict['another_from_prev_lst'] ==
+                prev_dict['another_for_next_lst'] != []
+            ):
+                curr_dict['parent_pos_lst'].append(prev_dict['curr_poss'])
+                prev_dict['chidren_pos_lst'].append(curr_dict['curr_poss'])
+                print(
+                    "connecting: ", prev_dict['curr_poss'],
+                    " with ", curr_dict['curr_poss']
+                )
+
+    print("\n", "=" * 90)
+
+    for cmd_dict in list_of_commands:
+        if cmd_dict['parent_pos_lst'] != []:
+            for parent_cmd in list_of_commands:
+                if parent_cmd['curr_poss'] in cmd_dict['parent_pos_lst']:
+                    print(
+                        "\n", parent_cmd['full_cmd_lst'], "\nconnects to:\n",
+                        cmd_dict['full_cmd_lst'], "\n"
+                    )
+
+    print("\n", "+" * 90)
+
+    for cmd_dict in list_of_commands:
+        for child_cmd in list_of_commands:
+            if child_cmd['curr_poss'] in cmd_dict['chidren_pos_lst']:
+                print(
+                    "\n", cmd_dict['full_cmd_lst'], "\nconnects to:\n",
+                    child_cmd['full_cmd_lst'], "\n"
+                )
+
 
     return list_of_commands
 
