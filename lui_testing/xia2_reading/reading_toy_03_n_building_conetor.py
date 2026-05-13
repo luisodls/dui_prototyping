@@ -22,14 +22,11 @@ def get_list_of_commands(path_in):
         if single_line[0:15] == "# command line:":
             print("\n")
             new_cmd_str = lines_str[position + 1][1:-1]
-            #print("<<", new_cmd_str, ">> \n")
 
             divide_pos = new_cmd_str.find("'")
 
             exe_cmd = new_cmd_str[0:divide_pos]
-            #print("exe_cmd =", exe_cmd)
             per_line_cmd_lst = new_cmd_str[divide_pos + 1:-1].split("' '")
-            #print("per_line_cmd_lst =", per_line_cmd_lst, "\n")
 
             full_cmd_lst = [exe_cmd]
 
@@ -40,10 +37,8 @@ def get_list_of_commands(path_in):
                 elif inner_cmd not in full_cmd_lst:
                     full_cmd_lst.append(inner_cmd)
 
-            #print("full_cmd_lst = ", full_cmd_lst)
-
             if exe_cmd == 'dials.report':
-                #print('exe_cmd = dials.report')
+                #TODO: have a look if some command escapes this
                 continue
 
             connect_for_next_lst = []
