@@ -13,13 +13,12 @@ def reversed_find_str(str_in = None, lst_sep_lst = ["=", os.sep]):
 
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
-    log_file = open(path_in, 'r', encoding="utf-8")
-    lines_str = log_file.readlines()
-    log_file.close()
+    with open(path_in, 'r', encoding="utf-8") as log_file:
+        lines_str = log_file.readlines()
     list_of_commands = []
-    curr_poss = 0
+    curr_idx = 0
     for position, single_line in enumerate(lines_str):
-        if single_line[0:15] == "# command line:":
+        if single_line.startswith("# command line:"):
             print("\n")
             new_cmd_str = lines_str[position + 1][1:-1]
 
@@ -51,14 +50,14 @@ def get_list_of_commands(path_in):
                     connect_for_next_lst.append(single_par)
 
             for single_par in full_cmd_lst:
-                if single_par[-5:] == ".refl" and (
+                if single_par.endswith(".refl") and (
                     single_par not in connect_from_prev_lst
                 ) and (
                     single_par not in connect_for_next_lst
                 ):
                     connect_from_prev_lst.append(single_par)
 
-                if single_par[-5:] == ".expt" and (
+                if single_par.endswith(".expt") and (
                     single_par not in connect_from_prev_lst
                 ) and (
                     single_par not in connect_for_next_lst
@@ -71,10 +70,10 @@ def get_list_of_commands(path_in):
             for par in connect_from_prev_lst:
                 par = reversed_find_str(str_in = par)
 
-                if par[-5:] == ".refl":
+                if par.endswith(".refl"):
                     refl_from_prev_lst.append(par)
 
-                elif par[-5:] == ".expt":
+                elif par.endswith(".expt"):
                     expt_from_prev_lst.append(par)
 
                 else:
@@ -85,10 +84,10 @@ def get_list_of_commands(path_in):
             another_for_next_lst = []
             for par in connect_for_next_lst:
                 par = reversed_find_str(str_in = par)
-                if par[-5:] == ".refl":
+                if par.endswith(".refl"):
                     refl_for_next_lst.append(par)
 
-                elif par[-5:] == ".expt":
+                elif par.endswith(".expt"):
                     expt_for_next_lst.append(par)
 
                 else:
@@ -103,7 +102,7 @@ def get_list_of_commands(path_in):
                 ):
                     tuning_params_lst.append(single_par)
 
-            print("full_cmd_lst", curr_poss, " = ", full_cmd_lst, "\n")
+            print("full_cmd_lst", curr_idx, " = ", full_cmd_lst, "\n")
 
             cmd_dict = {
                 'full_cmd_lst'              :full_cmd_lst,
@@ -117,16 +116,15 @@ def get_list_of_commands(path_in):
                 'tuning_params_lst'         :tuning_params_lst,
                 'parent_pos_lst'            :[],
                 'chidren_pos_lst'           :[],
-                'curr_poss'                 :curr_poss,
+                'curr_idx'                 :curr_idx,
             }
-            curr_poss += 1
+            curr_idx += 1
             list_of_commands.append(cmd_dict)
 
     print("\n", "=" * 90)
 
     for cur_num, curr_dict in enumerate(list_of_commands):
         for prev_dict in list_of_commands[0:cur_num]:
-            #print("comparing:", curr_dict['curr_poss'], " with ", prev_dict['curr_poss'])
             if(
                 curr_dict['expt_from_prev_lst'] ==
                 prev_dict['expt_for_next_lst'] != []
@@ -140,11 +138,11 @@ def get_list_of_commands(path_in):
                 #TODO: have a look at the repeated use of the same integrated
                 #TODO: sweep on a multi sweep dataset
 
-                curr_dict['parent_pos_lst'].append(prev_dict['curr_poss'])
-                prev_dict['chidren_pos_lst'].append(curr_dict['curr_poss'])
+                curr_dict['parent_pos_lst'].append(prev_dict['curr_idx'])
+                prev_dict['chidren_pos_lst'].append(curr_dict['curr_idx'])
                 print(
-                    "connecting: ", prev_dict['curr_poss'],
-                    " with ", curr_dict['curr_poss']
+                    "connecting: ", prev_dict['curr_idx'],
+                    " with ", curr_dict['curr_idx']
                 )
 
     print("\n", "=" * 90)
@@ -152,7 +150,7 @@ def get_list_of_commands(path_in):
     for cmd_dict in list_of_commands:
         if cmd_dict['parent_pos_lst'] != []:
             for parent_cmd in list_of_commands:
-                if parent_cmd['curr_poss'] in cmd_dict['parent_pos_lst']:
+                if parent_cmd['curr_idx'] in cmd_dict['parent_pos_lst']:
                     print(
                         "\n", parent_cmd['full_cmd_lst'], "\nconnects to:\n",
                         cmd_dict['full_cmd_lst'], "\n"
@@ -162,7 +160,7 @@ def get_list_of_commands(path_in):
 
     for cmd_dict in list_of_commands:
         for child_cmd in list_of_commands:
-            if child_cmd['curr_poss'] in cmd_dict['chidren_pos_lst']:
+            if child_cmd['curr_idx'] in cmd_dict['chidren_pos_lst']:
                 print(
                     "\n", cmd_dict['full_cmd_lst'], "\nconnects to:\n",
                     child_cmd['full_cmd_lst'], "\n"
