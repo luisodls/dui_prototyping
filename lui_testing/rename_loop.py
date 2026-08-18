@@ -8,7 +8,6 @@ for file_name in lst_files[0:-2]:
         mid_side = "0" * (3 - len(mid_side)) + mid_side
 
     right_side = file_name[12:]
-
     new_file_name = left_side + mid_side + right_side
 
     #print( file_name, " to convert to ", new_file_name)
