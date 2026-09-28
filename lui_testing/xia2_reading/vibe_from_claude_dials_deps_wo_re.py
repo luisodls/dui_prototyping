@@ -7,50 +7,132 @@ Each entry's command line is parsed; arguments that name output files
 Any argument of a later command whose basename matches a produced file is
 treated as an input coming from that producer.
 
+This version uses only plain string handling (no `shlex`, no `re`).
+
 Usage:
-
-    cd /path/to/where/I/want/to/run/xia2
-
-    source '/path/to/ccp4-9/bin/ccp4.setup-sh'
-    source /path/to/Dials-3.30.1/dials
-
-    xia2 --integrate --timing ~/path/to/images/dir/
-
-    #optional
-    find . -type f -name "*.json"
-
-    dials.python /path/to/this/file...py [xia2-timing.json] [--dot deps.dot]
+    dials.python dials_deps.py [timing_data.json] [--dot deps.dot]
 """
 
 import argparse
 import json
 import os
-import re
-import shlex
 
-# Parameter names (the part before "=") that denote files written by the command
-OUTPUT_KEY = re.compile(r"(^|\.)(output|hklout|json)(\.|$)|hklout$|^output\.")
+# Components of a parameter name (the part before "=") that mark it as a
+# file written by the command, e.g. output.experiments, mtz.hklout, json=
+OUTPUT_KEY_PARTS = {"output", "hklout", "json"}
 
 # Positional keyword pairs used by CCP4-style programs, e.g. freerflag
 POSITIONAL_IN = {"hklin", "xyzin"}
 POSITIONAL_OUT = {"hklout", "xyzout"}
 
-# Files written under default names that never appear as output arguments.
-# Maps a regex on the input basename to the program that implicitly wrote it.
-IMPLICIT_OUTPUTS = [
-    (re.compile(r"^bravais_setting_\d+\.expt$"), "dials.refine_bravais_settings"),
-    (re.compile(r"^bravais_summary\.json$"), "dials.refine_bravais_settings"),
-]
-
-FILE_EXT = re.compile(
-    r"\.(expt|refl|mtz|mmcif|cif|json|phil|mask|sca|p4p|html|log|bz2)$"
+FILE_EXTENSIONS = tuple(
+    "." + ext
+    for ext in (
+        "expt", "refl", "mtz", "mmcif", "cif", "json", "phil",
+        "mask", "sca", "p4p", "html", "log", "bz2",
+    )
 )
 
-print("FILE_EXT =", FILE_EXT)
+WHITESPACE = " \t\r\n"
+
+
+def split_command(cmd):
+    """Split a command line into tokens, POSIX-shell style.
+
+    Behaves like shlex.split(cmd): whitespace separates tokens, '...' is
+    taken literally, inside "..." a backslash only escapes " and \\, and
+    outside quotes a backslash escapes any following character.
+    """
+    tokens = []
+    token = []
+    in_token = False  # needed so that '' or "" still yields an empty token
+    i, n = 0, len(cmd)
+    while i < n:
+        c = cmd[i]
+        if c in WHITESPACE:
+            if in_token:
+                tokens.append("".join(token))
+                token = []
+                in_token = False
+            i += 1
+        elif c == "\\":
+            if i + 1 >= n:
+                raise ValueError("No escaped character")
+            token.append(cmd[i + 1])
+            in_token = True
+            i += 2
+        elif c == "'":
+            end = cmd.find("'", i + 1)
+            if end == -1:
+                raise ValueError("No closing quotation")
+            token.append(cmd[i + 1:end])
+            in_token = True
+            i = end + 1
+        elif c == '"':
+            in_token = True
+            i += 1
+            while True:
+                if i >= n:
+                    raise ValueError("No closing quotation")
+                c = cmd[i]
+                if c == '"':
+                    i += 1
+                    break
+                if c == "\\":
+                    if i + 1 >= n:
+                        raise ValueError("No escaped character")
+                    nxt = cmd[i + 1]
+                    if nxt in '"\\':
+                        token.append(nxt)
+                    else:
+                        token.append("\\" + nxt)
+                    i += 2
+                else:
+                    token.append(c)
+                    i += 1
+        else:
+            token.append(c)
+            in_token = True
+            i += 1
+    if in_token:
+        tokens.append("".join(token))
+    return tokens
+
+
+def is_output_key(key):
+    """True for keys like output.x, x.output.y, mtz.hklout, json, *hklout."""
+    if key.endswith("hklout"):
+        return True
+    return any(part in OUTPUT_KEY_PARTS for part in key.split("."))
+
+
+def is_bravais_setting(name):
+    """True for bravais_setting_<digits>.expt"""
+    prefix, suffix = "bravais_setting_", ".expt"
+    if not (name.startswith(prefix) and name.endswith(suffix)):
+        return False
+    return name[len(prefix):-len(suffix)].isdecimal()
+
+
+def is_bravais_summary(name):
+    return name == "bravais_summary.json"
+
+
+def has_file_extension(name):
+    return name.endswith(FILE_EXTENSIONS)
+
+
+# Files written under default names that never appear as output arguments.
+# Maps a test on the input basename to the program that implicitly wrote it.
+IMPLICIT_OUTPUTS = [
+    (is_bravais_setting, "dials.refine_bravais_settings"),
+    (is_bravais_summary, "dials.refine_bravais_settings"),
+]
+
 
 def parse_command(cmd):
     """Return (program, inputs, outputs) with basenames of the files."""
-    tokens = shlex.split(cmd)
+    tokens = split_command(cmd)
     program, args = tokens[0], tokens[1:]
     inputs, outputs = [], []
     i = 0
@@ -67,7 +149,7 @@ def parse_command(cmd):
             if " " in value or not value:
                 i += 1
                 continue
-            if OUTPUT_KEY.search(key):
+            if is_output_key(key):
                 # ignore non-file outputs such as output.project_name=AUTOMATIC
                 if "." in os.path.basename(value):
                     outputs.append(os.path.basename(value))
@@ -90,8 +172,8 @@ def build_graph(entries):
                 deps.append((producer_of[name], name))
                 continue
             implicit = None
-            for pattern, prog in IMPLICIT_OUTPUTS:
-                if pattern.match(name):
+            for matches, prog in IMPLICIT_OUTPUTS:
+                if matches(name):
                     # most recent earlier run of that program
                     for j in range(idx - 1, -1, -1):
                         if steps[j]["program"] == prog:
@@ -99,10 +181,7 @@ def build_graph(entries):
                             break
             if implicit is not None:
                 deps.append((implicit, name))
-            elif FILE_EXT.search(name):
-
-                print("\n name =", name, "\n")
-
+            elif has_file_extension(name):
                 deps.append((None, name))  # external / unknown origin
         steps.append(
             {
@@ -154,7 +233,7 @@ def write_dot(steps, path):
                     edges.setdefault((producer, s["index"]), set()).add(name)
         for (a, b), names in sorted(edges.items()):
             label = "\\n".join(sorted(names))
-            f.write('  n%d -> n%d [label="%s"];\n' % (a, b, label))
+            f.write('  n%d -> n%d [label="%s", fontsize=9];\n' % (a, b, label))
         f.write("}\n")
 
 
@@ -166,9 +245,6 @@ def main():
 
     with open(args.timing_file) as f:
         entries = json.load(f)
-
-    print("\n\n entries =", entries, "\n\n")
-
     steps = build_graph(entries)
     print_report(steps)
     if args.dot:
