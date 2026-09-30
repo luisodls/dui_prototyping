@@ -249,7 +249,7 @@ def get_list_of_commands(path_in):
 
     print("\n", "=" * 90)
 
-    for cmd_dict in list_of_commands:
+    tmp_off = '''for cmd_dict in list_of_commands:
         for parent_poss in cmd_dict['parent_pos_lst']:
             print(
                 "\n", list_of_commands[parent_poss]['full_cmd_lst'],
@@ -269,7 +269,7 @@ def get_list_of_commands(path_in):
             print(
                 "\n", cmd_dict['full_cmd_lst'], "\nconnects to:\n",
                 list_of_commands[child_poss]['full_cmd_lst'], "\n"
-            )
+            )'''
 
 
     return list_of_commands

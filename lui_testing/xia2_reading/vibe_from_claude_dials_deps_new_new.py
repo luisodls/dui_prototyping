@@ -252,6 +252,18 @@ def print_commands(list_of_commands):
                 cmd_dict['time_end'] - cmd_dict['time_start'],
             )
 
+
+        lst_par = []
+        for parent_poss in cmd_dict['parent_pos_lst']:
+            lst_par.append(cmd_dict['files_from_parent_dict'][parent_poss])
+
+        print(
+            "connecting: ", cmd_dict['curr_poss'], " with ",
+            cmd_dict['chidren_pos_lst'], "via", lst_par
+        )
+
+
+        '''
         print("\n[%d] %s%s" % (
             cmd_dict['curr_poss'], cmd_dict['exe_cmd'], timing_str
         ))
@@ -274,6 +286,23 @@ def print_commands(list_of_commands):
 
         if cmd_dict['chidren_pos_lst'] != []:
             print("      children: %s" % cmd_dict['chidren_pos_lst'])
+        '''
+
+
+
+
+
+        '''
+
+    for curr_dict in list_of_commands:
+        for parent_poss in curr_dict['parent_pos_lst']:
+            print(
+                "connecting: ", parent_poss, " with ", curr_dict['curr_poss'],
+                " via ", curr_dict['files_from_parent_dict'][parent_poss]
+            )
+
+
+        '''
 
 
 def main():
