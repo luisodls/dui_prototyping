@@ -280,7 +280,7 @@ def main():
         arg_in = sys.argv[1]
 
     except IndexError:
-        print("Enter path of file to read")
+        print("Enter path of file to read ... /xia2-debug.txt")
         lst_cmd = []
 
     else:
