@@ -180,8 +180,12 @@ def get_list_of_commands(path_in):
     json_file.close()
 
     list_of_commands = []
-    for curr_poss, entry in enumerate(entries_lst):
+    curr_poss = 0
+    for entry in entries_lst:
         exe_cmd, par_lst = split_cmd_line(entry["command"])
+        if exe_cmd == 'dials.report':
+            continue
+
         from_prev_lst, for_next_lst = classify_params(par_lst)
         cmd_dict = {
             'exe_cmd'                   :exe_cmd,
@@ -196,6 +200,7 @@ def get_list_of_commands(path_in):
             'time_end'                  :entry.get("time_end"),
             'curr_poss'                 :curr_poss,
         }
+        curr_poss += 1
         list_of_commands.append(cmd_dict)
 
     # file name -> position of the most recent command that wrote it
@@ -238,6 +243,36 @@ def get_list_of_commands(path_in):
     return list_of_commands
 
 
+def short_label(label):
+    # parameter values keep their name, files lose path and "key="
+    for key, exe_cmd_lst in PARAM_FROM_PROGRAM:
+        if label.startswith(key + "="):
+            return label
+
+    return reversed_find_str(str_in = label)
+
+
+def print_graph_table(list_of_commands):
+    # one row per connection, same format for every input file type
+    fmt_str = "%-5s %-30s %-5s %-30s %s"
+    print("\n", "=" * 90)
+    print(fmt_str % ("from", "parent", "to", "child", "via"))
+    print("-" * 90)
+    for cmd_dict in list_of_commands:
+        for parent_poss in sorted(cmd_dict['parent_pos_lst']):
+            lbl_lst = []
+            for label in cmd_dict['files_from_parent_dict'][parent_poss]:
+                lbl_lst.append(short_label(label))
+
+            print(fmt_str % (
+                parent_poss, list_of_commands[parent_poss]['exe_cmd'],
+                cmd_dict['curr_poss'], cmd_dict['exe_cmd'],
+                ", ".join(sorted(lbl_lst)),
+            ))
+
+    print("=" * 90)
+
+
 def print_commands(list_of_commands):
     print("\n", "=" * 90)
     t0 = 0.0
@@ -253,14 +288,6 @@ def print_commands(list_of_commands):
             )
 
 
-        lst_par = []
-        for parent_poss in cmd_dict['parent_pos_lst']:
-            lst_par.append(cmd_dict['files_from_parent_dict'][parent_poss])
-
-        print(
-            "connecting: ", cmd_dict['curr_poss'], " with ",
-            cmd_dict['chidren_pos_lst'], "via", lst_par
-        )
 
 
         '''
@@ -313,7 +340,7 @@ def main():
         arg_in = "timing_data.json"
 
     lst_cmd = get_list_of_commands(arg_in)
-    print_commands(lst_cmd)
+    print_graph_table(lst_cmd)
 
 
 if __name__ == "__main__":
