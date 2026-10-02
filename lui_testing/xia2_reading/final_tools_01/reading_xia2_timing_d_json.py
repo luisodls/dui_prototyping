@@ -169,45 +169,6 @@ def print_commands(list_of_commands):
             )
 
 
-        '''
-        print("\n[%d] %s%s" % (
-            cmd_dict['curr_poss'], cmd_dict['exe_cmd'], timing_str
-        ))
-        for parent_poss in cmd_dict['parent_pos_lst']:
-            print(
-                "      <- [%d] %s: %s" % (
-                    parent_poss, list_of_commands[parent_poss]['exe_cmd'],
-                    ", ".join(cmd_dict['files_from_parent_dict'][parent_poss]),
-                )
-            )
-
-        if cmd_dict['external_files_lst'] != []:
-            print(
-                "      <- external: %s" %
-                ", ".join(cmd_dict['external_files_lst'])
-            )
-
-        if cmd_dict['for_next_lst'] != []:
-            print("      -> %s" % ", ".join(cmd_dict['for_next_lst']))
-
-        if cmd_dict['chidren_pos_lst'] != []:
-            print("      children: %s" % cmd_dict['chidren_pos_lst'])
-        '''
-
-
-        '''
-
-    for curr_dict in list_of_commands:
-        for parent_poss in curr_dict['parent_pos_lst']:
-            print(
-                "connecting: ", parent_poss, " with ", curr_dict['curr_poss'],
-                " via ", curr_dict['files_from_parent_dict'][parent_poss]
-            )
-
-
-        '''
-
-
 def main():
     try:
         arg_in = sys.argv[1]

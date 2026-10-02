@@ -185,29 +185,6 @@ def get_list_of_commands(path_in):
         ):
             producer_of[file_name] = curr_dict['curr_poss']
 
-    tmp_off = '''for cmd_dict in list_of_commands:
-        for parent_poss in cmd_dict['parent_pos_lst']:
-            print(
-                "\n", list_of_commands[parent_poss]['full_cmd_lst'],
-                "\nconnects to:\n", cmd_dict['full_cmd_lst'], "\n"
-            )
-
-        if cmd_dict['external_files_lst'] != []:
-            print(
-                "\n", cmd_dict['full_cmd_lst'], "\nreads external files:\n",
-                cmd_dict['external_files_lst'], "\n"
-            )
-
-    print("\n", "+" * 90)
-
-    for cmd_dict in list_of_commands:
-        for child_poss in cmd_dict['chidren_pos_lst']:
-            print(
-                "\n", cmd_dict['full_cmd_lst'], "\nconnects to:\n",
-                list_of_commands[child_poss]['full_cmd_lst'], "\n"
-            )'''
-
-
     return list_of_commands
 
 
@@ -224,21 +201,6 @@ def main():
         print_graph_table(lst_cmd)
 
         export_reusable_graph_list(lst_cmd)
-
-    off_for_now = '''
-    for pos_num, command in enumerate(lst_cmd):
-        print("\n num =", pos_num, "\n", command, "\n")
-    '''
-
-    tmp_off = '''
-    for pos_num, command in enumerate(lst_cmd):
-        print(
-            "\n num=<<", pos_num, ">>\nexe_cmd=<<", command["exe_cmd"],
-             ">>\ninput=<<", command['connect_from_prev_lst'], ">>\n"
-        )
-
-        print(command)
-    '''
 
 
 if __name__ == "__main__":
