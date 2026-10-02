@@ -1,6 +1,6 @@
 # pieces shared by the scripts that build the command dependency graph,
 # no matter which file they read (timing_data.json or xia2-debug.txt)
-import os
+import os, json
 
 # parts of a parameter name (before "=") that mark it as a written file
 # e.g.: output.experiments=..., mtz.hklout=..., json=...
@@ -127,3 +127,51 @@ def print_graph_table(list_of_commands):
             ))
 
     print("=" * 90)
+
+def export_reusable_graph_list(list_of_commands):
+    print(" here 1 \n\n")
+
+    lst_nod = []
+    #for uni in self.step_list:
+
+    bigger_lin = 0
+
+    for cmd_dict in list_of_commands:
+
+        if bigger_lin < cmd_dict['curr_poss']:
+            bigger_lin = cmd_dict['curr_poss']
+
+        node = {
+            "_base_dir"             :os.getcwd(),
+            "cmd_dict_ini"          :{
+                                        "nod_lst":[None],
+                                        "cmd_lst":[[None]]
+                                    },
+            "full_cmd_lst"          :cmd_dict['exe_cmd'],
+            "lst2run"               :[[cmd_dict['exe_cmd']]],
+            "_lst_expt_in"          :cmd_dict['expt_from_prev_lst'],
+            "_lst_refl_in"          :cmd_dict['refl_from_prev_lst'],
+            "_lst_expt_out"         :cmd_dict['expt_for_next_lst'],
+            "_lst_refl_out"         :cmd_dict['refl_for_next_lst'],
+            "_run_dir"              :os.getcwd(),
+            "_html_rep"             :None,
+            "_predic_refl"          :None,
+            "log_file_path"         :None,
+            "number"                :cmd_dict['curr_poss'],
+            "parent_node_lst"       :cmd_dict['parent_pos_lst'],
+            "child_node_lst"        :cmd_dict['chidren_pos_lst'],
+            "status"                :"Succeeded"
+        }
+        lst_nod.append(node)
+
+
+    all_dat = {
+            "step_list"             :lst_nod,
+            "bigger_lin"            :bigger_lin,
+    }
+
+    with open("run_data", "w") as fp:
+        json.dump(all_dat, fp, indent=4)
+
+    print("\n\n here 2 ")
+

@@ -2,7 +2,8 @@ import sys, os, json
 from graph_common import (
     reversed_find_str, is_output_key, has_file_extension,
     is_bravais_setting, find_implicit_parent, find_param_parent,
-    print_graph_table, POSITIONAL_IN, POSITIONAL_OUT,
+    print_graph_table, export_reusable_graph_list,
+    POSITIONAL_IN, POSITIONAL_OUT,
 )
 
 
@@ -216,6 +217,7 @@ def main():
 
     lst_cmd = get_list_of_commands(arg_in)
     print_graph_table(lst_cmd)
+    export_reusable_graph_list(lst_cmd)
 
 
 if __name__ == "__main__":
