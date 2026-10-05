@@ -38,6 +38,13 @@ def reversed_find_str(str_in = None, lst_sep_lst = ["=", os.sep]):
     return final_str
 
 
+def is_dials_command(exe_cmd):
+    # filtering and allowing only dials commands to pass
+    program_name = reversed_find_str(str_in = exe_cmd, lst_sep_lst = [os.sep])
+    DO_starts_with_dials = bool(program_name.startswith("dials."))
+    return DO_starts_with_dials
+
+
 def is_output_key(key):
     if key.endswith("hklout"):
         return True

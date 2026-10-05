@@ -2,7 +2,7 @@ import sys, os
 from graph_common import (
     reversed_find_str, is_output_key, has_file_extension,
     is_bravais_setting, find_implicit_parent, find_param_parent,
-    print_graph_table, export_reusable_graph_list,
+    print_graph_table, export_reusable_graph_list, is_dials_command,
     POSITIONAL_IN, POSITIONAL_OUT,
 )
 
@@ -112,7 +112,7 @@ def get_list_of_commands(path_in):
             new_cmd_str = lines_str[position + 1][1:]
             exe_cmd, full_cmd_lst = split_cmd_line(new_cmd_str)
 
-            if exe_cmd == 'dials.report':
+            if not is_dials_command(exe_cmd) or exe_cmd == 'dials.report':
                 #TODO: have a look if some command escapes this
                 continue
 

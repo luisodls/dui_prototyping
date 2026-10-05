@@ -2,7 +2,7 @@ import sys, os, json
 from graph_common import (
     reversed_find_str, is_output_key, has_file_extension,
     is_bravais_setting, find_implicit_parent, find_param_parent,
-    print_graph_table, export_reusable_graph_list,
+    print_graph_table, export_reusable_graph_list, is_dials_command,
     POSITIONAL_IN, POSITIONAL_OUT,
 )
 
@@ -73,6 +73,21 @@ def classify_params(par_lst):
     return from_prev_lst, for_next_lst
 
 
+def find_expt_n_refl(file_lst):
+
+    # picks the .expt and the .refl files, needed by export_reusable_graph_list
+    expt_lst = []
+    refl_lst = []
+    for file_name in file_lst:
+        if file_name.endswith(".expt"):
+            expt_lst.append(file_name)
+
+        elif file_name.endswith(".refl"):
+            refl_lst.append(file_name)
+
+    return expt_lst, refl_lst
+
+
 def add_connection(parent_dict, child_dict, file_name):
     parent_poss = parent_dict['curr_poss']
     if parent_poss not in child_dict['parent_pos_lst']:
@@ -94,15 +109,21 @@ def get_list_of_commands(path_in):
     curr_poss = 0
     for entry in entries_lst:
         exe_cmd, par_lst = split_cmd_line(entry["command"])
-        if exe_cmd == 'dials.report':
+        if not is_dials_command(exe_cmd) or exe_cmd == 'dials.report':
             continue
 
         from_prev_lst, for_next_lst = classify_params(par_lst)
+        expt_from_prev_lst, refl_from_prev_lst = find_expt_n_refl(from_prev_lst)
+        expt_for_next_lst, refl_for_next_lst = find_expt_n_refl(for_next_lst)
         cmd_dict = {
             'exe_cmd'                   :exe_cmd,
             'par_lst'                   :par_lst,
             'from_prev_lst'             :from_prev_lst,
             'for_next_lst'              :for_next_lst,
+            'expt_from_prev_lst'        :expt_from_prev_lst,
+            'refl_from_prev_lst'        :refl_from_prev_lst,
+            'expt_for_next_lst'         :expt_for_next_lst,
+            'refl_for_next_lst'         :refl_for_next_lst,
             'parent_pos_lst'            :[],
             'chidren_pos_lst'           :[],
             'files_from_parent_dict'    :{},
