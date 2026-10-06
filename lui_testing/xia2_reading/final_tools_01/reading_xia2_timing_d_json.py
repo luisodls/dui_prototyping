@@ -3,7 +3,7 @@ from graph_common import (
     reversed_find_str, is_output_key, has_file_extension,
     is_bravais_setting, find_implicit_parent, find_param_parent,
     print_graph_table, export_reusable_graph_list, is_dials_command,
-    POSITIONAL_IN, POSITIONAL_OUT,
+    find_work_dirs, POSITIONAL_IN, POSITIONAL_OUT,
 )
 
 
@@ -134,6 +134,9 @@ def get_list_of_commands(path_in):
         }
         curr_poss += 1
         list_of_commands.append(cmd_dict)
+
+
+    find_work_dirs(list_of_commands, os.path.dirname(os.path.abspath(path_in)))
 
     # file name -> position of the most recent command that wrote it
     producer_of = {}

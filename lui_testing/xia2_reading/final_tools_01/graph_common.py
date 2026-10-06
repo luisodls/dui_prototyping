@@ -115,6 +115,84 @@ def short_label(label):
     return reversed_find_str(str_in = label)
 
 
+def find_work_dirs(list_of_commands, default_dir):
+    # sets cmd_dict['work_dir'], the directory where each command ran
+    #
+    # xia2 removes "<working directory>/" from the arguments it logs, so:
+    #  - a file read from another directory keeps its full path, e.g.:
+    #      dials.index  ... 'output.experiments=5_indexed.expt'
+    #      dials.refine '/full/path/.../index/5_indexed.expt' ...
+    #    tells that dials.index ran in /full/path/.../index
+    #  - two commands using the same file name without path ran in the
+    #    same directory, so a directory found for one is valid for the other
+
+    # file name (no path) -> directory, from every full path in the run
+    dir_of_file = {}
+    for cmd_dict in list_of_commands:
+        cmd_dict['work_dir'] = None
+        for single_par in cmd_dict['par_lst']:
+            path_str = reversed_find_str(str_in = single_par, lst_sep_lst = ["="])
+            if os.path.isabs(path_str):
+                dir_of_file[reversed_find_str(str_in = path_str)] = (
+                    os.path.dirname(os.path.normpath(path_str))
+                )
+
+    found_new = True
+    while found_new:
+        found_new = False
+        for cmd_dict in list_of_commands:
+            if cmd_dict['work_dir'] is not None:
+                continue
+
+            no_path_lst = []
+            for single_par in cmd_dict['par_lst']:
+                path_str = reversed_find_str(
+                    str_in = single_par, lst_sep_lst = ["="]
+                )
+                if has_file_extension(path_str) and os.sep not in path_str:
+                    no_path_lst.append(path_str)
+
+            for file_name in no_path_lst:
+                if file_name in dir_of_file:
+                    cmd_dict['work_dir'] = dir_of_file[file_name]
+                    found_new = True
+                    break
+
+            if cmd_dict['work_dir'] is not None:
+                for file_name in no_path_lst:
+                    if file_name not in dir_of_file:
+                        dir_of_file[file_name] = cmd_dict['work_dir']
+
+    for cmd_dict in list_of_commands:
+        if cmd_dict['work_dir'] is None:
+            # nothing found, use the directory of the file that was read
+
+            print("Dir not found for:",  cmd_dict['par_lst'])
+
+            cmd_dict['work_dir'] = default_dir
+
+
+def full_path_lst(file_lst, cmd_dict):
+    # file names (no path) of a command -> the same files with full path,
+    # as written in the command if it was there, otherwise in 'work_dir'
+    path_lst = []
+    for file_name in file_lst:
+        new_path = os.path.join(cmd_dict['work_dir'], file_name)
+        for single_par in cmd_dict['par_lst']:
+            path_str = reversed_find_str(str_in = single_par, lst_sep_lst = ["="])
+            if (
+                os.path.isabs(path_str)
+                and reversed_find_str(str_in = path_str) == file_name
+            ):
+                new_path = path_str
+                break
+
+        path_lst.append(os.path.normpath(new_path))
+
+    return path_lst
+
+
+
 def print_graph_table(list_of_commands):
     # one row per connection, same format for every input file type
     fmt_str = "%-5s %-30s %-5s %-30s %s"
@@ -156,11 +234,21 @@ def export_reusable_graph_list(list_of_commands):
                                     },
             "full_cmd_lst"          :cmd_dict['exe_cmd'],
             "lst2run"               :[[cmd_dict['exe_cmd']]],
-            "_lst_expt_in"          :cmd_dict['expt_from_prev_lst'],
-            "_lst_refl_in"          :cmd_dict['refl_from_prev_lst'],
-            "_lst_expt_out"         :cmd_dict['expt_for_next_lst'],
-            "_lst_refl_out"         :cmd_dict['refl_for_next_lst'],
-            "_run_dir"              :os.getcwd(),
+
+            "_lst_expt_in"          :full_path_lst(
+                                        cmd_dict['expt_from_prev_lst'], cmd_dict
+                                    ),
+            "_lst_refl_in"          :full_path_lst(
+                                        cmd_dict['refl_from_prev_lst'], cmd_dict
+                                    ),
+            "_lst_expt_out"         :full_path_lst(
+                                        cmd_dict['expt_for_next_lst'], cmd_dict
+                                    ),
+            "_lst_refl_out"         :full_path_lst(
+                                        cmd_dict['refl_for_next_lst'], cmd_dict
+                                    ),
+            "_run_dir"              :cmd_dict['work_dir'],
+
             "_html_rep"             :None,
             "_predic_refl"          :None,
             "log_file_path"         :None,
