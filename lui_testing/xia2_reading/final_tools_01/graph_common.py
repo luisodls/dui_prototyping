@@ -173,7 +173,9 @@ def find_work_dirs(list_of_commands):
                     dir_set.add(dir_of_file[file_name])
 
             if len(dir_set) == 1:
-                cmd_dict['work_dir'] = dir_set.pop()
+                new_work_dir = dir_set.pop()
+                print("new_work_dir =", new_work_dir)
+                cmd_dict['work_dir'] = new_work_dir
                 found_new = True
                 for file_name in no_path_lst:
                     if (
@@ -185,6 +187,9 @@ def find_work_dirs(list_of_commands):
             elif len(dir_set) > 1 and cmd_dict not in conflict_lst:
                 conflict_lst.append(cmd_dict)
 
+    # common beginning of the path of every directory found,
+    # compared by whole directory names, not by characters
+    common_dir = None
     for cmd_dict in list_of_commands:
         if cmd_dict['work_dir'] is None:
             # not implied by the log, left as None on purpose
@@ -195,6 +200,29 @@ def find_work_dirs(list_of_commands):
             else:
                 print("Dir not found for:",
                       cmd_dict['curr_poss'], cmd_dict['exe_cmd'])
+
+        elif common_dir is None:
+            common_dir = cmd_dict['work_dir']
+
+        else:
+            common_dir = os.path.commonpath([common_dir, cmd_dict['work_dir']])
+
+    print("Common beginning of all found directories:", common_dir)
+
+    for cmd_dict in list_of_commands:
+        if cmd_dict['work_dir'] is None:
+
+            #FIXME: this hardcoded way to pick the position is the next TODO
+            cmd_dict['work_dir'] = common_dir[:-13] + "/scale/"
+
+            guide = '''
+            /tmp/xia2testing/run_dui2_nodes/DEFAULT/NATIVE/SWEEP1
+
+            vs
+
+            .../run_dui2_nodes/DEFAULT/scale/20_refined_cell.expt
+
+            '''
 
 
 def full_path_lst(file_lst, cmd_dict):
