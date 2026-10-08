@@ -136,7 +136,7 @@ def get_list_of_commands(path_in):
         list_of_commands.append(cmd_dict)
 
 
-    find_work_dirs(list_of_commands, os.path.dirname(os.path.abspath(path_in)))
+    find_work_dirs(list_of_commands)
 
     # file name -> position of the most recent command that wrote it
     producer_of = {}

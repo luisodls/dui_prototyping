@@ -115,8 +115,10 @@ def short_label(label):
     return reversed_find_str(str_in = label)
 
 
-def find_work_dirs(list_of_commands, default_dir):
-    # sets cmd_dict['work_dir'], the directory where each command ran
+def find_work_dirs(list_of_commands):
+    # sets cmd_dict['work_dir'], the directory where each command ran,
+    # using only directories that the logged command lines imply,
+    # it stays None when the log does not tell it
     #
     # xia2 removes "<working directory>/" from the arguments it logs, so:
     #  - a file read from another directory keeps its full path, e.g.:
@@ -125,18 +127,30 @@ def find_work_dirs(list_of_commands, default_dir):
     #    tells that dials.index ran in /full/path/.../index
     #  - two commands using the same file name without path ran in the
     #    same directory, so a directory found for one is valid for the other
+    #  - a file name seen with full path in two different directories
+    #    says nothing about where a command using it without path ran
 
     # file name (no path) -> directory, from every full path in the run
     dir_of_file = {}
+    ambiguous_set = set()
     for cmd_dict in list_of_commands:
         cmd_dict['work_dir'] = None
         for single_par in cmd_dict['par_lst']:
             path_str = reversed_find_str(str_in = single_par, lst_sep_lst = ["="])
             if os.path.isabs(path_str):
-                dir_of_file[reversed_find_str(str_in = path_str)] = (
-                    os.path.dirname(os.path.normpath(path_str))
-                )
+                file_name = reversed_find_str(str_in = path_str)
+                dir_name = os.path.dirname(os.path.normpath(path_str))
+                if file_name in ambiguous_set:
+                    continue
 
+                elif file_name not in dir_of_file:
+                    dir_of_file[file_name] = dir_name
+
+                elif dir_of_file[file_name] != dir_name:
+                    del dir_of_file[file_name]
+                    ambiguous_set.add(file_name)
+
+    conflict_lst = []
     found_new = True
     while found_new:
         found_new = False
@@ -152,32 +166,49 @@ def find_work_dirs(list_of_commands, default_dir):
                 if has_file_extension(path_str) and os.sep not in path_str:
                     no_path_lst.append(path_str)
 
+            # every directory the files of this command point to
+            dir_set = set()
             for file_name in no_path_lst:
                 if file_name in dir_of_file:
-                    cmd_dict['work_dir'] = dir_of_file[file_name]
-                    found_new = True
-                    break
+                    dir_set.add(dir_of_file[file_name])
 
-            if cmd_dict['work_dir'] is not None:
+            if len(dir_set) == 1:
+                cmd_dict['work_dir'] = dir_set.pop()
+                found_new = True
                 for file_name in no_path_lst:
-                    if file_name not in dir_of_file:
+                    if (
+                        file_name not in dir_of_file
+                        and file_name not in ambiguous_set
+                    ):
                         dir_of_file[file_name] = cmd_dict['work_dir']
+
+            elif len(dir_set) > 1 and cmd_dict not in conflict_lst:
+                conflict_lst.append(cmd_dict)
 
     for cmd_dict in list_of_commands:
         if cmd_dict['work_dir'] is None:
-            # nothing found, use the directory of the file that was read
+            # not implied by the log, left as None on purpose
+            if cmd_dict in conflict_lst:
+                print("Dir not found (conflicting dirs) for:",
+                      cmd_dict['curr_poss'], cmd_dict['exe_cmd'])
 
-            print("Dir not found for:",  cmd_dict['par_lst'])
-
-            cmd_dict['work_dir'] = default_dir
+            else:
+                print("Dir not found for:",
+                      cmd_dict['curr_poss'], cmd_dict['exe_cmd'])
 
 
 def full_path_lst(file_lst, cmd_dict):
     # file names (no path) of a command -> the same files with full path,
-    # as written in the command if it was there, otherwise in 'work_dir'
+    # as written in the command if it was there, otherwise in 'work_dir',
+    # without 'work_dir' the name stays as it is (no path)
     path_lst = []
     for file_name in file_lst:
-        new_path = os.path.join(cmd_dict['work_dir'], file_name)
+        if cmd_dict['work_dir'] is None:
+            new_path = file_name
+
+        else:
+            new_path = os.path.join(cmd_dict['work_dir'], file_name)
+
         for single_par in cmd_dict['par_lst']:
             path_str = reversed_find_str(str_in = single_par, lst_sep_lst = ["="])
             if (
@@ -214,8 +245,6 @@ def print_graph_table(list_of_commands):
     print("=" * 90)
 
 def export_reusable_graph_list(list_of_commands):
-    print(" here 1 \n\n")
-
     lst_nod = []
     #for uni in self.step_list:
 
@@ -267,6 +296,4 @@ def export_reusable_graph_list(list_of_commands):
 
     with open("run_data", "w") as fp:
         json.dump(all_dat, fp, indent=4)
-
-    print("\n\n here 2 ")
 
