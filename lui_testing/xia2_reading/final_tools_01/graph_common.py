@@ -125,12 +125,7 @@ def find_work_dirs(list_of_commands):
     #      dials.index  ... 'output.experiments=5_indexed.expt'
     #      dials.refine '/full/path/.../index/5_indexed.expt' ...
     #    tells that dials.index ran in /full/path/.../index
-    #  - two commands using the same file name without path ran in the
-    #    same directory, so a directory found for one is valid for the other
-    #  - a file name seen with full path in two different directories
-    #    says nothing about where a command using it without path ran
 
-    # file name (no path) -> directory, from every full path in the run
     dir_of_file = {}
     ambiguous_set = set()
     for cmd_dict in list_of_commands:
@@ -207,22 +202,13 @@ def find_work_dirs(list_of_commands):
         else:
             common_dir = os.path.commonpath([common_dir, cmd_dict['work_dir']])
 
-    print("Common beginning of all found directories:", common_dir)
+    print("\n using:", common_dir, "as root path")
+    natv_posi = common_dir.rfind("NATIVE") - 1
+    extra_dir_left = common_dir[0: natv_posi]
 
     for cmd_dict in list_of_commands:
         if cmd_dict['work_dir'] is None:
-
-            #FIXME: this hardcoded way to pick the position is the next TODO
-            cmd_dict['work_dir'] = common_dir[:-13] + "/scale/"
-
-            guide = '''
-            /tmp/xia2testing/run_dui2_nodes/DEFAULT/NATIVE/SWEEP1
-
-            vs
-
-            .../run_dui2_nodes/DEFAULT/scale/20_refined_cell.expt
-
-            '''
+            cmd_dict['work_dir'] = extra_dir_left + "/scale/"
 
 
 def full_path_lst(file_lst, cmd_dict):
