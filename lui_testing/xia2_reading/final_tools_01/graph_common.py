@@ -28,15 +28,9 @@ PARAM_FROM_PROGRAM = [
 
 
 def reversed_find_str(str_in = None, lst_sep_lst = ["=", os.sep]):
-    final_str = str_in
-    for pos, single_char in enumerate(reversed(str_in)):
-        for char in lst_sep_lst:
-            if single_char == char:
-                final_str = str_in[len(str_in) - pos:]
-                return final_str
-
-    return final_str
-
+    # everything after the last separator, or all of str_in if there is none
+    cut = max((str_in.rfind(sep) for sep in lst_sep_lst), default = -1)
+    return str_in[cut + 1:]
 
 def is_dials_command(exe_cmd):
     # filtering and allowing only dials commands to pass
