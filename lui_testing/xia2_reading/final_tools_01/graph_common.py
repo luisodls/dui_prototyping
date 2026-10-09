@@ -126,6 +126,13 @@ def find_work_dirs(list_of_commands):
     #      dials.refine '/full/path/.../index/5_indexed.expt' ...
     #    tells that dials.index ran in /full/path/.../index
 
+    dir_of_file, ambiguous_set = map_abs_paths(list_of_commands)
+    conflict_lst = spread_work_dirs(list_of_commands, dir_of_file, ambiguous_set)
+    common_dir = report_n_common_dir(list_of_commands, conflict_lst)
+    fill_missing_work_dirs(list_of_commands, common_dir)
+
+
+def map_abs_paths(list_of_commands):
     dir_of_file = {}
     ambiguous_set = set()
     for cmd_dict in list_of_commands:
@@ -145,6 +152,10 @@ def find_work_dirs(list_of_commands):
                     del dir_of_file[file_name]
                     ambiguous_set.add(file_name)
 
+    return dir_of_file, ambiguous_set
+
+
+def spread_work_dirs(list_of_commands, dir_of_file, ambiguous_set):
     conflict_lst = []
     found_new = True
     while found_new:
@@ -182,8 +193,11 @@ def find_work_dirs(list_of_commands):
             elif len(dir_set) > 1 and cmd_dict not in conflict_lst:
                 conflict_lst.append(cmd_dict)
 
-    # common beginning of the path of every directory found,
-    # compared by whole directory names, not by characters
+
+    return conflict_lst
+
+
+def report_n_common_dir(list_of_commands, conflict_lst):
     common_dir = None
     for cmd_dict in list_of_commands:
         if cmd_dict['work_dir'] is None:
@@ -202,6 +216,10 @@ def find_work_dirs(list_of_commands):
         else:
             common_dir = os.path.commonpath([common_dir, cmd_dict['work_dir']])
 
+
+    return common_dir
+
+def fill_missing_work_dirs(list_of_commands, common_dir):
     print("\n using:", common_dir, "as root path")
     natv_posi = common_dir.rfind("NATIVE") - 1
     extra_dir_left = common_dir[0: natv_posi]
