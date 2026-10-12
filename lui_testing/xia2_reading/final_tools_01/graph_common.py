@@ -310,7 +310,7 @@ def export_reusable_graph_list(list_of_commands):
 
             "_html_rep"             :None,
             "_predic_refl"          :None,
-            "log_file_path"         :None,
+            "log_file_path"         :cmd_dict.get('log_file_path'),
             "number"                :cmd_dict['curr_poss'],
             "parent_node_lst"       :cmd_dict['parent_pos_lst'],
             "child_node_lst"        :cmd_dict['chidren_pos_lst'],

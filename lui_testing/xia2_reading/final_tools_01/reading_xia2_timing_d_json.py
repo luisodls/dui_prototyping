@@ -99,6 +99,94 @@ def add_connection(parent_dict, child_dict, file_name):
         child_dict['files_from_parent_dict'][parent_poss].append(file_name)
 
 
+# xia2 (lib/bits.auto_logfiler) names the log of every step:
+#   <work_dir>/<run number>_<program>.log  or  ..._<program>_<TAG>.log
+# e.g.: 5_dials.index.log, 13_dials.integrate_INTEGRATE.log,
+# the same run number starts the names of the files that step writes,
+# e.g.: output.experiments=5_indexed.expt
+
+
+def run_number_of(file_name):
+    # 5_indexed.expt -> 5,  AUTOMATIC_DEFAULT_scaled.mtz -> None
+    num_str = file_name.split("_")[0]
+    if num_str.isdecimal() and num_str != file_name:
+        return int(num_str)
+
+    return None
+
+
+def hinted_run_number(cmd_dict):
+    # run number written in the names of the files this step wrote
+    for file_name in cmd_dict['for_next_lst']:
+        run_number = run_number_of(file_name)
+        if run_number is not None:
+            return run_number
+
+    return None
+
+
+def logs_in_dir(work_dir, exe_cmd):
+    # {run number: full path} of every xia2 log of exe_cmd in work_dir
+    found_dict = {}
+    if work_dir is None or not os.path.isdir(work_dir):
+        return found_dict
+
+    for file_name in os.listdir(work_dir):
+        if not file_name.endswith(".log"):
+            continue
+
+        run_number = run_number_of(file_name)
+        if run_number is None:
+            continue
+
+        rest = file_name[len(str(run_number)) + 1:-len(".log")]
+        if rest == exe_cmd or rest.startswith(exe_cmd + "_"):
+            found_dict[run_number] = os.path.join(work_dir, file_name)
+
+    return found_dict
+
+
+def find_log_files(list_of_commands):
+    # sets cmd_dict['log_file_path'], None when no log is found
+    #
+    # 1) the run number of the step, from its output file names
+    # 2) a step without numbered outputs (e.g.: dials.merge) takes the
+    #    smallest run number of its program in work_dir that is bigger than
+    #    the number of the previous step and smaller than the next hinted one,
+    #    xia2 gives run numbers in order and the steps run one after another
+    hint_lst = []
+    for cmd_dict in list_of_commands:
+        hint_lst.append(hinted_run_number(cmd_dict))
+
+    last_number = 0
+    for pos, cmd_dict in enumerate(list_of_commands):
+        cmd_dict['log_file_path'] = None
+        found_dict = logs_in_dir(cmd_dict['work_dir'], cmd_dict['exe_cmd'])
+        run_number = hint_lst[pos]
+        if run_number is None or run_number not in found_dict:
+            next_hint = None
+            for later_hint in hint_lst[pos + 1:]:
+                if later_hint is not None:
+                    next_hint = later_hint
+                    break
+
+            run_number = None
+            for candidate in sorted(found_dict):
+                if candidate > last_number and (
+                    next_hint is None or candidate < next_hint
+                ):
+                    run_number = candidate
+                    break
+
+        if run_number is None:
+            print("Log file not found for:",
+                  cmd_dict['curr_poss'], cmd_dict['exe_cmd'])
+
+        else:
+            cmd_dict['log_file_path'] = found_dict[run_number]
+            last_number = run_number
+
+
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
     json_file = open(path_in, 'r', encoding="utf-8")
@@ -137,6 +225,7 @@ def get_list_of_commands(path_in):
 
 
     find_work_dirs(list_of_commands)
+    find_log_files(list_of_commands)
 
     # file name -> position of the most recent command that wrote it
     producer_of = {}

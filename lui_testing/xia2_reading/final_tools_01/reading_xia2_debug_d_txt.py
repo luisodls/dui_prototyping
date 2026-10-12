@@ -100,6 +100,55 @@ def add_connection(parent_dict, child_dict, file_name):
     child_dict['files_from_parent_dict'][parent_poss].append(file_name)
 
 
+# xia2 (DefaultDriver.close_wait) echoes the end of every log it closes:
+#   Last 50 lines of /full/path/5_dials.index.log:
+#   <log line> ... # command line: ... # timing information: ...
+LOG_HEADER_START = "Last "
+LOG_HEADER_MID = " lines of "
+
+# where the log contents read from xia2-debug.txt are written
+LOG_COPY_DIR = "xia2_logs"
+
+
+def find_log_block(lines_str, cmd_line_pos):
+    # finds the echoed log that contains the "# command line:" at
+    # cmd_line_pos, returns (original log path, list of its lines),
+    # (None, []) when the command line is not inside an echoed log
+    for header_pos in range(cmd_line_pos - 1, -1, -1):
+        header = lines_str[header_pos].rstrip("\n")
+        if (
+            header.startswith(LOG_HEADER_START)
+            and LOG_HEADER_MID in header
+            and header.endswith(":")
+        ):
+            num_str = header[len(LOG_HEADER_START):header.find(LOG_HEADER_MID)]
+            if not num_str.isdecimal():
+                continue
+
+            num_lines = int(num_str)
+            if cmd_line_pos > header_pos + num_lines:
+                # the closest echoed log ends before this command line
+                return None, []
+
+            log_path = header[header.find(LOG_HEADER_MID) + len(LOG_HEADER_MID):-1]
+            return log_path, lines_str[header_pos + 1:header_pos + 1 + num_lines]
+
+    return None, []
+
+
+def write_log_copy(log_path, log_lines):
+    # writes the echoed log lines into LOG_COPY_DIR, keeping the xia2 name
+    # (e.g.: 5_dials.index.log, unique thanks to the xia2 run number)
+    os.makedirs(LOG_COPY_DIR, exist_ok = True)
+    new_path = os.path.abspath(
+        os.path.join(LOG_COPY_DIR, os.path.basename(log_path))
+    )
+    with open(new_path, "w", encoding="utf-8") as fp:
+        fp.writelines(log_lines)
+
+    return new_path
+
+
 def get_list_of_commands(path_in):
     print("file 2 read = ", path_in)
     log_file = open(path_in, 'r', encoding="utf-8")
@@ -128,6 +177,11 @@ def get_list_of_commands(path_in):
                 expt_for_next_lst, refl_for_next_lst, another_for_next_lst
             ) = split_by_type(connect_for_next_lst)
 
+            log_file_path = None
+            orig_log_path, log_lines = find_log_block(lines_str, position)
+            if orig_log_path is not None:
+                log_file_path = write_log_copy(orig_log_path, log_lines)
+
             cmd_dict = {
                 'full_cmd_lst'              :full_cmd_lst,
                 'exe_cmd'                   :exe_cmd,
@@ -143,6 +197,7 @@ def get_list_of_commands(path_in):
                 'chidren_pos_lst'           :[],
                 'files_from_parent_dict'    :{},
                 'external_files_lst'        :[],
+                'log_file_path'             :log_file_path,
                 'curr_poss'                 :curr_poss,
             }
             curr_poss += 1
